@@ -14,6 +14,7 @@
 - Quân vua không đang bị chiếu
 - Nếu trên đường đi nhập thành mà bị chiếu thì cũng không được.
 <img src="src/res/readme/case_castling.jpeg" alt="white not castling through the bishop" width="300">
+
 ### FEN và PGN
 FEN: Chỉ lưu hình cờ tại một thời điểm nhất định.
 PGN: Cung cấp đầy đủ thông tin của một ván đấu (tất cả các nước cờ, player1 player2,..)
