@@ -12,9 +12,8 @@ public class Listener extends MouseAdapter {
     public Sound sound = new Sound();
     private boolean isTurn = true;// mặc định quân trắng đi trước
     public boolean isEnd = false;// end because King die
-    public Listener(GamePVP board) {//Sau khi khởi tạo, lớp Listener có thể sử dụng biến board để truy cập các thuộc tính và phương thức của lớp Board.
-        this.board = board;// tôi nghĩ làm thế này để tránh trường hợp trong class Board thì new Listener, trong Listener lại new Board => lỗi
-        //Điều này có nghĩa là tham chiếu board của lớp Listener giờ đã trỏ đến đúng đối tượng Board mà bạn muốn lớp này sử dụng.
+    public Listener(GamePVP board) {
+        this.board = board;
     }
     @Override
     public void mousePressed(MouseEvent e) {//Được triệu hồi khi nút chuột đã được nhấn trên một thành phần.
