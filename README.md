@@ -30,9 +30,11 @@ PGN: Cung cấp đầy đủ thông tin của một ván đấu (tất cả các
     ```r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` <img src="src/res/readme/delete_knight_fen.png" alt="" width="300">
     
     - VD: Xoá 2 quân tốt (black) ở vị trí [3][g] và [4][g]:
+  
     ```rnbqkbnr/pp2pppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` <img src="src/res/readme/delete_2_pawn_fen.png" alt="" width="300">
 - Để thêm quân cờ:
     - VD: Thêm một con tốt vào vị trí [6][c]:
+  
     ```rnbqkbnr/pppppppp/2p5/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` <img src="src/res/readme/add_pawn_fen.png" alt="" width="300">
     - VD: Di chuyển queen đến vị trí [4][c] và knight đến vị trí [4][e]:
     ```rnbqkbnr/pppppppp/8/8/2Q1N3/8/PPPPPPPP/R1B1KBNR w KQkq - 0 1``` <img src="src/res/readme/move_queen_and_knight.png" alt="" width="300">
