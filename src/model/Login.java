@@ -19,7 +19,7 @@ public class Login extends JFrame implements ActionListener {
     private JButton login_button;
     private JButton switch_to_signup;
     public Login() {
-        this.setTitle("CHESS");
+        this.setTitle("LOGIN");
         this.setLayout(new GridLayout(0,2));
         try {
             BufferedImage originalImage = ImageIO.read(new File("src/res/gui/bg.jpg"));

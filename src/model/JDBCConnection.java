@@ -1,9 +1,6 @@
 package model;
 
-import javax.swing.*;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class JDBCConnection {
     private static final String url = "jdbc:mysql://localhost:3306/chess?autoReconnect=true&useSSL=false";

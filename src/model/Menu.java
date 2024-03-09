@@ -13,17 +13,16 @@ public class Menu extends JPanel implements ActionListener {
     private JLabel name_title;
     BufferedImage icon_title;
     private BufferedImage menu_normal;
-    private JLabel newgame_menu;
-    private JLabel history_menu;
-    private JLabel puzzles_menu;
-    private JLabel settings_menu;
-    private JLabel about_menu;
-    private JLabel exit_menu;
+    private BeautifyButton newgame_menu;
+    private BeautifyButton history_menu;
+    private BeautifyButton puzzles_menu;
+    private BeautifyButton settings_menu;
+    private BeautifyButton about_menu;
+    private BeautifyButton exit_menu;
     public Menu() {
         frame = new JFrame("CHESS");
         try {
             icon_title = ImageIO.read(new File("src/res/gui/icon_title.jpg"));
-            menu_normal = ImageIO.read(new File("src/res/buttons/menu_normal.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,31 +52,37 @@ public class Menu extends JPanel implements ActionListener {
         name_title = new JLabel("CHESS GAME");
         name_title.setBounds(600,240,400,50);
         name_title.setForeground(Color.WHITE);
+        name_title.setFocusable(false);
         name_title.setFont(name_title.getFont().deriveFont(50.0f));
-        //
-        newgame_menu = new JLabel("New Game");
+        newgame_menu = new BeautifyButton("New Game");
         newgame_menu.setBounds(574,378,170,52);
         newgame_menu.setForeground(Color.WHITE);
+        newgame_menu.setFocusable(false);
         newgame_menu.setFont(newgame_menu.getFont().deriveFont(20.0f));
-        history_menu = new JLabel("History");
+        history_menu = new BeautifyButton("History");
         history_menu.setBounds(794,378,170,52);
         history_menu.setForeground(Color.WHITE);
+        history_menu.setFocusable(false);
         history_menu.setFont(history_menu.getFont().deriveFont(20.0f));
-        puzzles_menu = new JLabel("Puzzles");
+        puzzles_menu = new BeautifyButton("Puzzles");
         puzzles_menu.setBounds(574,458,170,52);
         puzzles_menu.setForeground(Color.WHITE);
+        puzzles_menu.setFocusable(false);
         puzzles_menu.setFont(puzzles_menu.getFont().deriveFont(20.0f));
-        about_menu = new JLabel("About");
+        about_menu = new BeautifyButton("About");
         about_menu.setBounds(794,458,170,52);
         about_menu.setForeground(Color.WHITE);
+        about_menu.setFocusable(false);
         about_menu.setFont(about_menu.getFont().deriveFont(20.0f));
-        settings_menu = new JLabel("Settings");
+        settings_menu = new BeautifyButton("Settings");
         settings_menu.setBounds(574,538,170,52);
         settings_menu.setForeground(Color.WHITE);
+        settings_menu.setFocusable(false);
         settings_menu.setFont(settings_menu.getFont().deriveFont(20.0f));
-        exit_menu = new JLabel("Exit");
+        exit_menu = new BeautifyButton("Exit");
         exit_menu.setBounds(794,538,170,52);
         exit_menu.setForeground(Color.WHITE);
+        exit_menu.setFocusable(false);
         exit_menu.setFont(exit_menu.getFont().deriveFont(20.0f));
         newgame_menu.addMouseListener(new MouseAdapter() {
             @Override
@@ -143,15 +148,6 @@ public class Menu extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(icon_title,670,28,190,180,this);
-
-        g2d.drawImage(menu_normal,570,380,180,60,this);
-        g2d.drawImage(menu_normal,790,380,180,60,this);
-
-        g2d.drawImage(menu_normal,570,460,180,60,this);
-        g2d.drawImage(menu_normal,790,460,180,60,this);
-
-        g2d.drawImage(menu_normal,570,540,180,60,this);
-        g2d.drawImage(menu_normal,790,540,180,60,this);
     }
 
     @Override

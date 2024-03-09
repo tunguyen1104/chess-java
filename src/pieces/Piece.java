@@ -6,6 +6,7 @@ import model.Setting;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
@@ -18,11 +19,10 @@ public class Piece {
     Image sprite;
     GamePVP board;
     public boolean the_pawn_first_move = true;
-
     BufferedImage sheet;
     {
         try {
-            sheet = ImageIO.read(ClassLoader.getSystemResourceAsStream("res/pieces/default.png"));
+            sheet = ImageIO.read(new File("src/res/pieces/default.png"));
         }catch (IOException e) {
             e.printStackTrace();
         }

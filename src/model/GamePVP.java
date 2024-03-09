@@ -102,12 +102,12 @@ public class GamePVP extends JPanel {
         panel.setPreferredSize(new Dimension(1600, 1000));
         panel.setLayout(null);
         //setting name
-        white_name = new JLabel("Computer (Black)");
+        white_name = new JLabel("Player2 (Black)");
         white_name.setBounds(1050,140,490,120);
         white_name.setForeground(Color.WHITE);
         white_name.setFont(white_name.getFont().deriveFont(20.0f)); // Tạo font mới với kích thước mới và thiết lập cho nhãn
 
-        black_name = new JLabel("Player (White)");
+        black_name = new JLabel("Player1 (White)");
         black_name.setBounds(1050,610,490,120);
         black_name.setForeground(Color.WHITE);
         black_name.setFont(black_name.getFont().deriveFont(20.0f));
