@@ -16,7 +16,7 @@ public class Listener extends MouseAdapter {
         this.board = board;
     }
     @Override
-    public void mousePressed(MouseEvent e) {//Được triệu hồi khi nút chuột đã được nhấn trên một thành phần.
+    public void mousePressed(MouseEvent e) {
         if(isEnd) return;
         if ("00:00".equals(board.timeLabelWhite.getText())) {
             sound.playMusic(1);
@@ -43,28 +43,27 @@ public class Listener extends MouseAdapter {
         }
     }
     @Override
-    public void mouseDragged(MouseEvent e) { //khi người dùng giữ nút chuột và di chuyển chuột trên màn hình.
+    public void mouseDragged(MouseEvent e) {
         if(isEnd) return;
         if(board.selectedPiece != null) {
             if(isTurn != board.selectedPiece.isWhite) {
                 board.selectedPiece = null;
             }
             else {
-                //đặt tọa độ x của đối tượng selectedPiece để nằm chính giữa ô được kéo
                 board.selectedPiece.xPos =  e.getX() - board.tileSize / 2;
                 board.selectedPiece.yPos =  e.getY() - board.tileSize / 2;
-                board.repaint();//load lại
+                board.repaint();
             }
         }
     }
     @Override
-    public void mouseReleased(MouseEvent e) {//trieu hoi khi nút chuột đã được giải phóng trên một thành phần.
-        int col = e.getX() / board.tileSize;//tính toán ra cột và hàng mà chuột được nhả
+    public void mouseReleased(MouseEvent e) {
+        int col = e.getX() / board.tileSize;
         int row = e.getY() / board.tileSize;
         if(board.selectedPiece != null){
-            Move move = new Move(board,board.selectedPiece,col,row);// lưu vị trí quân cơ mới cho move.capture và cũ cho move.piece
+            Move move = new Move(board,board.selectedPiece,col,row);
             if(board.isValidMove(move)){
-                board.makeMove(move);// nếu ví trí mới có cờ khác màu thì cập nhật move.piece và xoá quân cờ move.capture đi
+                board.makeMove(move);
                 if(isTurn == true) {
                     board.start_white();
                     board.stop_black();
@@ -78,13 +77,13 @@ public class Listener extends MouseAdapter {
                 board.paint_old_new(move.getOldCol(),move.getOldRow(),move.getNewCol(),move.getNewRow());
                 sound.playMusic(2);
             }
-            else {// nếu 2 quân cờ cùng màu thì sửa lại xPos,yPos về vị trí ban đầu (đã thay đổi ở dòng 26,27)
+            else {
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize;
                 board.selectedPiece.yPos = board.selectedPiece.row * board.tileSize;
             }
         }
-        board.selectedPiece = null;//để hủy bỏ việc chọn quân cờ
-        board.repaint();//vẽ lại bảng sau khi đã di chuyển đối tượng selectedPiece để cập nhật giao diện.
+        board.selectedPiece = null;
+        board.repaint();
         if (board.findKing(true) == null) {
             isEnd = true;
             sound.playMusic(1);
