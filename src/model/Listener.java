@@ -43,7 +43,7 @@ public class Listener extends MouseAdapter {
         }
     }
     @Override
-    public void mouseDragged(MouseEvent e) { //khi người dùng giữ nút chuột và di chuyển chuột trên màn hình.
+    public void mouseDragged(MouseEvent e) {
         if(isEnd) return;
         if(board.selectedPiece != null) {
             if(isTurn != board.selectedPiece.isWhite) {
