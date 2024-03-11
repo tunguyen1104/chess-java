@@ -1,11 +1,11 @@
-package pieces;
+package model.pieces;
 
-import model.GamePVP;
+import model.Board;
 import java.awt.image.BufferedImage;
 
-public class Knight extends Piece{
+public class Knight extends Piece {
 
-    public Knight(GamePVP board, int col, int row, boolean isWhite) {
+    public Knight(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;
@@ -20,6 +20,6 @@ public class Knight extends Piece{
     }
     @Override
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {
-        return Math.abs(col - this.col) * Math.abs(row - this.row) == 2;
+        return Math.abs(col - this.col) * Math.abs(row - this.row) == 2 && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
 }

@@ -1,11 +1,10 @@
-package pieces;
+package model.pieces;
 
-import model.GamePVP;
-import java.awt.image.BufferedImage;
+import model.Board;
 
-public class Bishop extends Piece{
+public class Bishop extends Piece {
 
-    public Bishop(GamePVP board, int col, int row, boolean isWhite) {
+    public Bishop(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;
@@ -13,11 +12,11 @@ public class Bishop extends Piece{
         this.yPos = row * board.tileSize;
         this.isWhite = isWhite;
         this.name = "Bishop";
-        this.sprite = sheet.getSubimage(2 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        this.sprite = sheet.getSubimage(2 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale);
     }
     @Override
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {
-        return Math.abs(this.col - col) == Math.abs(this.row - row);
+        return Math.abs(this.col - col) == Math.abs(this.row - row) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
     @Override
     public boolean moveCollidesWithPiece(int col,int row) {

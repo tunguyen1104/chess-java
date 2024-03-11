@@ -1,10 +1,10 @@
 package model;
 
-import pieces.Piece;
+import model.pieces.Piece;
 //Kiem tra chieu tuong
 public class CheckScanner {
-    GamePVP board;
-    public CheckScanner(GamePVP board) {
+    private Board board;
+    public CheckScanner(Board board) {
         this.board = board;
     }
     public boolean isKingChecked(Move move) {

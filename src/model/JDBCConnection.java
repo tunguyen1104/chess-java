@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.*;
 import java.sql.*;
 
 public class JDBCConnection {
@@ -31,9 +32,12 @@ public class JDBCConnection {
                     _password = rs.getString(2);
                     _email = rs.getString(3);
                     if (username.equals(_username) && password.equals(_password)) {
+                        preparedStatement.close();
+                        conn.close();
                         return true;
                     }
                 }
+                JOptionPane.showMessageDialog(null, "Username or password is incorrect","Message", JOptionPane.WARNING_MESSAGE);
                 preparedStatement.close();
                 conn.close();
             } catch(SQLException ex) {
@@ -41,6 +45,7 @@ public class JDBCConnection {
             }
         }
         else {
+            JOptionPane.showMessageDialog(null, "Connection database failed!","Message", JOptionPane.WARNING_MESSAGE);
             System.out.println("Connection database failed!");
         }
         return false;
@@ -59,6 +64,9 @@ public class JDBCConnection {
                     _password = rs.getString(2);
                     _email = rs.getString(3);
                     if (username.equals(_username) || email.equals(_email)) {
+                        preparedStatement.close();
+                        conn.close();
+                        JOptionPane.showMessageDialog(null, "Account already exist!","Message", JOptionPane.WARNING_MESSAGE);
                         return false;
                     }
                 }
@@ -71,6 +79,7 @@ public class JDBCConnection {
             }
         }
         else {
+            JOptionPane.showMessageDialog(null, "Connection database failed!","Message", JOptionPane.WARNING_MESSAGE);
             System.out.println("Connection database failed!");
         }
         return false;

@@ -1,4 +1,6 @@
-package model;
+package view;
+
+import model.JDBCConnection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -89,28 +91,26 @@ public class Login extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == login_button) {
-            String username = _username.getText();
-            String password = _password.getText();
+            String username = _username.getText().trim();
+            char[] password_char = _password.getPassword();
+            String password = new String(password_char).trim();
             if(username.equals("")) {
-                JOptionPane.showMessageDialog(null, "username is blank");
+                JOptionPane.showMessageDialog(null, "username is blank","Message", JOptionPane.WARNING_MESSAGE);
             }
             else if(password.equals("")) {
-                JOptionPane.showMessageDialog(null, "password is blank");
+                JOptionPane.showMessageDialog(null, "password is blank","Message", JOptionPane.WARNING_MESSAGE);
             }
             else if(username.length() < 8) {
-                JOptionPane.showMessageDialog(null, "username < 8");
+                JOptionPane.showMessageDialog(null, "username < 8","Message", JOptionPane.WARNING_MESSAGE);
             }
             else if(password.length() < 8) {
-                JOptionPane.showMessageDialog(null, "password < 8");
+                JOptionPane.showMessageDialog(null, "password < 8","Message", JOptionPane.WARNING_MESSAGE);
             }
             else {
                 if (JDBCConnection.checkValidAccount(username,password)) {
-                    JOptionPane.showMessageDialog(null, "Login successfully!");
+                    JOptionPane.showMessageDialog(null, "Login successfully!","Success",JOptionPane.INFORMATION_MESSAGE);
                     this.dispose();
                     new Menu();
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Username or password is incorrect");
                 }
             }
         }

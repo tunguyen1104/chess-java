@@ -1,10 +1,11 @@
-package pieces;
+package model.pieces;
 
-import model.GamePVP;
+import model.Board;
+
 import java.awt.image.BufferedImage;
 
-public class Pawn extends Piece{
-    public Pawn(GamePVP board, int col, int row, boolean isWhite) {
+public class Pawn extends Piece {
+    public Pawn(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;

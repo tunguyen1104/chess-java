@@ -1,4 +1,4 @@
-package model;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,7 +80,7 @@ public class GameOptions extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Menu();
+                new view.Menu();
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
@@ -121,6 +121,7 @@ public class GameOptions extends JPanel{
                             minute = 10;
                             break;
                     }
+                    frame.dispose();
                     new GamePVP(minute);
                 }
             }
