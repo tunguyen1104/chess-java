@@ -1,32 +1,42 @@
-package model;
+package controller;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import pieces.*;
+import model.*;
+import model.pieces.Piece;
+import view.GameOptions;
+import view.GamePVP;
+import view.Menu;
 
 import javax.swing.*;
 
 public class Listener extends MouseAdapter {
-    private GamePVP board;
+    private GamePVP game;
+    private Board board;
     public Sound sound = new Sound();
     private boolean isTurn = true;// mặc định quân trắng đi trước
     public boolean isEnd = false;// end because King die
-    public Listener(GamePVP board) {
+    public Integer check_delete_or_promotion = -1;
+    public Listener(Board board,GamePVP game) {
         this.board = board;
+        this.game = game;
+    }
+    public void change_check_delete_or_promotion(int x) {
+        this.check_delete_or_promotion = x;
     }
     @Override
     public void mousePressed(MouseEvent e) {
         if(isEnd) return;
-        if ("00:00".equals(board.timeLabelWhite.getText())) {
+        if ("00:00".equals(game.timeLabelWhite.getText())) {
             sound.playMusic(1);
-            board.stop_white();
-            board.stop_black();
+            game.stop_white();
+            game.stop_black();
             noti_end_game("White","Time out");
-        } else if ("00:00".equals(board.timeLabelBlack.getText())) {
+        } else if ("00:00".equals(game.timeLabelBlack.getText())) {
             sound.playMusic(1);
-            board.stop_white();
-            board.stop_black();
+            game.stop_white();
+            game.stop_black();
             noti_end_game("Black", "Time out");
         }
         if(board.selectedPiece != null) {
@@ -63,19 +73,26 @@ public class Listener extends MouseAdapter {
         if(board.selectedPiece != null){
             Move move = new Move(board,board.selectedPiece,col,row);
             if(board.isValidMove(move)){
+                this.check_delete_or_promotion = -1;
                 board.makeMove(move);
                 if(isTurn == true) {
-                    board.start_white();
-                    board.stop_black();
+                    game.start_white();
+                    game.stop_black();
                     isTurn = false;
                 }
                 else{
-                    board.start_black();
-                    board.stop_white();
+                    game.start_black();
+                    game.stop_white();
                     isTurn = true;
                 }
                 board.paint_old_new(move.getOldCol(),move.getOldRow(),move.getNewCol(),move.getNewRow());
-                sound.playMusic(2);
+                if(this.check_delete_or_promotion == -1) sound.playMusic(2);
+                else if(this.check_delete_or_promotion == 1000) {
+
+                }
+                else if(this.check_delete_or_promotion == 2000) {
+
+                }
             }
             else {
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize;
@@ -87,15 +104,15 @@ public class Listener extends MouseAdapter {
         if (board.findKing(true) == null) {
             isEnd = true;
             sound.playMusic(1);
-            board.stop_white();
-            board.stop_black();
+            game.stop_white();
+            game.stop_black();
             noti_end_game("Black","King die");
         }
         else if (board.findKing(false) == null) {
             isEnd = true;
             sound.playMusic(1);
-            board.stop_white();
-            board.stop_black();
+            game.stop_white();
+            game.stop_black();
             noti_end_game("White","King die");
         }
     }
@@ -105,15 +122,15 @@ public class Listener extends MouseAdapter {
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         switch(select) {
             case 0:
-                board.frame.dispose();
+                game.frame.dispose();
                 new GameOptions();
                 break;
             case 1:
-                board.frame.dispose();
+                game.frame.dispose();
                 new Menu();
                 break;
             case 2:
-                board.frame.dispose();
+                game.frame.dispose();
                 break;
         }
     }

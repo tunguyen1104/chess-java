@@ -1,4 +1,6 @@
-package model;
+package view;
+
+import model.JDBCConnection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,10 +20,12 @@ public class Login extends JFrame implements ActionListener {
     private JPasswordField _password;
     private JButton login_button;
     private JButton switch_to_signup;
+    private BufferedImage icon_game;
     public Login() {
         this.setTitle("LOGIN");
         this.setLayout(new GridLayout(0,2));
         try {
+            icon_game = ImageIO.read(new File("src/res/gui/icon_game.png"));
             BufferedImage originalImage = ImageIO.read(new File("src/res/gui/bg.jpg"));
             Image scaledImage = originalImage.getScaledInstance(400, 500, Image.SCALE_SMOOTH);
             ImageIcon imageIcon = new ImageIcon(scaledImage);
@@ -30,6 +34,9 @@ public class Login extends JFrame implements ActionListener {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+        this.setIconImage(icon_game);
         panel = new JPanel();
         panel.setPreferredSize(new Dimension(400, 500));
         panel.setLayout(null);
@@ -89,28 +96,26 @@ public class Login extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == login_button) {
-            String username = _username.getText();
-            String password = _password.getText();
+            String username = _username.getText().trim();
+            char[] password_char = _password.getPassword();
+            String password = new String(password_char).trim();
             if(username.equals("")) {
-                JOptionPane.showMessageDialog(null, "username is blank");
+                JOptionPane.showMessageDialog(null, "username is blank","Message", JOptionPane.WARNING_MESSAGE);
             }
             else if(password.equals("")) {
-                JOptionPane.showMessageDialog(null, "password is blank");
+                JOptionPane.showMessageDialog(null, "password is blank","Message", JOptionPane.WARNING_MESSAGE);
             }
             else if(username.length() < 8) {
-                JOptionPane.showMessageDialog(null, "username < 8");
+                JOptionPane.showMessageDialog(null, "username < 8","Message", JOptionPane.WARNING_MESSAGE);
             }
             else if(password.length() < 8) {
-                JOptionPane.showMessageDialog(null, "password < 8");
+                JOptionPane.showMessageDialog(null, "password < 8","Message", JOptionPane.WARNING_MESSAGE);
             }
             else {
                 if (JDBCConnection.checkValidAccount(username,password)) {
-                    JOptionPane.showMessageDialog(null, "Login successfully!");
+                    JOptionPane.showMessageDialog(null, "Login successfully!","Success",JOptionPane.INFORMATION_MESSAGE);
                     this.dispose();
                     new Menu();
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Username or password is incorrect");
                 }
             }
         }

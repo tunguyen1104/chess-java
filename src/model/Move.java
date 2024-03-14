@@ -1,6 +1,6 @@
 package model;
 
-import pieces.Piece;
+import model.pieces.Piece;
 
 public class Move {
     private int oldCol;
@@ -9,7 +9,7 @@ public class Move {
     private int newRow;
     Piece capture;//to
     Piece piece;//from
-    public Move(GamePVP board, Piece piece, int newCol, int newRow) {
+    public Move(Board board, Piece piece, int newCol, int newRow) {
         this.oldCol = piece.col;
         this.oldRow = piece.row;
         this.newCol = newCol;

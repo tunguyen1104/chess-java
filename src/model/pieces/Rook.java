@@ -1,10 +1,10 @@
-package pieces;
+package model.pieces;
 
-import model.GamePVP;
+import model.Board;
 import java.awt.image.BufferedImage;
-public class Rook extends Piece{
+public class Rook extends Piece {
 
-    public Rook(GamePVP board, int col, int row, boolean isWhite) {
+    public Rook(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;
@@ -16,7 +16,7 @@ public class Rook extends Piece{
     }
     @Override
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {
-        return this.col == col || this.row == row;
+        return (this.col == col || this.row == row) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
     @Override
     public boolean moveCollidesWithPiece(int col,int row){

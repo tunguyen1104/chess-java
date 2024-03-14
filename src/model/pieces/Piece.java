@@ -1,7 +1,6 @@
-package pieces;
+package model.pieces;
 
-import model.GamePVP;
-import model.Setting;
+import model.Board;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,9 +16,9 @@ public class Piece {
     public boolean isWhite;
     public String name;
     Image sprite;
-    GamePVP board;
+    Board board;
     public boolean the_pawn_first_move = true;
-    BufferedImage sheet;
+    protected BufferedImage sheet;
     {
         try {
             sheet = ImageIO.read(new File("src/res/pieces/default.png"));
@@ -29,7 +28,7 @@ public class Piece {
     }
     protected int sheetScale = sheet.getWidth() / 6;
 
-    public Piece(GamePVP board) {
+    public Piece(Board board) {
         this.board = board;
     }
     public void paint(Graphics2D g2d){
