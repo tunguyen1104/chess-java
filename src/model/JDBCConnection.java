@@ -136,21 +136,21 @@ public class JDBCConnection {
     public static boolean checkCurrentUser() {
         Connection conn = JDBCConnection.getJDBCConnection();
         if (conn != null) {
-                try {
-                    PreparedStatement statement = conn.prepareStatement("SELECT username, password, email FROM CURRENTUSER");
-                    ResultSet rs = statement.executeQuery();
-                    if (rs.next()) {
-                        String username = rs.getString("username");
-                        String password = rs.getString("password");
-                        String email = rs.getString("email");
-                        rs.close();
-                        statement.close();
-                        return true;
-                    }
-                    return false;
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
+            try {
+                PreparedStatement statement = conn.prepareStatement("SELECT username, password, email FROM CURRENTUSER");
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    String email = rs.getString("email");
+                    rs.close();
+                    statement.close();
+                    return true;
                 }
+                return false;
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         try {
             conn.close();
