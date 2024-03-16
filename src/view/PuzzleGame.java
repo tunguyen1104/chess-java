@@ -1,5 +1,7 @@
 package view;
 
+import model.Board;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +27,7 @@ public class PuzzleGame extends JPanel {
     private ButtonImage home_normal_button;
     private BufferedImage board_index;
     private BufferedImage panel_320_292;
-    BoardPuzzle boardPuzzle;
+    Board board;
     private BufferedImage normal;
     private BufferedImage selected;
     private ButtonImage hint;
@@ -42,7 +44,7 @@ public class PuzzleGame extends JPanel {
     private JLabel failed;
     public PuzzleGame(String FEN, int lever) {
         this.FEN = FEN;
-        boardPuzzle = new BoardPuzzle(this,FEN);
+        board = new Board(this,FEN);
         try {
             normal = ImageIO.read(new File("src/res/buttons/menu_normal.png"));
             selected = ImageIO.read(new File("src/res/buttons/menu_selected.png"));
@@ -58,8 +60,8 @@ public class PuzzleGame extends JPanel {
             e.printStackTrace();
         }
         initPanel(lever);
-        hint_panel.setVisible(false);
-        done_panel.setVisible(true);
+        hint_panel.setVisible(true);
+        done_panel.setVisible(false);
         undo_panel.setVisible(false);
         frame = new JFrame("CHESS");
         frame.setIconImage(icon_game);
@@ -84,10 +86,10 @@ public class PuzzleGame extends JPanel {
         this.setPreferredSize(new Dimension(1600,1000));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
-        boardPuzzle.setBounds(308,94,boardPuzzle.tileSize * 8,boardPuzzle.tileSize * 8);
-        this.add(boardPuzzle);
-        title_bar_label = new JLabel("Puzzles - Lever " + lever);
-        title_bar_label.setBounds(720,0,400,60);
+        board.setBounds(308,94,board.tileSize * 8,board.tileSize * 8);
+        this.add(board);
+        title_bar_label = new JLabel("Puzzle - Lever " + lever);
+        title_bar_label.setBounds(680,4,400,50);
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
         this.add(title_bar_label);
@@ -102,7 +104,7 @@ public class PuzzleGame extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.setVisible(false);
-                new Puzzle();
+                new ListPuzzle();
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
@@ -121,10 +123,10 @@ public class PuzzleGame extends JPanel {
         hint_panel.setBackground(new Color(55,55,55));
         hint_panel.setLayout(null);
         hint = new ButtonImage(normal,selected,150,50,"Hint");
-        hint.setBounds(60,160,150,50);
+        hint.setBounds(60,136,150,50);
         hint_panel.add(hint);
         color_to_move = new JLabel();
-        String key = boardPuzzle.isTurn ? "White to move" : "Black to move";
+        String key = board.color_to_move ? "White to Move" : "Black to Move";
         color_to_move.setText(key);
         try {
             color_to_move.setFont(Font.createFont(Font.TRUETYPE_FONT,
@@ -134,7 +136,7 @@ public class PuzzleGame extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        color_to_move.setBounds(40,60,240,60);
+        color_to_move.setBounds(18,60,240,50);
         color_to_move.setForeground(Color.WHITE);
         hint_panel.add(color_to_move);
         this.add(hint_panel);
@@ -144,10 +146,10 @@ public class PuzzleGame extends JPanel {
         undo_panel.setBackground(new Color(55,55,55));
         undo_panel.setLayout(null);
         undo = new ButtonImage(normal,selected,150,50,"Undo");
-        undo.setBounds(60,160,150,50);
-        undo_panel.add(hint);
+        undo.setBounds(58,100,150,50);
+        undo_panel.add(undo);
         failed = new JLabel();
-        failed.setText("Try Again!");
+        failed.setText("Try Again");
         try {
             failed.setFont(Font.createFont(Font.TRUETYPE_FONT,
                     new File("src/res/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 30));
@@ -156,7 +158,7 @@ public class PuzzleGame extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        failed.setBounds(40,60,240,60);
+        failed.setBounds(46,60,240,60);
         failed.setForeground(Color.WHITE);
         undo_panel.add(failed);
         this.add(undo_panel);

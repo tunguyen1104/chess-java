@@ -1,5 +1,7 @@
 package view;
 
+import model.JDBCConnection;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,8 +11,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class Puzzle extends JPanel {
+public class ListPuzzle extends JPanel {
     private JFrame frame;
     private JPanel panel_contains_puzzle_page_1;
     private JPanel panel_contains_puzzle_page_2;
@@ -35,14 +38,16 @@ public class Puzzle extends JPanel {
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
     private ButtonImage puzzle[] = new ButtonImage[106];
-
     private ButtonImage forward_left;
     private ButtonImage forward_right;
     private int cnt = 1;
     private JLabel page;
     String _page[] = {"1/3","2/3","3/3"};
     private int index_page = 0;
-    public Puzzle () {
+    private ArrayList<String> arr;
+    public ListPuzzle() {
+        arr = new ArrayList<String>();
+        arr = JDBCConnection.takeDataPuzzle();
         try {
             forward_normal_game = ImageIO.read(new File("src/res/buttons/forward_normal.png"));
             forward_normal_game_v2 = ImageIO.read(new File("src/res/buttons/forward_normalv2.png"));
@@ -103,7 +108,7 @@ public class Puzzle extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new view.Menu();
+                new Menu();
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
@@ -192,6 +197,7 @@ public class Puzzle extends JPanel {
             System.out.println(e);
         }
         initPuzzleFailed();
+        initPuzzleSolved();
     }
     public void initPage1() {
         panel_contains_puzzle_page_1 = new JPanel();
@@ -243,7 +249,6 @@ public class Puzzle extends JPanel {
         panel_contains_puzzle_page_3.setBackground(new Color(41, 41, 41));
         panel_contains_puzzle_page_3.setLayout(null);
         panel_contains_puzzle_page_3.setBounds(260,100,1000,620);
-
         int X = 10;
         int Y = 10;
         for(int i = 0;i < 5; ++i) {
@@ -262,6 +267,8 @@ public class Puzzle extends JPanel {
         }
     }
     public void initController(final String FEN, final int lever) {
+        /* mouseClicked cần truy cập FEN nhưng lever không thể truy cập trực tiếp vì chúng là các biến cục bộ.
+        Khai báo FEN and lever as final cung cấp quyền truy cập an toàn và có kiểm soát từ lớp bên trong ẩn danh.*/
             puzzle[lever].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -270,15 +277,24 @@ public class Puzzle extends JPanel {
                     new PuzzleGame(FEN, lever);
                 }
             });
-
     }
     public void initPuzzleFailed() {
-        puzzle[1].setNormal(puzzle_failed_normal);
-        puzzle[1].setSelected(puzzle_failed_selected);
-        puzzle[1].setImage(puzzle_failed_normal);
+        String s = arr.get(0);
+        String number[] = s.split(",");
+        for(String x: number) {
+            puzzle[Integer.parseInt(x)].setNormal(puzzle_failed_normal);
+            puzzle[Integer.parseInt(x)].setSelected(puzzle_failed_selected);
+            puzzle[Integer.parseInt(x)].setImage(puzzle_failed_normal);
+        }
     }
     public void initPuzzleSolved() {
-
+        String s = arr.get(1);
+        String number[] = s.split(",");
+        for(String x: number) {
+            puzzle[Integer.parseInt(x)].setNormal(puzzle_solved_normal);
+            puzzle[Integer.parseInt(x)].setSelected(puzzle_solved_selected);
+            puzzle[Integer.parseInt(x)].setImage(puzzle_solved_normal);
+        }
     }
     @Override
     protected void paintComponent(Graphics g) {
@@ -287,6 +303,6 @@ public class Puzzle extends JPanel {
         g2d.drawImage(title_bar,530,10,450,42,this);
     }
     public static void main(String[] args) {
-        new Puzzle();
+        new ListPuzzle();
     }
 }

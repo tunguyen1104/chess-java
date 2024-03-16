@@ -14,13 +14,14 @@ import javax.swing.*;
 public class Listener extends MouseAdapter {
     private GamePVP game;
     private Board board;
-    public Sound sound = new Sound();
+    public Sound sound;
     private boolean isTurn = true;// mặc định quân trắng đi trước
     public boolean isEnd = false;// end because King die
     public Integer check_delete_or_promotion = -1;
-    public Listener(Board board,GamePVP game) {
+    public Listener(Board board,GamePVP game,Sound sound) {
         this.board = board;
         this.game = game;
+        this.sound = sound;
     }
     public void change_check_delete_or_promotion(int x) {
         this.check_delete_or_promotion = x;

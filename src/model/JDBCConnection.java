@@ -170,7 +170,7 @@ public class JDBCConnection {
         }
         return false;
     }
-    public static ArrayList<String> takeData() {
+    public static ArrayList<String> takeDataSetting() {
         ArrayList<String> arr = null;
         Connection conn = null;
         PreparedStatement statement = null;
@@ -189,7 +189,7 @@ public class JDBCConnection {
                 arr.add(sound ? "1" : "0");
             }
         } catch (SQLException ex) {
-            System.err.println("Lỗi kết nối: " + ex.getMessage());
+            System.err.println(ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -205,11 +205,44 @@ public class JDBCConnection {
                 System.err.println(ex);
             }
         }
-
         return arr;
     }
-
-    public static void updateData(String piece_url, String board_url, Boolean sound) {
+    public static ArrayList<String> takeDataPuzzle() {
+        ArrayList<String> arr = null;
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            conn = JDBCConnection.getJDBCConnection();
+            statement = conn.prepareStatement("SELECT PUZZLE_FAILED, PUZZLE_SOLVED FROM CURRENTUSER");
+            rs = statement.executeQuery();
+            if (rs.next()) {
+                String puzzle_failed = rs.getString("puzzle_failed");
+                String puzzle_solved = rs.getString("puzzle_solved");
+                arr = new ArrayList<String>();
+                arr.add(puzzle_failed);
+                arr.add(puzzle_solved);
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
+        return arr;
+    }
+    public static void updateDataSetting(String piece_url, String board_url, Boolean sound) {
         Connection conn = null;
         PreparedStatement statement = null;
 
@@ -235,5 +268,28 @@ public class JDBCConnection {
             }
         }
     }
-
+    public static void updateDataPuzzle(String puzzle_failed, String puzzle_solved) {
+        Connection conn = null;
+        PreparedStatement statement = null;
+        try {
+            conn = JDBCConnection.getJDBCConnection();
+            statement = conn.prepareStatement("UPDATE CURRENTUSER SET PUZZLE_FAILED = ?, PUZZLE_SOLVED = ?");
+            statement.setString(1, puzzle_failed);
+            statement.setString(2, puzzle_solved);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
+    }
 }

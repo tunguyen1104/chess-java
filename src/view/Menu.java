@@ -107,7 +107,7 @@ public class Menu extends JPanel implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 frame.dispose();
-                new Puzzle();
+                new ListPuzzle();
             }
         });
         settings_menu.addMouseListener(new MouseAdapter() {

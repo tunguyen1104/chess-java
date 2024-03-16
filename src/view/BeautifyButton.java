@@ -8,10 +8,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 
 public class BeautifyButton extends JButton {
-    private boolean check_color;//nếu dang hover vào button -> true
     private Color color;
     private Color colorHover;
-    private Color colorClick;
     public void setColor(Color color) {
         this.color = color;
         setBackground(color);
@@ -19,31 +17,16 @@ public class BeautifyButton extends JButton {
     public BeautifyButton(String title) {
         this.setText(title);
         setColor(new Color(79,88,104));
-        colorHover = new Color(47, 53, 62);
-        colorClick = new Color(135, 146, 166);
+        colorHover = new Color(135, 146, 166);
         this.setContentAreaFilled(false);
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent me) {
                 setBackground(colorHover);
-                check_color = true;
             }
             @Override
             public void mouseExited(MouseEvent me) {
                 setBackground(color);
-                check_color = false;
-            }
-            @Override
-            public void mousePressed(MouseEvent me) {
-                setBackground(colorClick);
-            }
-            @Override
-            public void mouseReleased(MouseEvent me) {
-                if (check_color) {
-                    setBackground(colorHover);
-                } else {
-                    setBackground(color);
-                }
             }
         });
     }

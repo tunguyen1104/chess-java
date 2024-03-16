@@ -14,7 +14,7 @@ public class Move {
         this.oldRow = piece.row;
         this.newCol = newCol;
         this.newRow = newRow;
-        this.capture = board.getPiece(newCol, newRow);//lay ra quan co o vi tri newCol,newRow. Nếu ô trống -> null
+        this.capture = board.getPiece(newCol, newRow);
         this.piece = piece;
     }
 

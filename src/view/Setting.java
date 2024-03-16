@@ -25,9 +25,6 @@ public class Setting extends JPanel{
     private BufferedImage home_normal;
     private BufferedImage piece_image;
     private JLabel title_bar_label;
-    private JComboBox combo_piece;
-    private JComboBox combo_board;
-    private JComboBox combo_sound;
     private BufferedImage noavatar;
     private BufferedImage board_image;
     private BufferedImage icon_game;
@@ -58,6 +55,29 @@ public class Setting extends JPanel{
     private BufferedImage save_selected;
     private ButtonImage save;
     private ButtonImage change_password;
+    private BufferedImage forward_normal_piece;
+    private BufferedImage forward_normal_piece_v2;
+    private BufferedImage forward_selected_piece;
+    private BufferedImage forward_selected_piece_v2;
+    private int index_piece = 0;
+    private ButtonImage forward_left_piece;
+    private ButtonImage forward_right_piece;
+    private BufferedImage forward_normal_board;
+    private BufferedImage forward_normal_board_v2;
+    private BufferedImage forward_selected_board;
+    private BufferedImage forward_selected_board_v2;
+    private int index_board = 0;
+    private ButtonImage forward_left_board;
+    private ButtonImage forward_right_board;
+    private BufferedImage forward_normal_sound;
+    private BufferedImage forward_normal_sound_v2;
+    private BufferedImage forward_selected_sound;
+    private BufferedImage forward_selected_sound_v2;
+    private BufferedImage option_box_sound;
+    private int index_sound = 0;
+    private JLabel option_box_sound_label;
+    private ButtonImage forward_left_sound;
+    private ButtonImage forward_right_sound;
     ArrayList<String> dataJDBC;
     String [] piece_url = {
             "src/res/pieces/default.png",
@@ -73,13 +93,7 @@ public class Setting extends JPanel{
             "src/res/board/green.png","src/res/board/brown.png","src/res/board/tournament.png","src/res/board/blackwhite.png",
             "src/res/board/blue.png","src/res/board/metal.png","src/res/board/wood.png"
     };
-    String pieces[] = {
-            "  Default","  Alpha","  Anarcandy","  Cardinal","  Chessnut","  Kiwen-suwi","  Maestro","  Tatiana"
-    };
-    String board[] = {
-            "  Green","  Brown","  Tournament", "  Black White","  Blue","  Metal","  Wood"
-    };
-    String turn[] = {"  On","  Off"};
+    String turn[] = {"On","Off"};
     public Setting(){
         initPanel();
         frame = new JFrame();
@@ -103,11 +117,24 @@ public class Setting extends JPanel{
     }
     public void initPanel() {
         dataJDBC = new ArrayList<String>();
-        dataJDBC = JDBCConnection.takeData();
+        dataJDBC = JDBCConnection.takeDataSetting();
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         // Load image
         try {
+            option_box_sound = ImageIO.read(new File("src/res/gui/option_box.png"));
+            forward_normal_piece = ImageIO.read(new File("src/res/buttons/forward_normal.png"));
+            forward_normal_piece_v2 = ImageIO.read(new File("src/res/buttons/forward_normalv2.png"));
+            forward_selected_piece = ImageIO.read(new File("src/res/buttons/forward_selected.png"));
+            forward_selected_piece_v2 = ImageIO.read(new File("src/res/buttons/forward_selectedv2.png"));
+            forward_normal_board = forward_normal_piece;
+            forward_normal_board_v2 = forward_normal_piece_v2;
+            forward_selected_board = forward_selected_piece;
+            forward_selected_board_v2 = forward_selected_piece_v2;
+            forward_normal_sound = forward_normal_piece;
+            forward_normal_sound_v2 = forward_normal_piece_v2;
+            forward_selected_sound = forward_selected_piece;
+            forward_selected_sound_v2 = forward_selected_piece_v2;
             save_normal = ImageIO.read(new File("src/res/buttons/save_normal.png"));
             save_selected = ImageIO.read(new File("src/res/buttons/save_selected.png"));
             noavatar = ImageIO.read(new File("src/res/gui/noavatar.gif"));
@@ -171,117 +198,177 @@ public class Setting extends JPanel{
         initLogout();
     }
     public void initGame() {
-        game = new JPanel();
+        game = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g;
+                super.paintComponent(g2d);
+                g2d.drawImage(option_box_sound,276,276,160,40,game);
+            }
+        };
         game.setBounds(500,180,540,420);
         game.setBackground(new Color(55,55,55));
         game.setLayout(null);
         this.add(game);
         //label piece set
         piece_set = new JLabel("Piece Set");
-        piece_set.setBounds(50,20,90,40);
+        piece_set.setBounds(50,30,90,40);
         piece_set.setForeground(Color.WHITE);
         piece_set.setFont(piece_set.getFont().deriveFont(20.0f));
         game.add(piece_set);
         //------------------------
         board_label = new JLabel("Board");
-        board_label.setBounds(50,160,90,40);
+        board_label.setBounds(50,150,90,40);
         board_label.setForeground(Color.WHITE);
         board_label.setFont(board_label.getFont().deriveFont(20.0f));
         game.add(board_label);
         //------------------------
         sound_label = new JLabel("Sound");
-        sound_label.setBounds(50,280,90,40);
+        sound_label.setBounds(50,270,90,40);
         sound_label.setForeground(Color.WHITE);
         sound_label.setFont(sound_label.getFont().deriveFont(20.0f));
         game.add(sound_label);
-        //------------------------
         //setting type pieces
-        combo_piece = new JComboBox(pieces);
+        forward_left_piece = new ButtonImage(forward_normal_piece, forward_selected_piece,32,32,"");
+        forward_right_piece = new ButtonImage(forward_normal_piece_v2,forward_selected_piece_v2,32,32,"");
+        forward_left_piece.setBounds(240,40,32,32);
+        forward_right_piece.setBounds(440,40,32,32);
         for(int i = 0;i < piece_url.length; ++i) {
             if(piece_url[i].equals(dataJDBC.get(0))) {
-                combo_piece.setSelectedIndex(i);
+                index_piece = i;
                 break;
             }
         }
-        combo_piece.setBackground(new Color(27, 101, 106, 255));
-        combo_piece.setForeground(Color.WHITE);
-        combo_piece.setFocusable(false);
-        combo_piece.setBounds(330,30,140,30);
-        combo_piece.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        forward_left_piece.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                --index_piece;
+                if(index_piece < 0) index_piece = piece_url.length - 1;
                 try {
-                    int selectedIndex = combo_piece.getSelectedIndex();
-                    piece_image = ImageIO.read(new File(piece_url[selectedIndex]));
+                    piece_image = ImageIO.read(new File(piece_url[index_piece]));
                     piece_panel.repaint();
                 } catch (IOException ex) {
                     System.out.println("Error url image!");
-                    throw new RuntimeException(ex);
                 }
             }
         });
-        piece_panel = new JPanel(){
+
+        forward_right_piece.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                ++index_piece;
+                if(index_piece > piece_url.length - 1) index_piece = 0;
+                try {
+                    piece_image = ImageIO.read(new File(piece_url[index_piece]));
+                    piece_panel.repaint();
+                } catch (IOException ex) {
+                    System.out.println("Error url image!");
+                }
+            }
+        });
+        piece_panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
                 super.paintComponent(g2d);
-                g2d.drawImage(piece_image,6,5,140,50,game);
+                g2d.drawImage(piece_image,6,5,140,50,piece_panel);
             }
         };
         piece_panel.setBackground(new Color(161, 150, 128));
-        piece_panel.setBounds(160,20,150,60);
+        piece_panel.setBounds(282,30,150,60);
         game.add(piece_panel);
-        game.add(combo_piece);
-
-
-        combo_board = new JComboBox(board);
+        game.add(forward_left_piece);
+        game.add(forward_right_piece);
+        //board
         for(int i = 0;i < board_url.length; ++i) {
             if(board_url[i].equals(dataJDBC.get(1))) {
-                combo_board.setSelectedIndex(i);
+                index_board = i;
                 break;
             }
         }
-        combo_board.setBackground(new Color(27, 101, 106, 255));
-        combo_board.setFocusable(false);
-        combo_board.setForeground(Color.WHITE);
-        combo_board.setBounds(330, 160, 140, 30);
-        game.add(combo_board);
-
-        combo_board.addActionListener(new ActionListener() {
+        forward_left_board = new ButtonImage(forward_normal_board,forward_selected_board,32,32,"");
+        forward_right_board = new ButtonImage(forward_normal_board_v2,forward_selected_board_v2,32,32,"");
+        forward_left_board.setBounds(240,160,32,32);
+        forward_right_board.setBounds(440,160,32,32);
+        forward_left_board.addMouseListener(new MouseAdapter(){
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                --index_board;
+                if(index_board < 0) index_board = board_url.length - 1;
                 try {
-                    int selectedIndex = combo_board.getSelectedIndex();
-                    board_image = ImageIO.read(new File(board_url[selectedIndex]));
+                    board_image = ImageIO.read(new File(board_url[index_board]));
                     int tilesize = board_image.getWidth() / 8;
                     board_image_cut = board_image.getSubimage(0, 0, tilesize*6 , tilesize*3).getScaledInstance(tilesize*6, tilesize*3, BufferedImage.SCALE_SMOOTH);
                     board_panel.repaint();
                 } catch (IOException ex) {
                     System.out.println("Error url image!");
-                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        forward_right_board.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                ++index_board;
+                if(index_board > board_url.length - 1) index_board = 0;
+                try {
+                    board_image = ImageIO.read(new File(board_url[index_board]));
+                    int tilesize = board_image.getWidth() / 8;
+                    board_image_cut = board_image.getSubimage(0, 0, tilesize*6 , tilesize*3).getScaledInstance(tilesize*6, tilesize*3, BufferedImage.SCALE_SMOOTH);
+                    board_panel.repaint();
+                } catch (IOException ex) {
+                    System.out.println("Error url image!");
                 }
             }
         });
         board_panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(board_image_cut,0,0,140,70,board_panel);
+                Graphics2D g2d = (Graphics2D) g;
+                super.paintComponent(g2d);
+                g2d.drawImage(board_image_cut,0,0,150,70,board_panel);
             }
         };
-        board_panel.setBounds(160,152,140,70);
+        board_panel.setBounds(280,152,150,70);
         game.add(board_panel);
-
-        combo_sound = new JComboBox(turn);
-        combo_sound.setBackground(new Color(27, 101, 106, 255));
-        combo_sound.setBounds(330,280,140,30);
-        combo_sound.setFocusable(false);
-        if(dataJDBC.get(2).equals("1")) {
-            combo_sound.setSelectedIndex(0);
-        }
-        else combo_sound.setSelectedIndex(1);
-        combo_sound.setForeground(Color.WHITE);
-        game.add(combo_sound);
-
+        game.add(forward_left_board);
+        game.add(forward_right_board);
+        //
+        option_box_sound_label = new JLabel();
+        index_sound = dataJDBC.get(2).equals("1") ? 0 : 1;
+        option_box_sound_label.setText(turn[index_sound]);
+        option_box_sound_label.setForeground(Color.WHITE);
+        option_box_sound_label.setFont(new Font("",Font.PLAIN,18));
+        option_box_sound_label.setBounds(340,280,200,32);
+        forward_left_sound = new ButtonImage(forward_normal_sound,forward_selected_sound,32,32,"");
+        forward_right_sound = new ButtonImage(forward_normal_sound_v2,forward_selected_sound_v2,32,32,"");
+        forward_left_sound.setBounds(240,280,32,32);
+        forward_right_sound.setBounds(440,280,32,32);
+        forward_left_sound.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                --index_sound;
+                if(index_sound < 0) index_sound = 1;
+                option_box_sound_label.setText(turn[index_sound]);
+            }
+        });
+        forward_right_sound.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                ++index_sound;
+                if(index_sound > 1) index_sound = 0;
+                option_box_sound_label.setText(turn[index_sound]);
+            }
+        });
+        game.add(forward_left_sound);
+        game.add(forward_right_sound);
+        game.add(option_box_sound_label);
+        //
         save = new ButtonImage(save_normal,save_selected,100,40,"Save");
         save.setBounds(340,350,100,40);
         game.add(save);
@@ -326,9 +413,7 @@ public class Setting extends JPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                int piece_index = combo_piece.getSelectedIndex();
-                int sound_index = combo_sound.getSelectedIndex();
-                JDBCConnection.updateData(piece_url[piece_index],board_url[combo_board.getSelectedIndex()],(sound_index == 0) ? true : false);
+                JDBCConnection.updateDataSetting(piece_url[index_piece],board_url[index_board],(index_sound == 0) ? true : false);
                 JOptionPane.showMessageDialog(null, "Your settings have been saved", "Notification", JOptionPane.INFORMATION_MESSAGE);
             }
         });

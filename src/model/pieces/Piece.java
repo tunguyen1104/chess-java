@@ -25,7 +25,7 @@ public class Piece {
     protected BufferedImage sheet;
     {
         try {
-            sheet = ImageIO.read(new File(JDBCConnection.takeData().get(0)));
+            sheet = ImageIO.read(new File(JDBCConnection.takeDataSetting().get(0)));
         }catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,8 +1,10 @@
 package model;
 
 import controller.Listener;
+import controller.ListenerPuzzle;
 import model.pieces.*;
 import view.GamePVP;
+import view.PuzzleGame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,26 +20,48 @@ public class Board extends JPanel{
     public int rows = 8;
     public int cols = 8;
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
+    private ArrayList<String> whiteMove = new ArrayList<String>();
+    private ArrayList<String> blackMove = new ArrayList<String>();
     public Piece selectedPiece;// quân cờ lúc bạn trỏ vào
     public Listener input;
+    public ListenerPuzzle inputPuzzle;
     public int enPassantTile = -1;
-    Sound sound = new Sound();
+    Sound sound;
     private BufferedImage board_image;
     //paint old new piece
     private int old_col = -1;
     private int old_row = -1;
     private int new_col = -1;
     private int new_row = -1;
-    public ArrayList<String> dataJDBC;
-    Piece piece;
+    public ArrayList<String> dataJDBC = JDBCConnection.takeDataSetting();
+    //dataJDBC =
+    public boolean color_to_move;
     public CheckScanner checkScanner = new CheckScanner(this);
+    private PuzzleGame puzzleGame;
+    private String FEN = "";
+    public Board(PuzzleGame puzzleGame, String FEN) {
+        if(dataJDBC.get(2) == "1") sound = new Sound();
+        else sound = new Sound(1);
+        this.puzzleGame = puzzleGame;
+        this.FEN = FEN;
+        sound.playMusic(0);
+        inputPuzzle = new ListenerPuzzle(this,sound);
+        try {
+            board_image = ImageIO.read(new File(dataJDBC.get(1)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
+        this.addMouseListener(inputPuzzle);
+        this.addMouseMotionListener(inputPuzzle);
+        handleFen(FEN);
+    }
     public Board (GamePVP game) {
-        dataJDBC = new ArrayList<String>();
-        dataJDBC = JDBCConnection.takeData();
-        piece = new Piece(this);
+        if(dataJDBC.get(2) == "1") sound = new Sound();
+        else sound = new Sound(1);
         this.game = game;
         sound.playMusic(0);
-        input = new Listener(this,game);
+        input = new Listener(this,game,sound);
         try {
             board_image = ImageIO.read(new File(dataJDBC.get(1)));
         } catch (IOException e) {
@@ -48,7 +72,7 @@ public class Board extends JPanel{
         this.addMouseMotionListener(input);
         addPiece();
     }
-    public Piece getPiece(int col, int row){// setting o day vi Board co pieceList
+    public Piece getPiece(int col, int row){
         for(Piece piece: pieceList){
             if(piece.col == col && piece.row == row){
                 return piece;
@@ -64,7 +88,7 @@ public class Board extends JPanel{
         }
         return null;
     }
-    public void makeMove(Move move) {// hàm xử lý khi di chuyển quân cờ này ăn một quân cờ khác
+    public void makeMove(Move move) {
         if(move.piece.name.equals("Pawn")) {
             movePawn(move);
         }
@@ -76,7 +100,7 @@ public class Board extends JPanel{
             if (move.capture != null) {
                 sound.playMusic(3);
                 delete_piece(move.capture);
-                input.change_check_delete_or_promotion(1000);
+                if(FEN.equals("")) input.change_check_delete_or_promotion(1000);
             }
         }
     }
@@ -103,15 +127,15 @@ public class Board extends JPanel{
         if(move.capture != null) {
             sound.playMusic(3);
             delete_piece(move.capture);
-            this.repaint();
-            input.change_check_delete_or_promotion(1000);
+            if(FEN.equals(""))input.change_check_delete_or_promotion(1000);
         }
+        this.repaint();
         move.piece.the_pawn_first_move = false;
         //promotions
         colorIndex = move.piece.isWhite ? 0 : 7;
         if(move.getNewRow() == colorIndex && findKing(true) != null && findKing(false) != null) {
             promotePawn(move);
-            input.change_check_delete_or_promotion(2000);
+            if(FEN.equals("")) input.change_check_delete_or_promotion(2000);
         }
     }
     public void promotePawn (Move move) {
@@ -200,13 +224,83 @@ public class Board extends JPanel{
         pieceList.add(new Pawn(this, 6, 6, true));
         pieceList.add(new Pawn(this, 7, 6, true));
     }
-
+    public void handleFen(String fen) {
+        //   4R1k1/2p2q1p/4pBpQ/p2pP3/r3p3/4P2P/5PP1/6K1 b - - 0 27,f7e8 h6g7
+        int cnt = 0;
+        for (int j = 0; j < 8; ++j) {
+            for (int i = 0; i < 8; ++i) {
+                char ch = fen.charAt(cnt);
+                if (Character.isDigit(ch)) {
+                    i += Character.getNumericValue(ch) - 1;
+                } else {
+                    switch (ch) {
+                        case 'r':
+                            pieceList.add(new Rook(this,i,j,false));
+                            break;
+                        case 'p':
+                            pieceList.add(new Pawn(this,i,j,false));
+                            break;
+                        case 'n':
+                            pieceList.add(new Knight(this,i,j,false));
+                            break;
+                        case 'b':
+                            pieceList.add(new Bishop(this,i,j,false));
+                            break;
+                        case 'q':
+                            pieceList.add(new Queen(this,i,j,false));
+                            break;
+                        case 'k':
+                            pieceList.add(new King(this,i,j,false));
+                            break;
+                        case 'R':
+                            pieceList.add(new Rook(this,i,j,true));
+                            break;
+                        case 'P':
+                            pieceList.add(new Pawn(this,i,j,true));
+                            break;
+                        case 'N':
+                            pieceList.add(new Knight(this, i,j,true));
+                            break;
+                        case 'B':
+                            pieceList.add(new Bishop(this,i,j,true));
+                            break;
+                        case 'Q':
+                            pieceList.add(new Queen(this,i,j,true));
+                            break;
+                        case 'K':
+                            pieceList.add(new King(this,i,j,true));
+                            break;
+                    }
+                }
+                ++cnt;
+            }
+            if (fen.charAt(cnt) == '/') {
+                ++cnt;
+            }
+            if(j == 7) {
+                ++cnt;
+                color_to_move = (fen.charAt(cnt) == 'b') ?  false : true;
+                while (cnt < fen.length()) {
+                    if (fen.charAt(cnt) == ',') {
+                        ++cnt;
+                        break;
+                    }
+                    ++cnt;
+                }
+                while (cnt + 5 < fen.length()) {
+                    whiteMove.add(fen.substring(cnt, cnt + 4));
+                    cnt += 5;
+                    blackMove.add(fen.substring(cnt, cnt + 4));
+                    cnt += 5;
+                }
+            }
+        }
+    }
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(board_image,0,0,tileSize * 8,tileSize * 8,this);
-        // paint hightlights
         if(selectedPiece != null) {
             for(int i = 0;i < rows; ++i){
                 for(int j = 0;j < cols; ++j){
@@ -217,13 +311,11 @@ public class Board extends JPanel{
                 }
             }
         }
-        //paint location new and old
         if(old_col != -1) {
             g2d.setColor(new Color(36, 144, 193, 151));
             g2d.fillRect(old_col* 85, old_row * 85, 85, 85);
             g2d.fillRect(new_col* 85, new_row * 85, 85, 85);
         }
-        // paint pieces
         for (Piece piece : pieceList) {
             piece.paint(g2d);
         }
