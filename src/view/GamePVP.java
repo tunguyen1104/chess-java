@@ -2,6 +2,7 @@ package view;
 
 import model.Board;
 import model.Sound;
+import model.pieces.Piece;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -119,8 +120,8 @@ public class GamePVP extends JPanel {
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(title_bar_label.getFont().deriveFont(18.0f)); // Tạo font mới với kích thước mới và thiết lập cho nhãn
         //================================
-        back_normal_button = new ButtonImage(back_normal,back_selected,42,42);
-        home_normal_button = new ButtonImage(home_normal,home_selected,42,42);
+        back_normal_button = new ButtonImage(back_normal,back_selected,42,42,"");
+        home_normal_button = new ButtonImage(home_normal,home_selected,42,42,"");
         back_normal_button.setBounds(465,10,42,42);
         home_normal_button.setBounds(1000,10,42,42);
         back_normal_button.addMouseListener(new MouseAdapter() {
@@ -155,9 +156,8 @@ public class GamePVP extends JPanel {
         textArea.setText(s);
         textArea.setForeground(Color.WHITE);
         try {
-            Font customFont = Font.createFont(Font.TRUETYPE_FONT,
-                    new File("src/res/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 14);
-            textArea.setFont(customFont);
+            textArea.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("src/res/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 14));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (FontFormatException e) {
@@ -179,7 +179,7 @@ public class GamePVP extends JPanel {
         this.add(title_bar_label);
 
 
-        ButtonImage rotate = new ButtonImage(rotate_normal,rotate_selected,40,30);
+        ButtonImage rotate = new ButtonImage(rotate_normal,rotate_selected,40,30,"");
         rotate.setBounds(1252,338,40,30);
         this.add(rotate);
     }

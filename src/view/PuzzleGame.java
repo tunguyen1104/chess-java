@@ -1,0 +1,197 @@
+package view;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class PuzzleGame extends JPanel {
+    private JFrame frame;
+    private String FEN;
+    private BufferedImage title_bar;
+    private JLabel title_bar_label;
+    private BufferedImage icon_game;
+    private BufferedImage home_normal;
+    private BufferedImage home_selected;
+    private BufferedImage back_normal;
+    private BufferedImage back_selected;
+    private ButtonImage back_normal_button;
+    private ButtonImage home_normal_button;
+    private BufferedImage board_index;
+    private BufferedImage panel_320_292;
+    BoardPuzzle boardPuzzle;
+    private BufferedImage normal;
+    private BufferedImage selected;
+    private ButtonImage hint;
+
+    private ButtonImage undo;
+
+    private ButtonImage try_again;
+    private ButtonImage next_lever;
+    private JPanel hint_panel;
+    private JPanel undo_panel;
+    private JPanel done_panel;
+    private JLabel color_to_move;
+    private JLabel correct;
+    private JLabel failed;
+    public PuzzleGame(String FEN, int lever) {
+        this.FEN = FEN;
+        boardPuzzle = new BoardPuzzle(this,FEN);
+        try {
+            normal = ImageIO.read(new File("src/res/buttons/menu_normal.png"));
+            selected = ImageIO.read(new File("src/res/buttons/menu_selected.png"));
+            panel_320_292 = ImageIO.read(new File("src/res/gui/panel_320_292.png"));
+            board_index = ImageIO.read(new File("src/res/gui/board_index_white.png"));
+            icon_game = ImageIO.read(new File("src/res/gui/icon_game.png"));
+            title_bar = ImageIO.read(new File("src/res/gui/title_bar.png"));
+            back_normal = ImageIO.read(new File("src/res/buttons/back_normal.png"));
+            home_normal = ImageIO.read(new File("src/res/buttons/home_normal.png"));
+            back_selected = ImageIO.read(new File("src/res/buttons/back_selected.png"));
+            home_selected = ImageIO.read(new File("src/res/buttons/home_selected.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        initPanel(lever);
+        hint_panel.setVisible(false);
+        done_panel.setVisible(true);
+        undo_panel.setVisible(false);
+        frame = new JFrame("CHESS");
+        frame.setIconImage(icon_game);
+        frame.add(this);
+        frame.pack();
+        frame.setLocation(-6,0);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (option == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+                else frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            }
+        });
+    }
+    public void initPanel(int lever) {
+        this.setPreferredSize(new Dimension(1600,1000));
+        this.setBackground(new Color(41, 41, 41));
+        this.setLayout(null);
+        boardPuzzle.setBounds(308,94,boardPuzzle.tileSize * 8,boardPuzzle.tileSize * 8);
+        this.add(boardPuzzle);
+        title_bar_label = new JLabel("Puzzles - Lever " + lever);
+        title_bar_label.setBounds(720,0,400,60);
+        title_bar_label.setForeground(Color.WHITE);
+        title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
+        this.add(title_bar_label);
+        //----------------------
+        //setting back_normal, home_normal
+        back_normal_button = new ButtonImage(back_normal,back_selected,42,42,"");
+        home_normal_button = new ButtonImage(home_normal,home_selected,42,42,"");
+        back_normal_button.setBounds(465,10,42,42);
+        home_normal_button.setBounds(1000,10,42,42);
+        back_normal_button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                frame.setVisible(false);
+                new Puzzle();
+            }
+        });
+        home_normal_button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                frame.dispose();
+                new Menu();
+            }
+        });
+        this.add(back_normal_button);
+        this.add(home_normal_button);
+        //setting menu hint
+        hint_panel = new JPanel();
+        hint_panel.setBounds(1026,266,268,250);
+        hint_panel.setBackground(new Color(55,55,55));
+        hint_panel.setLayout(null);
+        hint = new ButtonImage(normal,selected,150,50,"Hint");
+        hint.setBounds(60,160,150,50);
+        hint_panel.add(hint);
+        color_to_move = new JLabel();
+        String key = boardPuzzle.isTurn ? "White to move" : "Black to move";
+        color_to_move.setText(key);
+        try {
+            color_to_move.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("src/res/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 30));
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        color_to_move.setBounds(40,60,240,60);
+        color_to_move.setForeground(Color.WHITE);
+        hint_panel.add(color_to_move);
+        this.add(hint_panel);
+        //setting menu try again
+        undo_panel = new JPanel();
+        undo_panel.setBounds(1026,266,268,250);
+        undo_panel.setBackground(new Color(55,55,55));
+        undo_panel.setLayout(null);
+        undo = new ButtonImage(normal,selected,150,50,"Undo");
+        undo.setBounds(60,160,150,50);
+        undo_panel.add(hint);
+        failed = new JLabel();
+        failed.setText("Try Again!");
+        try {
+            failed.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("src/res/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 30));
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        failed.setBounds(40,60,240,60);
+        failed.setForeground(Color.WHITE);
+        undo_panel.add(failed);
+        this.add(undo_panel);
+        //setting menu done
+        done_panel = new JPanel();
+        done_panel.setBounds(1026,266,268,250);
+        done_panel.setBackground(new Color(55,55,55));
+        done_panel.setLayout(null);
+        next_lever = new ButtonImage(normal,selected,150,50,"Next Lever");
+        next_lever.setBounds(60,180,150,50);
+        try_again = new ButtonImage(normal,selected,150,50,"Try Again");
+        try_again.setBounds(60,120,150,50);
+        done_panel.add(next_lever);
+        done_panel.add(try_again);
+        correct = new JLabel();
+        correct.setText("Next Lever");
+        try {
+            correct.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("src/res/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 30));
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        correct.setBounds(40,40,240,60);
+        correct.setForeground(Color.WHITE);
+        done_panel.add(correct);
+        this.add(done_panel);
+    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        super.paintComponent(g2d);
+        g2d.drawImage(title_bar,530,10,450,42,this);
+        g2d.drawImage(board_index,280,70,this);
+        g2d.drawImage(panel_320_292,1020,260,280,260,this);
+    }
+}

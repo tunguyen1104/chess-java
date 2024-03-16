@@ -1,6 +1,7 @@
 package model.pieces;
 
 import model.Board;
+import model.JDBCConnection;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,19 +19,18 @@ public class Piece {
     Image sprite;
     Board board;
     public boolean the_pawn_first_move = true;
+    public Piece(Board board) {
+        this.board = board;
+    }
     protected BufferedImage sheet;
     {
         try {
-            sheet = ImageIO.read(new File("src/res/pieces/default.png"));
+            sheet = ImageIO.read(new File(JDBCConnection.takeData().get(0)));
         }catch (IOException e) {
             e.printStackTrace();
         }
     }
     protected int sheetScale = sheet.getWidth() / 6;
-
-    public Piece(Board board) {
-        this.board = board;
-    }
     public void paint(Graphics2D g2d){
         g2d.drawImage(sprite,xPos,yPos,null);
     }

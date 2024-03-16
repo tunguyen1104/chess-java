@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Setting extends JPanel{
     private JFrame frame;
@@ -49,11 +50,15 @@ public class Setting extends JPanel{
     private JLabel retypeNewPassword;
     private JPasswordField newPasswordBox;
     private JPasswordField retypeNewPasswordBox;
-    private JButton changePasswordButton;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
     private BufferedImage back_selected;
     private BufferedImage home_selected;
+    private BufferedImage save_normal;
+    private BufferedImage save_selected;
+    private ButtonImage save;
+    private ButtonImage change_password;
+    ArrayList<String> dataJDBC;
     String [] piece_url = {
             "src/res/pieces/default.png",
             "src/res/pieces/alpha.png",
@@ -65,8 +70,16 @@ public class Setting extends JPanel{
             "src/res/pieces/tatiana.png"
     };
     String board_url[] = {
-            "src/res/board/green.png","src/res/board/brown.png","src/res/board/tournament.png"
+            "src/res/board/green.png","src/res/board/brown.png","src/res/board/tournament.png","src/res/board/blackwhite.png",
+            "src/res/board/blue.png","src/res/board/metal.png","src/res/board/wood.png"
     };
+    String pieces[] = {
+            "  Default","  Alpha","  Anarcandy","  Cardinal","  Chessnut","  Kiwen-suwi","  Maestro","  Tatiana"
+    };
+    String board[] = {
+            "  Green","  Brown","  Tournament", "  Black White","  Blue","  Metal","  Wood"
+    };
+    String turn[] = {"  On","  Off"};
     public Setting(){
         initPanel();
         frame = new JFrame();
@@ -89,18 +102,25 @@ public class Setting extends JPanel{
         });
     }
     public void initPanel() {
+        dataJDBC = new ArrayList<String>();
+        dataJDBC = JDBCConnection.takeData();
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         // Load image
         try {
-            noavatar = ImageIO.read(new File("C:\\Users\\Tu_Nguyen\\Downloads\\noavatar.gif"));
+            save_normal = ImageIO.read(new File("src/res/buttons/save_normal.png"));
+            save_selected = ImageIO.read(new File("src/res/buttons/save_selected.png"));
+            noavatar = ImageIO.read(new File("src/res/gui/noavatar.gif"));
             option_setting_normal = ImageIO.read(new File("src/res/buttons/history_normal.png"));
             option_setting_selected = ImageIO.read(new File("src/res/buttons/history_selected.png"));
             option_settingv2 = option_setting_normal;
             option_settingv1 = option_setting_selected;
             logout_image = option_setting_normal;
             icon_game = ImageIO.read(new File("src/res/gui/icon_game.png"));
-            board_image = ImageIO.read(new File(board_url[0]));
+            String urlBoard = dataJDBC.get(1);
+            if(dataJDBC != null)
+                board_image = ImageIO.read(new File(urlBoard));
+            else board_image = ImageIO.read(new File("src/res/board/metal.png"));
             int tilesize = board_image.getWidth() / 8;
             board_image_cut = board_image.getSubimage(0, 0, tilesize*6 , tilesize*3).getScaledInstance(tilesize*6, tilesize*3, BufferedImage.SCALE_SMOOTH);
             title_bar = ImageIO.read(new File("src/res/gui/title_bar.png"));
@@ -108,7 +128,7 @@ public class Setting extends JPanel{
             home_normal = ImageIO.read(new File("src/res/buttons/home_normal.png"));
             back_selected = ImageIO.read(new File("src/res/buttons/back_selected.png"));
             home_selected = ImageIO.read(new File("src/res/buttons/home_selected.png"));
-            piece_image = ImageIO.read(new File(piece_url[0]));
+            piece_image = ImageIO.read(new File(dataJDBC.get(0)));
         } catch (IOException e) {
             System.out.println("Error url image!");
             throw new RuntimeException(e);
@@ -123,8 +143,8 @@ public class Setting extends JPanel{
         this.add(title_bar_label);
         //----------------------
         //setting back_normal, home_normal
-        back_normal_button = new ButtonImage(back_normal,back_selected,42,42);
-        home_normal_button = new ButtonImage(home_normal,home_selected,42,42);
+        back_normal_button = new ButtonImage(back_normal,back_selected,42,42,"");
+        home_normal_button = new ButtonImage(home_normal,home_selected,42,42,"");
         back_normal_button.setBounds(465,10,42,42);
         home_normal_button.setBounds(1000,10,42,42);
         back_normal_button.addMouseListener(new MouseAdapter() {
@@ -146,6 +166,11 @@ public class Setting extends JPanel{
         this.add(back_normal_button);
         this.add(home_normal_button);
         //------------------------
+        initGame();
+        initAccount();
+        initLogout();
+    }
+    public void initGame() {
         game = new JPanel();
         game.setBounds(500,180,540,420);
         game.setBackground(new Color(55,55,55));
@@ -171,11 +196,13 @@ public class Setting extends JPanel{
         game.add(sound_label);
         //------------------------
         //setting type pieces
-        String piecesName[] = {
-                "  Default","  Alpha","  Anarcandy","  Cardinal","  Chessnut","  Kiwen-suwi","  Maestro","  Tatiana"
-        };
-        combo_piece = new JComboBox(piecesName);
-        combo_piece.setSelectedIndex(0);
+        combo_piece = new JComboBox(pieces);
+        for(int i = 0;i < piece_url.length; ++i) {
+            if(piece_url[i].equals(dataJDBC.get(0))) {
+                combo_piece.setSelectedIndex(i);
+                break;
+            }
+        }
         combo_piece.setBackground(new Color(27, 101, 106, 255));
         combo_piece.setForeground(Color.WHITE);
         combo_piece.setFocusable(false);
@@ -205,15 +232,17 @@ public class Setting extends JPanel{
         game.add(piece_panel);
         game.add(combo_piece);
 
-        String board[] = {
-                "  Green","  Brown","  Tournament"
-        };
+
         combo_board = new JComboBox(board);
+        for(int i = 0;i < board_url.length; ++i) {
+            if(board_url[i].equals(dataJDBC.get(1))) {
+                combo_board.setSelectedIndex(i);
+                break;
+            }
+        }
         combo_board.setBackground(new Color(27, 101, 106, 255));
         combo_board.setFocusable(false);
-        combo_board.setSelectedIndex(0);
         combo_board.setForeground(Color.WHITE);
-
         combo_board.setBounds(330, 160, 140, 30);
         game.add(combo_board);
 
@@ -241,14 +270,21 @@ public class Setting extends JPanel{
         };
         board_panel.setBounds(160,152,140,70);
         game.add(board_panel);
-        String turn[] = {"  On","  Off"};
+
         combo_sound = new JComboBox(turn);
         combo_sound.setBackground(new Color(27, 101, 106, 255));
         combo_sound.setBounds(330,280,140,30);
         combo_sound.setFocusable(false);
-        combo_sound.setSelectedIndex(0);
+        if(dataJDBC.get(2).equals("1")) {
+            combo_sound.setSelectedIndex(0);
+        }
+        else combo_sound.setSelectedIndex(1);
         combo_sound.setForeground(Color.WHITE);
         game.add(combo_sound);
+
+        save = new ButtonImage(save_normal,save_selected,100,40,"Save");
+        save.setBounds(340,350,100,40);
+        game.add(save);
         // option_setting
         option_setting_labelv1 = new JLabel("Game");
         option_setting_labelv1.setBounds(280,200,200,40);
@@ -285,7 +321,44 @@ public class Setting extends JPanel{
                 }
             }
         });
-
+        //setup button save
+        save.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int piece_index = combo_piece.getSelectedIndex();
+                int sound_index = combo_sound.getSelectedIndex();
+                JDBCConnection.updateData(piece_url[piece_index],board_url[combo_board.getSelectedIndex()],(sound_index == 0) ? true : false);
+                JOptionPane.showMessageDialog(null, "Your settings have been saved", "Notification", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+    public void initLogout() {
+        logout_label = new JLabel("Log out");
+        logout_label.setFont(new Font("",Font.PLAIN,20));
+        logout_label.setForeground(Color.WHITE);
+        logout_label.setHorizontalAlignment(SwingConstants.CENTER);
+        logout_label.setBounds(280,300,200,40);
+        logout_label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent me) {
+                logout_label.setForeground(new Color(140, 181, 90));
+            }
+            @Override
+            public void mouseExited(MouseEvent me) {
+                logout_label.setForeground(Color.WHITE);
+            }
+            @Override
+            public void mouseClicked(MouseEvent me) {
+                //call database delete current user
+                JDBCConnection.deleteDataCurrentUser();
+                frame.dispose();
+                new Login();
+            }
+        });
+        this.add(logout_label);
+    }
+    public void initAccount() {
         // account
         option_setting_labelv2 = new JLabel("Account");
         option_setting_labelv2.setBounds(280,250,200,40);
@@ -340,13 +413,9 @@ public class Setting extends JPanel{
         retypeNewPasswordBox = new JPasswordField();
         retypeNewPasswordBox.setBounds(260,320,200,26);
         account.add(retypeNewPasswordBox);
-        changePasswordButton = new JButton("Change Password");
-        changePasswordButton.setFont(new Font("",Font.BOLD,12));
-        changePasswordButton.setBackground(new Color(140, 181, 90));
-        changePasswordButton.setForeground(Color.WHITE);
-        changePasswordButton.setFocusPainted(false);
-        changePasswordButton.setBounds(50,360,150,32);
-        account.add(changePasswordButton);
+        change_password = new ButtonImage(save_normal,save_selected,180,40,"Change Password");
+        change_password.setBounds(50,360,180,40);
+        account.add(change_password);
         option_setting_labelv2.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent me) {
@@ -380,29 +449,6 @@ public class Setting extends JPanel{
         this.add(option_setting_labelv1);
         this.add(option_setting_labelv2);
         this.add(account);
-        logout_label = new JLabel("Log out");
-        logout_label.setFont(new Font("",Font.PLAIN,20));
-        logout_label.setForeground(Color.WHITE);
-        logout_label.setHorizontalAlignment(SwingConstants.CENTER);
-        logout_label.setBounds(280,300,200,40);
-        logout_label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent me) {
-                logout_label.setForeground(new Color(140, 181, 90));
-            }
-            @Override
-            public void mouseExited(MouseEvent me) {
-                logout_label.setForeground(Color.WHITE);
-            }
-            @Override
-            public void mouseClicked(MouseEvent me) {
-                //call database delete current user
-                JDBCConnection.deleteDataCurrentUser();
-                frame.dispose();
-                new Login();
-            }
-        });
-        this.add(logout_label);
     }
     @Override
     protected void paintComponent(Graphics g) {
@@ -413,7 +459,6 @@ public class Setting extends JPanel{
         g2d.drawImage(logout_image,280,300,200,40,this);
         g2d.drawImage(title_bar,530,10,450,42,this);
     }
-
     public static void main(String[] args) {
         new Setting();
     }

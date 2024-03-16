@@ -4,31 +4,45 @@ import controller.Listener;
 import model.pieces.*;
 import view.GamePVP;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 public class Board extends JPanel{
     private GamePVP game;
     public int tileSize = 85;
     public int rows = 8;
     public int cols = 8;
-    private Set<Piece> pieceList = new HashSet<Piece>();
+    private ArrayList<Piece> pieceList = new ArrayList<Piece>();
     public Piece selectedPiece;// quân cờ lúc bạn trỏ vào
     public Listener input;
     public int enPassantTile = -1;
     Sound sound = new Sound();
+    private BufferedImage board_image;
     //paint old new piece
     private int old_col = -1;
     private int old_row = -1;
     private int new_col = -1;
     private int new_row = -1;
+    public ArrayList<String> dataJDBC;
+    Piece piece;
     public CheckScanner checkScanner = new CheckScanner(this);
     public Board (GamePVP game) {
+        dataJDBC = new ArrayList<String>();
+        dataJDBC = JDBCConnection.takeData();
+        piece = new Piece(this);
         this.game = game;
         sound.playMusic(0);
         input = new Listener(this,game);
+        try {
+            board_image = ImageIO.read(new File(dataJDBC.get(1)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
@@ -89,6 +103,7 @@ public class Board extends JPanel{
         if(move.capture != null) {
             sound.playMusic(3);
             delete_piece(move.capture);
+            this.repaint();
             input.change_check_delete_or_promotion(1000);
         }
         move.piece.the_pawn_first_move = false;
@@ -117,8 +132,8 @@ public class Board extends JPanel{
                 pieceList.add(new Bishop(this,move.getNewCol(),move.getNewRow(),move.piece.isWhite));
                 break;
         }
-        sound.playMusic(5);
         delete_piece(move.piece);
+        sound.playMusic(5);
     }
     public void delete_piece(Piece piece){
         pieceList.remove(piece);
@@ -189,14 +204,8 @@ public class Board extends JPanel{
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-
-        //paint board
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                g2d.setColor(((c + r) % 2 == 0) ? new Color(227, 198, 181) : new Color(157, 105, 53));
-                g2d.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
-            }
-        }
+        super.paintComponent(g2d);
+        g2d.drawImage(board_image,0,0,tileSize * 8,tileSize * 8,this);
         // paint hightlights
         if(selectedPiece != null) {
             for(int i = 0;i < rows; ++i){

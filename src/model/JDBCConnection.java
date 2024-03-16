@@ -4,6 +4,7 @@ import view.Menu;
 
 import javax.swing.*;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class JDBCConnection {
     private static final String url = "jdbc:mysql://localhost:3306/chess?autoReconnect=true&useSSL=false";
@@ -39,10 +40,13 @@ public class JDBCConnection {
                         rs.close();
                         preparedStatement.close();
                         preparedStatement = conn.prepareStatement(
-                                "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL) VALUES (?, ?, ?)");
+                                "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND) VALUES (?, ?, ?, ?, ?, ?)");
                         preparedStatement.setString(1, _username);
                         preparedStatement.setString(2, _password);
                         preparedStatement.setString(3, _email);
+                        preparedStatement.setString(4, "src/res/pieces/default.png");
+                        preparedStatement.setString(5, "src/res/board/green.png");
+                        preparedStatement.setBoolean(6, true);
                         preparedStatement.executeUpdate();
                         preparedStatement.close();
                         conn.close();
@@ -85,16 +89,22 @@ public class JDBCConnection {
                     return false;
                 }
                 PreparedStatement insertStatement = conn.prepareStatement(
-                        "INSERT INTO ACCOUNT(USERNAME, PASSWORD, EMAIL) VALUES (?, ?, ?)");
+                        "INSERT INTO ACCOUNT(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND) VALUES (?, ?, ?, ?, ?, ?)");
                 insertStatement.setString(1, username);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
+                insertStatement.setString(4, "src/res/pieces/default.png");
+                insertStatement.setString(5, "src/res/board/green.png");
+                insertStatement.setBoolean(6, true);
                 insertStatement.executeUpdate();
                 insertStatement = conn.prepareStatement(
-                        "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL) VALUES (?, ?, ?)");
+                        "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND) VALUES (?, ?, ?, ?, ?, ?)");
                 insertStatement.setString(1, username);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
+                insertStatement.setString(4, "src/res/pieces/default.png");
+                insertStatement.setString(5, "src/res/board/green.png");
+                insertStatement.setBoolean(6, true);
                 insertStatement.executeUpdate();
                 rs.close();
                 checkStatement.close();
@@ -160,4 +170,70 @@ public class JDBCConnection {
         }
         return false;
     }
+    public static ArrayList<String> takeData() {
+        ArrayList<String> arr = null;
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            conn = JDBCConnection.getJDBCConnection();
+            statement = conn.prepareStatement("SELECT PIECE, BOARD_NAME, SOUND FROM CURRENTUSER");
+            rs = statement.executeQuery();
+            if (rs.next()) {
+                String piece_url = rs.getString("piece");
+                String board_url = rs.getString("board_name");
+                Boolean sound = rs.getBoolean("sound");
+                arr = new ArrayList<String>();
+                arr.add(piece_url);
+                arr.add(board_url);
+                arr.add(sound ? "1" : "0");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Lỗi kết nối: " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
+
+        return arr;
+    }
+
+    public static void updateData(String piece_url, String board_url, Boolean sound) {
+        Connection conn = null;
+        PreparedStatement statement = null;
+
+        try {
+            conn = JDBCConnection.getJDBCConnection();
+            statement = conn.prepareStatement("UPDATE CURRENTUSER SET PIECE = ?, BOARD_NAME = ?, SOUND = ?");
+            statement.setString(1, piece_url);
+            statement.setString(2, board_url);
+            statement.setBoolean(3, sound);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
+    }
+
 }

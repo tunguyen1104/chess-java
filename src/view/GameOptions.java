@@ -31,6 +31,9 @@ public class GameOptions extends JPanel{
     private BufferedImage forward_selected_game;
     private BufferedImage forward_selected_game_v2;
     private BufferedImage option_box_game;
+    private BufferedImage option_box_time;
+    private BufferedImage option_box_side;
+    private BufferedImage option_box_lever;
     private ButtonImage forward_left_game;
     private ButtonImage forward_right_game;
     private JLabel option_box_game_label;
@@ -78,7 +81,9 @@ public class GameOptions extends JPanel{
             forward_normal_game_v2 = ImageIO.read(new File("src/res/buttons/forward_normalv2.png"));
             forward_selected_game = ImageIO.read(new File("src/res/buttons/forward_selected.png"));
             forward_selected_game_v2 = ImageIO.read(new File("src/res/buttons/forward_selectedv2.png"));
-
+            option_box_time = option_box_game;
+            option_box_side = option_box_game;
+            option_box_lever = option_box_game;
             forward_normal_time = forward_normal_game;
             forward_normal_time_v2 = forward_normal_game_v2;
             forward_selected_time = forward_selected_game;
@@ -135,8 +140,8 @@ public class GameOptions extends JPanel{
         this.add(title_bar_label);
         //----------------------
         //setting back_normal, home_normal
-        back_normal_button = new ButtonImage(back_normal,back_selected,42,42);
-        home_normal_button = new ButtonImage(home_normal,home_selected,42,42);
+        back_normal_button = new ButtonImage(back_normal,back_selected,42,42,"");
+        home_normal_button = new ButtonImage(home_normal,home_selected,42,42,"");
         back_normal_button.setBounds(465,10,42,42);
         home_normal_button.setBounds(1000,10,42,42);
         back_normal_button.addMouseListener(new MouseAdapter() {
@@ -222,16 +227,40 @@ public class GameOptions extends JPanel{
         option_box_game_label.setForeground(Color.WHITE);
         option_box_game_label.setFont(new Font("",Font.PLAIN,18));
         option_box_game_label.setBounds(650,210,100,32);
-        forward_left_game = new ButtonImage(forward_normal_game,forward_selected_game,32,32);
-        forward_right_game = new ButtonImage(forward_normal_game_v2,forward_selected_game_v2,32,32);
+        forward_left_game = new ButtonImage(forward_normal_game,forward_selected_game,32,32,"");
+        forward_right_game = new ButtonImage(forward_normal_game_v2,forward_selected_game_v2,32,32,"");
         forward_left_game.setBounds(580,210,32,32);
         forward_right_game.setBounds(760,210,32,32);
-        forward_left_game.addMouseListener(new MouseAdapter() {
+        forward_left_game.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 --index_game;
                 if(index_game < 0) index_game = game_mode_string.length - 1;
+                if(index_game == 1) {
+                    side.setVisible(false);
+                    option_box_side_label.setVisible(false);
+                    forward_left_side.setVisible(false);
+                    forward_right_side.setVisible(false);
+                    option_box_side = null;
+                    lever.setVisible(false);
+                    option_box_lever_label.setVisible(false);
+                    forward_left_lever.setVisible(false);
+                    forward_right_lever.setVisible(false);
+                    option_box_lever = null;
+                }
+                else {
+                    side.setVisible(true);
+                    option_box_side_label.setVisible(true);
+                    forward_left_side.setVisible(true);
+                    forward_right_side.setVisible(true);
+                    option_box_side = option_box_game;
+                    lever.setVisible(true);
+                    option_box_lever_label.setVisible(true);
+                    forward_left_lever.setVisible(true);
+                    forward_right_lever.setVisible(true);
+                    option_box_lever = option_box_game;
+                }
                 option_box_game_label.setText(game_mode_string[index_game]);
             }
         });
@@ -241,6 +270,30 @@ public class GameOptions extends JPanel{
                 super.mouseClicked(e);
                 ++index_game;
                 if(index_game > game_mode_string.length - 1) index_game = 0;
+                if(index_game == 1) {
+                    side.setVisible(false);
+                    option_box_side_label.setVisible(false);
+                    forward_left_side.setVisible(false);
+                    forward_right_side.setVisible(false);
+                    option_box_side = null;
+                    lever.setVisible(false);
+                    option_box_lever_label.setVisible(false);
+                    forward_left_lever.setVisible(false);
+                    forward_right_lever.setVisible(false);
+                    option_box_lever = null;
+                }
+                else {
+                    side.setVisible(true);
+                    option_box_side_label.setVisible(true);
+                    forward_left_side.setVisible(true);
+                    forward_right_side.setVisible(true);
+                    option_box_side = option_box_game;
+                    lever.setVisible(true);
+                    option_box_lever_label.setVisible(true);
+                    forward_left_lever.setVisible(true);
+                    forward_right_lever.setVisible(true);
+                    option_box_lever = option_box_game;
+                }
                 option_box_game_label.setText(game_mode_string[index_game]);
             }
         });
@@ -254,8 +307,8 @@ public class GameOptions extends JPanel{
         option_box_time_label.setForeground(Color.WHITE);
         option_box_time_label.setFont(new Font("",Font.PLAIN,18));
         option_box_time_label.setBounds(648,290,100,32);
-        forward_left_time = new ButtonImage(forward_normal_time,forward_selected_time,32,32);
-        forward_right_time = new ButtonImage(forward_normal_time_v2,forward_selected_time_v2,32,32);
+        forward_left_time = new ButtonImage(forward_normal_time,forward_selected_time,32,32,"");
+        forward_right_time = new ButtonImage(forward_normal_time_v2,forward_selected_time_v2,32,32,"");
         forward_left_time.setBounds(580,290,32,32);
         forward_right_time.setBounds(760,290,32,32);
         forward_left_time.addMouseListener(new MouseAdapter() {
@@ -286,8 +339,8 @@ public class GameOptions extends JPanel{
         option_box_side_label.setForeground(Color.WHITE);
         option_box_side_label.setFont(new Font("",Font.PLAIN,18));
         option_box_side_label.setBounds(648,370,100,32);
-        forward_left_side = new ButtonImage(forward_normal_side,forward_selected_side,32,32);
-        forward_right_side = new ButtonImage(forward_normal_side_v2,forward_selected_side_v2,32,32);
+        forward_left_side = new ButtonImage(forward_normal_side,forward_selected_side,32,32,"");
+        forward_right_side = new ButtonImage(forward_normal_side_v2,forward_selected_side_v2,32,32,"");
         forward_left_side.setBounds(580,370,32,32);
         forward_right_side.setBounds(760,370,32,32);
         forward_left_side.addMouseListener(new MouseAdapter() {
@@ -317,8 +370,8 @@ public class GameOptions extends JPanel{
         option_box_lever_label.setForeground(Color.WHITE);
         option_box_lever_label.setFont(new Font("",Font.PLAIN,18));
         option_box_lever_label.setBounds(650,450,100,32);
-        forward_left_lever = new ButtonImage(forward_normal_lever,forward_selected_lever,32,32);
-        forward_right_lever = new ButtonImage(forward_normal_lever_v2,forward_selected_lever_v2,32,32);
+        forward_left_lever = new ButtonImage(forward_normal_lever,forward_selected_lever,32,32,"");
+        forward_right_lever = new ButtonImage(forward_normal_lever_v2,forward_selected_lever_v2,32,32,"");
         forward_left_lever.setBounds(580,450,32,32);
         forward_right_lever.setBounds(760,450,32,32);
         forward_left_lever.addMouseListener(new MouseAdapter() {
@@ -351,9 +404,9 @@ public class GameOptions extends JPanel{
         g2d.drawImage(game_options_panel,360,160,520,420,this);
         g2d.drawImage(chess_standard,890,160,240,320,this);
         g2d.drawImage(option_box_game,616,210,140,32,this);
-        g2d.drawImage(option_box_game,616,290,140,32,this);
-        g2d.drawImage(option_box_game,616,370,140,32,this);
-        g2d.drawImage(option_box_game,616,450,140,32,this);
+        g2d.drawImage(option_box_time,616,290,140,32,this);
+        g2d.drawImage(option_box_side,616,370,140,32,this);
+        g2d.drawImage(option_box_lever,616,450,140,32,this);
     }
 
     public static void main(String[] args) {

@@ -20,6 +20,7 @@ public class Menu extends JPanel implements ActionListener {
     private BeautifyButton settings_menu;
     private BeautifyButton about_menu;
     private BeautifyButton exit_menu;
+    private ButtonImage newgame;
     public Menu() {
         frame = new JFrame("CHESS");
         try {
@@ -55,37 +56,37 @@ public class Menu extends JPanel implements ActionListener {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         name_title = new JLabel("CHESS GAME");
-        name_title.setBounds(600,240,400,50);
+        name_title.setBounds(600,240,400,46);
         name_title.setForeground(Color.WHITE);
         name_title.setFocusable(false);
         name_title.setFont(name_title.getFont().deriveFont(50.0f));
         newgame_menu = new BeautifyButton("New Game");
-        newgame_menu.setBounds(574,378,170,50);
+        newgame_menu.setBounds(574,378,170,46);
         newgame_menu.setForeground(Color.WHITE);
         newgame_menu.setFocusable(false);
         newgame_menu.setFont(newgame_menu.getFont().deriveFont(20.0f));
         history_menu = new BeautifyButton("History");
-        history_menu.setBounds(794,378,170,50);
+        history_menu.setBounds(794,378,170,46);
         history_menu.setForeground(Color.WHITE);
         history_menu.setFocusable(false);
         history_menu.setFont(history_menu.getFont().deriveFont(20.0f));
         puzzles_menu = new BeautifyButton("Puzzles");
-        puzzles_menu.setBounds(574,458,170,50);
+        puzzles_menu.setBounds(574,458,170,46);
         puzzles_menu.setForeground(Color.WHITE);
         puzzles_menu.setFocusable(false);
         puzzles_menu.setFont(puzzles_menu.getFont().deriveFont(20.0f));
         about_menu = new BeautifyButton("About");
-        about_menu.setBounds(794,458,170,50);
+        about_menu.setBounds(794,458,170,46);
         about_menu.setForeground(Color.WHITE);
         about_menu.setFocusable(false);
         about_menu.setFont(about_menu.getFont().deriveFont(20.0f));
         settings_menu = new BeautifyButton("Settings");
-        settings_menu.setBounds(574,538,170,50);
+        settings_menu.setBounds(574,538,170,46);
         settings_menu.setForeground(Color.WHITE);
         settings_menu.setFocusable(false);
         settings_menu.setFont(settings_menu.getFont().deriveFont(20.0f));
         exit_menu = new BeautifyButton("Exit");
-        exit_menu.setBounds(794,538,170,50);
+        exit_menu.setBounds(794,538,170,46);
         exit_menu.setForeground(Color.WHITE);
         exit_menu.setFocusable(false);
         exit_menu.setFont(exit_menu.getFont().deriveFont(20.0f));
@@ -106,6 +107,7 @@ public class Menu extends JPanel implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 frame.dispose();
+                new Puzzle();
             }
         });
         settings_menu.addMouseListener(new MouseAdapter() {

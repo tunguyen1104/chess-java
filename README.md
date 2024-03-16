@@ -25,7 +25,8 @@ PGN: Cung cấp đầy đủ thông tin của một ván đấu (tất cả các
 - ```w``` : quân trắng được đi trước.
 
 - ```KQkq```: K cho phép quân trắng nhập thành ngắn, Q cho phép nhập thành dài và tượng tự với quân đen.
-- ```-```: được phép en passant.
+- ```0```: không có en passant.
+- ```1```: số lượng bán nước đi đã được thực hiện trong ván cờ.
 - Để xoá một quân cờ: 
     - VD: Xoá một quân mã (black) ở vị trí [8][b]:    
     ```r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` <img src="src/res/readme/delete_knight_fen.png" alt="" width="300">
