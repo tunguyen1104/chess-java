@@ -17,18 +17,18 @@ public class Listener extends MouseAdapter {
     public Sound sound;
     public boolean isTurn = true;// mặc định quân trắng đi trước
     public boolean isEnd = false;// end because King die
-    public int check_delete = -1;
-    public int check_promotion = - 1;
+    public boolean check_delete = false;
+    public boolean check_promotion = true;
     public Listener(Board board,GamePVP game,Sound sound) {
         this.board = board;
         this.game = game;
         this.sound = sound;
     }
     private int count_step = 1;
-    public void change_check_delete(int x) {
+    public void change_check_delete(boolean x) {
         this.check_delete = x;
     }
-    public void change_check_promotion(int x) {
+    public void change_check_promotion(boolean x) {
         this.check_promotion = x;
     }
     @Override
@@ -116,7 +116,8 @@ public class Listener extends MouseAdapter {
                 else {
                     step += check.name.charAt(0);
                 }
-                this.check_delete = -1;
+                this.check_delete = false;
+                this.check_promotion = false;
                 board.makeMove(move);
                 if(isTurn == true) {
                     game.start_white();
@@ -129,9 +130,9 @@ public class Listener extends MouseAdapter {
                 isTurn = !isTurn;
                 board.paint_old_new(move.getOldCol(),move.getOldRow(),move.getNewCol(),move.getNewRow());
                 board.paint_in_place(-1,-1);
-                if(this.check_delete == -1) sound.playMusic(2);
-                else if(this.check_delete == 1) sound.playMusic(3);
-                else if(this.check_promotion == 1) sound.playMusic(5);
+                if(this.check_delete) sound.playMusic(2);
+                else sound.playMusic(3);
+                if(this.check_promotion) sound.playMusic(5);
                 String s = game.textArea.getText();
                 if(isTurn) s += board.step(step,move) + "\n";
                 else {

@@ -158,7 +158,7 @@ public class Board extends JPanel{
             move.piece.yPos = move.getNewRow() * tileSize;
             if (move.capture != null) {
                 delete_piece(move.capture);
-                if(FEN.equals("")) input.change_check_delete(1);
+                if(FEN.equals("")) input.change_check_delete(true);
             }
         }
     }
@@ -186,7 +186,7 @@ public class Board extends JPanel{
         move.piece.yPos = move.getNewRow() * tileSize;
         if(move.capture != null) {
             delete_piece(move.capture);
-            if(FEN.equals(""))input.change_check_delete(1);
+            if(FEN.equals(""))input.change_check_delete(true);
         }
         this.repaint();
         move.piece.the_pawn_first_move = false;
@@ -196,7 +196,7 @@ public class Board extends JPanel{
 
         if(move.getNewRow() == colorIndex && findKing(true) != null && findKing(false) != null) {
             promotePawn(move);
-            if(FEN.equals("")) input.change_check_promotion(1);
+            if(FEN.equals("")) input.change_check_promotion(true);
         }
     }
     public void promotePawn (Move move) {
@@ -224,7 +224,7 @@ public class Board extends JPanel{
         delete_piece(move.piece);
     }
     public String step(String step,Move move) {
-        if(input.check_delete == 1) {
+        if(input.check_delete) {
             step += 'x';
         }
         else {
@@ -259,7 +259,7 @@ public class Board extends JPanel{
                 break;
         }
         step += String.valueOf(8 - move.getNewRow());
-        if(input.check_promotion == 1) {
+        if(input.check_promotion) {
             step += '=';
             switch (promotion) {
                 case 0:
