@@ -15,26 +15,31 @@ public class Listener extends MouseAdapter {
     private GamePVP game;
     private Board board;
     public Sound sound;
-    private boolean isTurn = true;// mặc định quân trắng đi trước
+    public boolean isTurn = true;// mặc định quân trắng đi trước
     public boolean isEnd = false;// end because King die
-    public Integer check_delete_or_promotion = -1;
+    public int check_delete = -1;
+    public int check_promotion = - 1;
     public Listener(Board board,GamePVP game,Sound sound) {
         this.board = board;
         this.game = game;
         this.sound = sound;
     }
-    public void change_check_delete_or_promotion(int x) {
-        this.check_delete_or_promotion = x;
+    private int count_step = 1;
+    public void change_check_delete(int x) {
+        this.check_delete = x;
+    }
+    public void change_check_promotion(int x) {
+        this.check_promotion = x;
     }
     @Override
     public void mousePressed(MouseEvent e) {
         if(isEnd) return;
-        if ("00:00".equals(game.timeLabelWhite.getText())) {
+        if ("00:00".equals(game.getTimeLabelWhite().getText())) {
             sound.playMusic(1);
             game.stop_white();
             game.stop_black();
             noti_end_game("White","Time out");
-        } else if ("00:00".equals(game.timeLabelBlack.getText())) {
+        } else if ("00:00".equals(game.getTimeLabelBlack().getText())) {
             sound.playMusic(1);
             game.stop_white();
             game.stop_black();
@@ -51,6 +56,7 @@ public class Listener extends MouseAdapter {
         Piece pieceXY = board.getPiece(col, row);
         if (pieceXY != null) {
             board.selectedPiece = pieceXY;
+            board.paint_in_place(col, row);
         }
     }
     @Override
@@ -74,26 +80,65 @@ public class Listener extends MouseAdapter {
         if(board.selectedPiece != null){
             Move move = new Move(board,board.selectedPiece,col,row);
             if(board.isValidMove(move)){
-                this.check_delete_or_promotion = -1;
+                String step = "";
+                Piece check = board.getPiece(move.getOldCol(),move.getOldRow());
+                if(check.name.equals("Pawn")) {
+                    switch (move.getOldCol()) {
+                        case 0:
+                            step += 'a';
+                            break;
+                        case 1:
+                            step += 'b';
+                            break;
+                        case 2:
+                            step += 'c';
+                            break;
+                        case 3:
+                            step += 'd';
+                            break;
+                        case 4:
+                            step += 'e';
+                            break;
+                        case 5:
+                            step += 'f';
+                            break;
+                        case 6:
+                            step += 'g';
+                            break;
+                        case 7:
+                            step += 'h';
+                            break;
+                    }
+                }
+                else if(check.name.equals("Knight")) {
+                    step += 'N';
+                }
+                else {
+                    step += check.name.charAt(0);
+                }
+                this.check_delete = -1;
                 board.makeMove(move);
                 if(isTurn == true) {
                     game.start_white();
                     game.stop_black();
-                    isTurn = false;
                 }
                 else{
                     game.start_black();
                     game.stop_white();
-                    isTurn = true;
                 }
+                isTurn = !isTurn;
                 board.paint_old_new(move.getOldCol(),move.getOldRow(),move.getNewCol(),move.getNewRow());
-                if(this.check_delete_or_promotion == -1) sound.playMusic(2);
-                else if(this.check_delete_or_promotion == 1000) {
-
+                board.paint_in_place(-1,-1);
+                if(this.check_delete == -1) sound.playMusic(2);
+                else if(this.check_delete == 1) sound.playMusic(3);
+                else if(this.check_promotion == 1) sound.playMusic(5);
+                String s = game.textArea.getText();
+                if(isTurn) s += board.step(step,move) + "\n";
+                else {
+                    s += String.format("%2s %8s %-12s", count_step, board.step(step,move), " ");
+                    ++count_step;
                 }
-                else if(this.check_delete_or_promotion == 2000) {
-
-                }
+                game.textArea.setText(s);
             }
             else {
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize;
@@ -107,14 +152,14 @@ public class Listener extends MouseAdapter {
             sound.playMusic(1);
             game.stop_white();
             game.stop_black();
-            noti_end_game("Black","King die");
+            noti_end_game("Black","Checkmate");
         }
         else if (board.findKing(false) == null) {
             isEnd = true;
             sound.playMusic(1);
             game.stop_white();
             game.stop_black();
-            noti_end_game("White","King die");
+            noti_end_game("White","Checkmate");
         }
     }
     public void noti_end_game(String name_win, String reason) {

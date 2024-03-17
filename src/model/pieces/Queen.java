@@ -18,7 +18,7 @@ public class Queen extends Piece {
     }
     @Override
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {
-        return (Math.abs(this.col - col) == Math.abs(this.row - row)) || (this.col == col || this.row == row) && (col < 8 && col >= 0 && row < 8 && row >= 0);
+        return ((Math.abs(this.col - col) == Math.abs(this.row - row)) || (this.col == col || this.row == row)) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
     @Override
     public boolean moveCollidesWithPiece(int col,int row) {

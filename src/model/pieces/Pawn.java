@@ -16,7 +16,13 @@ public class Pawn extends Piece {
         this.sprite = sheet.getSubimage(5 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {
-        int colorIndex = isWhite ? 1 : -1;
+        int colorIndex;
+        if(!board.rotating) {
+            colorIndex = isWhite ? 1 : -1;
+        }
+        else {
+            colorIndex = isWhite ? -1 : 1;
+        }
         //push pawn 1
         if(this.col == col && this.row - colorIndex == row && board.getPiece(col,row) == null) return true;
         //push pawn 2

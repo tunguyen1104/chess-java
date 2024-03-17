@@ -26,12 +26,28 @@ public class GamePVP extends JPanel {
     private BufferedImage rotate_selected;
     private BufferedImage board_index_black;
     private BufferedImage board_index;
-    private JLabel white_name;
-    private JLabel black_name;
+    protected JLabel white_name;
+    protected JLabel black_name;
     private JLabel title_bar_label;
+
+    public JLabel getWhite_name() {
+        return white_name;
+    }
+
+    public JLabel getBlack_name() {
+        return black_name;
+    }
+
+    public JLabel getTimeLabelWhite() {
+        return timeLabelWhite;
+    }
+
+    public JLabel getTimeLabelBlack() {
+        return timeLabelBlack;
+    }
     //time
-    public JLabel timeLabelWhite = new JLabel();
-    public JLabel timeLabelBlack = new JLabel();
+    private JLabel timeLabelWhite = new JLabel();
+    private JLabel timeLabelBlack = new JLabel();
     private int seconds_white;
     private int minutes_white;
     private int seconds_black;
@@ -142,18 +158,6 @@ public class GamePVP extends JPanel {
         });
         textArea = new JTextArea();
         textArea.setBackground(new Color(55,55,55));
-        String s = "   1.   Kxh7\t\td7\n" +
-                "   2.   Kxh7\t\td7\n" +
-                "   3.   Kxh7\t\td7\n" +
-                "   4.   Kxh7\t\td7\n" +
-                "   5.   Kxh7\t\td7\n" +
-                "   6.   Kxh7\t\td7\n" +
-                "   7.   Kxh7\t\td7\n" +
-                "   8.   Kxh7\t\td7\n" +
-                "   9.   Kxh7\t\td7\n" +
-                "   10.   Kxh7\t\td7\n" +
-                "   11.   Kxh7\t\td7\n";
-        textArea.setText(s);
         textArea.setForeground(Color.WHITE);
         try {
             textArea.setFont(Font.createFont(Font.TRUETYPE_FONT,
@@ -181,6 +185,14 @@ public class GamePVP extends JPanel {
 
         ButtonImage rotate = new ButtonImage(rotate_normal,rotate_selected,40,30,"");
         rotate.setBounds(1252,338,40,30);
+        rotate.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                board_index = (board.rotating) ? null : board_index_black;
+                board.rotateBoard();
+                repaint();
+            }
+        });
         this.add(rotate);
     }
     @Override

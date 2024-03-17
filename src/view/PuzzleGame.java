@@ -31,9 +31,7 @@ public class PuzzleGame extends JPanel {
     private BufferedImage normal;
     private BufferedImage selected;
     private ButtonImage hint;
-
     private ButtonImage undo;
-
     private ButtonImage try_again;
     private ButtonImage next_lever;
     private JPanel hint_panel;

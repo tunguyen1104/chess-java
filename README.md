@@ -17,6 +17,7 @@
 
 ### FEN và PGN
 FEN: Chỉ lưu hình cờ tại một thời điểm nhất định.
+
 PGN: Cung cấp đầy đủ thông tin của một ván đấu (tất cả các nước cờ, player1 player2,..)
 
 ```rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1```
@@ -29,14 +30,43 @@ PGN: Cung cấp đầy đủ thông tin của một ván đấu (tất cả các
 - ```1```: số lượng bán nước đi đã được thực hiện trong ván cờ.
 - Để xoá một quân cờ: 
     - VD: Xoá một quân mã (black) ở vị trí [8][b]:    
-    ```r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` <img src="src/res/readme/delete_knight_fen.png" alt="" width="300">
+    ```r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` | <img src="src/res/readme/delete_knight_fen.png" alt="" width="300">
     
     - VD: Xoá 2 quân tốt (black) ở vị trí [3][g] và [4][g]:
   
-    ```rnbqkbnr/pp2pppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` <img src="src/res/readme/delete_2_pawn_fen.png" alt="" width="300">
+    ```rnbqkbnr/pp2pppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` | <img src="src/res/readme/delete_2_pawn_fen.png" alt="" width="300">
 - Để thêm quân cờ:
     - VD: Thêm một con tốt vào vị trí [6][c]:
   
-    ```rnbqkbnr/pppppppp/2p5/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` <img src="src/res/readme/add_pawn_fen.png" alt="" width="300">
+    ```rnbqkbnr/pppppppp/2p5/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` | <img src="src/res/readme/add_pawn_fen.png" alt="" width="300">
     - VD: Di chuyển queen đến vị trí [4][c] và knight đến vị trí [4][e]:
-    ```rnbqkbnr/pppppppp/8/8/2Q1N3/8/PPPPPPPP/R1B1KBNR w KQkq - 0 1``` <img src="src/res/readme/move_queen_and_knight.png" alt="" width="300">
+    ```rnbqkbnr/pppppppp/8/8/2Q1N3/8/PPPPPPPP/R1B1KBNR w KQkq - 0 1``` | <img src="src/res/readme/move_queen_and_knight.png" alt="" width="300">
+
+### Cách xây dựng các nước đi
+
+1. Xác định quân cờ di chuyển:
+Mỗi quân cờ có một ký tự riêng:
+- K: Vua
+- Q: Hậu
+- R: Xe
+- B: Tượng
+- N: Mã
+- P: Tốt
+2. Xác định vị trí xuất phát:
+- Ký tự chữ cái thể hiện cột xuất phát (a - h)
+- Ký tự số thể hiện hàng xuất phát (1 - 8)
+3. Xác định vị trí đến (nếu có):
+- Tương tự như vị trí xuất phát, sử dụng ký tự chữ cái và số để xác định ô đến.
+4. Ký hiệu đặc biệt:
+- x : Ăn quân
+- + : Chiếu Vua
+- # : Chiếu hết
+- = : promotion
+- O-O: nhập thành ngắn
+- O-O-O: nhập thành dài
+5. Example
+- fxe5 : quân tốt ở vị trí cột f ăn quân địch ở ví trí cột e hàng 5
+- fe5 : quân tốt di chuyển đến cột e hàng 5
+- Nxg3 : quân mã ăn quân địch ở ví trí cột g hàng 3
+- Bf6 : quân tượng di chuyển đến vị trí cột f hàng 6
+- Qb5+ : Queen di chuyển đến vị trí cột b hàng 5 và chiếu tướng

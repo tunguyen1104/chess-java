@@ -22,10 +22,14 @@ public class Board extends JPanel{
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
     private ArrayList<String> whiteMove = new ArrayList<String>();
     private ArrayList<String> blackMove = new ArrayList<String>();
+    private ArrayList<Piece> rotateList = new ArrayList<Piece>();
+    private ArrayList<Piece> the_pawn_first_move_list = new ArrayList<Piece>();
+    public boolean rotating = false;
     public Piece selectedPiece;// quân cờ lúc bạn trỏ vào
     public Listener input;
     public ListenerPuzzle inputPuzzle;
     public int enPassantTile = -1;
+    public int promotion = -1;
     Sound sound;
     private BufferedImage board_image;
     //paint old new piece
@@ -33,6 +37,8 @@ public class Board extends JPanel{
     private int old_row = -1;
     private int new_col = -1;
     private int new_row = -1;
+    private int col_in_place = -1;
+    private int row_in_place = -1;
     public ArrayList<String> dataJDBC = JDBCConnection.takeDataSetting();
     //dataJDBC =
     public boolean color_to_move;
@@ -88,6 +94,59 @@ public class Board extends JPanel{
         }
         return null;
     }
+    public void rotateBoard() {
+        rotating = !rotating;
+        rotateList.clear();
+        for(Piece piece: pieceList) {
+            if(piece.name.equals("Pawn")) {
+                Piece pawn = new Pawn(this,7-piece.col,7-piece.row,piece.isWhite);
+                pawn.the_pawn_first_move = piece.the_pawn_first_move;
+                rotateList.add(pawn);
+            }
+            else if(piece.name.equals("King")) {
+                rotateList.add(new King(this,7-piece.col,7-piece.row,piece.isWhite));
+            }
+            else if(piece.name.equals("Queen")) {
+                rotateList.add(new Queen(this,7-piece.col,7-piece.row,piece.isWhite));
+            }
+            else if(piece.name.equals("Rook")) {
+                rotateList.add(new Rook(this,7-piece.col,7-piece.row,piece.isWhite));
+            }
+            else if(piece.name.equals("Bishop")) {
+                rotateList.add(new Bishop(this,7-piece.col,7-piece.row,piece.isWhite));
+            }
+            else if(piece.name.equals("Knight")) {
+                rotateList.add(new Knight(this,7-piece.col,7-piece.row,piece.isWhite));
+            }
+        }
+        enPassantTile = 63 - enPassantTile;
+        pieceList.clear();
+        pieceList.addAll(rotateList);
+        if(old_col != -1) {
+            old_col = 7 - old_col;
+            old_row = 7 - old_row;
+            new_col = 7 - new_col;
+            new_row = 7 - new_row;
+        }
+        if(col_in_place != -1) {
+            col_in_place = 7 - col_in_place;
+            row_in_place = 7 - row_in_place;
+        }
+        if(!rotating) {
+            game.getWhite_name().setBounds(1050,140,490,120);
+            game.getBlack_name().setBounds(1050,610,490,120);
+            game.getTimeLabelWhite().setBounds(1100, 160, 500, 200);
+            game.getTimeLabelBlack().setBounds(1100, 505, 500, 200);
+        }
+        else {
+            game.getWhite_name().setBounds(1050,610,490,120);
+            game.getBlack_name().setBounds(1050,140,490,120);
+            game.getTimeLabelWhite().setBounds(1100, 505, 500, 200);
+            game.getTimeLabelBlack().setBounds(1100, 160, 500, 200);
+        }
+        sound.playMusic(4);
+        repaint();
+    }
     public void makeMove(Move move) {
         if(move.piece.name.equals("Pawn")) {
             movePawn(move);
@@ -98,9 +157,8 @@ public class Board extends JPanel{
             move.piece.xPos = move.getNewCol() * tileSize;
             move.piece.yPos = move.getNewRow() * tileSize;
             if (move.capture != null) {
-                sound.playMusic(3);
                 delete_piece(move.capture);
-                if(FEN.equals("")) input.change_check_delete_or_promotion(1000);
+                if(FEN.equals("")) input.change_check_delete(1);
             }
         }
     }
@@ -112,7 +170,9 @@ public class Board extends JPanel{
     }
     private void movePawn(Move move) {
         //enPassant
-        int colorIndex = move.piece.isWhite ? 1 : -1;
+        int colorIndex;
+        if(!rotating) colorIndex = move.piece.isWhite ? 1 : -1;
+        else colorIndex = move.piece.isWhite ? -1 : 1;
         if(getTileNum(move.getNewCol(),move.getNewRow()) == enPassantTile) {
             move.capture = getPiece(move.getNewCol(),move.getNewRow() + colorIndex);
         }
@@ -125,17 +185,18 @@ public class Board extends JPanel{
         move.piece.xPos = move.getNewCol() * tileSize;
         move.piece.yPos = move.getNewRow() * tileSize;
         if(move.capture != null) {
-            sound.playMusic(3);
             delete_piece(move.capture);
-            if(FEN.equals(""))input.change_check_delete_or_promotion(1000);
+            if(FEN.equals(""))input.change_check_delete(1);
         }
         this.repaint();
         move.piece.the_pawn_first_move = false;
         //promotions
-        colorIndex = move.piece.isWhite ? 0 : 7;
+        if(!rotating) colorIndex = move.piece.isWhite ? 0 : 7;
+        else colorIndex = move.piece.isWhite ? 7 : 0;
+
         if(move.getNewRow() == colorIndex && findKing(true) != null && findKing(false) != null) {
             promotePawn(move);
-            if(FEN.equals("")) input.change_check_delete_or_promotion(2000);
+            if(FEN.equals("")) input.change_check_promotion(1);
         }
     }
     public void promotePawn (Move move) {
@@ -145,19 +206,77 @@ public class Board extends JPanel{
         switch(select) {
             case 0:
                 pieceList.add(new Queen(this,move.getNewCol(),move.getNewRow(),move.piece.isWhite));
+                promotion = 0;
                 break;
             case 1:
                 pieceList.add(new Rook(this,move.getNewCol(),move.getNewRow(),move.piece.isWhite));
+                promotion = 1;
                 break;
             case 2:
                 pieceList.add(new Knight(this,move.getNewCol(),move.getNewRow(),move.piece.isWhite));
+                promotion = 2;
                 break;
             case 3:
                 pieceList.add(new Bishop(this,move.getNewCol(),move.getNewRow(),move.piece.isWhite));
+                promotion = 3;
                 break;
         }
         delete_piece(move.piece);
-        sound.playMusic(5);
+    }
+    public String step(String step,Move move) {
+        if(input.check_delete == 1) {
+            step += 'x';
+        }
+        else {
+            if(Character.isLowerCase(step.charAt(0))) {
+                step = "";
+            }
+        }
+        switch (move.getNewCol()) {
+            case 0:
+                step += 'a';
+                break;
+            case 1:
+                step += 'b';
+                break;
+            case 2:
+                step += 'c';
+                break;
+            case 3:
+                step += 'd';
+                break;
+            case 4:
+                step += 'e';
+                break;
+            case 5:
+                step += 'f';
+                break;
+            case 6:
+                step += 'g';
+                break;
+            case 7:
+                step += 'h';
+                break;
+        }
+        step += String.valueOf(8 - move.getNewRow());
+        if(input.check_promotion == 1) {
+            step += '=';
+            switch (promotion) {
+                case 0:
+                    step += 'Q';
+                    break;
+                case 1:
+                    step += 'R';
+                    break;
+                case 2:
+                    step += 'B';
+                    break;
+                case 3:
+                    step += 'N';
+                    break;
+            }
+        }
+        return step;
     }
     public void delete_piece(Piece piece){
         pieceList.remove(piece);
@@ -167,6 +286,10 @@ public class Board extends JPanel{
             return false;
         }
         return p1.isWhite == p2.isWhite;
+    }
+    public void paint_in_place(int col, int row) {
+        col_in_place = col;
+        row_in_place = row;
     }
     public boolean isValidMove(Move move) {// check nước đi
         if(sameTeam(move.piece,move.capture)) {
@@ -183,7 +306,7 @@ public class Board extends JPanel{
         }
         return true;
     }
-    public int getTileNum(int col,int row) {//lấy ra vị trí ô thú mấy trong 64 ô
+    public int getTileNum(int col,int row) {
         return row * rows + col;
     }
 
@@ -301,6 +424,10 @@ public class Board extends JPanel{
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(board_image,0,0,tileSize * 8,tileSize * 8,this);
+        if(col_in_place != -1) {
+            g2d.setColor(new Color(224, 207, 56, 131));
+            g2d.fillRect(col_in_place* 85, row_in_place * 85, 85, 85);
+        }
         if(selectedPiece != null) {
             for(int i = 0;i < rows; ++i){
                 for(int j = 0;j < cols; ++j){
