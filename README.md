@@ -26,8 +26,7 @@ PGN: Cung cấp đầy đủ thông tin của một ván đấu (tất cả các
 - ```w``` : quân trắng được đi trước.
 
 - ```KQkq```: K cho phép quân trắng nhập thành ngắn, Q cho phép nhập thành dài và tượng tự với quân đen.
-- ```0```: không có en passant.
-- ```1```: số lượng bán nước đi đã được thực hiện trong ván cờ.
+- ```-```: không có en passant.
 - Để xoá một quân cờ: 
     - VD: Xoá một quân mã (black) ở vị trí [8][b]:    
     ```r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` | <img src="src/res/readme/delete_knight_fen.png" alt="" width="300">
@@ -40,6 +39,7 @@ PGN: Cung cấp đầy đủ thông tin của một ván đấu (tất cả các
   
     ```rnbqkbnr/pppppppp/2p5/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1``` | <img src="src/res/readme/add_pawn_fen.png" alt="" width="300">
     - VD: Di chuyển queen đến vị trí [4][c] và knight đến vị trí [4][e]:
+    - 
     ```rnbqkbnr/pppppppp/8/8/2Q1N3/8/PPPPPPPP/R1B1KBNR w KQkq - 0 1``` | <img src="src/res/readme/move_queen_and_knight.png" alt="" width="300">
 
 ### Cách xây dựng các nước đi
@@ -58,10 +58,10 @@ Mỗi quân cờ có một ký tự riêng:
 3. Xác định vị trí đến (nếu có):
 - Tương tự như vị trí xuất phát, sử dụng ký tự chữ cái và số để xác định ô đến.
 4. Ký hiệu đặc biệt:
-- x : Ăn quân
-- + : Chiếu Vua
-- # : Chiếu hết
-- = : promotion
+- ```x``` : Ăn quân
+- ```+``` : Chiếu Vua
+- ```#``` : Chiếu hết
+- ```=``` : promotion
 - O-O: nhập thành ngắn
 - O-O-O: nhập thành dài
 5. Example
