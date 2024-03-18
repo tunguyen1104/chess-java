@@ -83,7 +83,7 @@ public class Listener extends MouseAdapter {
                 String step = "";
                 Piece check = board.getPiece(move.getOldCol(),move.getOldRow());
                 if(check.name.equals("Pawn")) {
-                    step += board.column.charAt(move.getNewCol());
+                    step += board.column.charAt(move.getOldCol());
                 }
                 else if(check.name.equals("Knight")) {
                     step += 'N';
