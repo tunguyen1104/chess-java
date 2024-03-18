@@ -83,32 +83,7 @@ public class Listener extends MouseAdapter {
                 String step = "";
                 Piece check = board.getPiece(move.getOldCol(),move.getOldRow());
                 if(check.name.equals("Pawn")) {
-                    switch (move.getOldCol()) {
-                        case 0:
-                            step += 'a';
-                            break;
-                        case 1:
-                            step += 'b';
-                            break;
-                        case 2:
-                            step += 'c';
-                            break;
-                        case 3:
-                            step += 'd';
-                            break;
-                        case 4:
-                            step += 'e';
-                            break;
-                        case 5:
-                            step += 'f';
-                            break;
-                        case 6:
-                            step += 'g';
-                            break;
-                        case 7:
-                            step += 'h';
-                            break;
-                    }
+                    step += board.column.charAt(move.getNewCol());
                 }
                 else if(check.name.equals("Knight")) {
                     step += 'N';
@@ -130,8 +105,8 @@ public class Listener extends MouseAdapter {
                 isTurn = !isTurn;
                 board.paint_old_new(move.getOldCol(),move.getOldRow(),move.getNewCol(),move.getNewRow());
                 board.paint_in_place(-1,-1);
-                if(this.check_delete) sound.playMusic(2);
-                else sound.playMusic(3);
+                if(this.check_delete) sound.playMusic(3);
+                else sound.playMusic(2);
                 if(this.check_promotion) sound.playMusic(5);
                 String s = game.textArea.getText();
                 if(isTurn) s += board.step(step,move) + "\n";

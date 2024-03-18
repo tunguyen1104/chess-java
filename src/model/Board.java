@@ -23,7 +23,6 @@ public class Board extends JPanel{
     private ArrayList<String> whiteMove = new ArrayList<String>();
     private ArrayList<String> blackMove = new ArrayList<String>();
     private ArrayList<Piece> rotateList = new ArrayList<Piece>();
-    private ArrayList<Piece> the_pawn_first_move_list = new ArrayList<Piece>();
     public boolean rotating = false;
     public Piece selectedPiece;// quân cờ lúc bạn trỏ vào
     public Listener input;
@@ -44,6 +43,7 @@ public class Board extends JPanel{
     public boolean color_to_move;
     public CheckScanner checkScanner = new CheckScanner(this);
     private PuzzleGame puzzleGame;
+    public String column = "abcdefgh";
     private String FEN = "";
     public Board(PuzzleGame puzzleGame, String FEN) {
         if(dataJDBC.get(2) == "1") sound = new Sound();
@@ -200,6 +200,7 @@ public class Board extends JPanel{
         }
     }
     public void promotePawn (Move move) {
+        promotion = -1;
         Object[] options = { "Queen", "Rook", "Knight", "Bishop" };
         int select = JOptionPane.showOptionDialog(null, "Choose Piece To Promote to", null, JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -232,47 +233,21 @@ public class Board extends JPanel{
                 step = "";
             }
         }
-        switch (move.getNewCol()) {
-            case 0:
-                step += 'a';
-                break;
-            case 1:
-                step += 'b';
-                break;
-            case 2:
-                step += 'c';
-                break;
-            case 3:
-                step += 'd';
-                break;
-            case 4:
-                step += 'e';
-                break;
-            case 5:
-                step += 'f';
-                break;
-            case 6:
-                step += 'g';
-                break;
-            case 7:
-                step += 'h';
-                break;
-        }
+        step += column.charAt(move.getNewCol());
         step += String.valueOf(8 - move.getNewRow());
         if(input.check_promotion) {
-            step += '=';
             switch (promotion) {
                 case 0:
-                    step += 'Q';
+                    step += "=Q";
                     break;
                 case 1:
-                    step += 'R';
+                    step += "=R";
                     break;
                 case 2:
-                    step += 'B';
+                    step += "=B";
                     break;
                 case 3:
-                    step += 'N';
+                    step += "=N";
                     break;
             }
         }

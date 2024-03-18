@@ -66,7 +66,7 @@ Mỗi quân cờ có một ký tự riêng:
 - O-O-O: nhập thành dài
 5. Example
 - fxe5 : quân tốt ở vị trí cột f ăn quân địch ở ví trí cột e hàng 5
-- fe5 : quân tốt di chuyển đến cột e hàng 5
+- e5 : quân tốt di chuyển đến cột e hàng 5
 - Nxg3 : quân mã ăn quân địch ở ví trí cột g hàng 3
 - Bf6 : quân tượng di chuyển đến vị trí cột f hàng 6
 - Qb5+ : Queen di chuyển đến vị trí cột b hàng 5 và chiếu tướng
