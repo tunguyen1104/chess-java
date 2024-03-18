@@ -280,6 +280,7 @@ public class ListPuzzle extends JPanel {
     }
     public void initPuzzleFailed() {
         String s = arr.get(0);
+        if(s.equals("")) return;
         String number[] = s.split(",");
         for(String x: number) {
             puzzle[Integer.parseInt(x)].setNormal(puzzle_failed_normal);
@@ -289,6 +290,7 @@ public class ListPuzzle extends JPanel {
     }
     public void initPuzzleSolved() {
         String s = arr.get(1);
+        if(s.equals("")) return;
         String number[] = s.split(",");
         for(String x: number) {
             puzzle[Integer.parseInt(x)].setNormal(puzzle_solved_normal);

@@ -32,21 +32,33 @@ public class JDBCConnection {
                 String _username;
                 String _password;
                 String _email;
+                String _piece;
+                String _board_name;
+                Boolean _sound;
+                String _puzzle_failed;
+                String _puzzle_solved;
                 while (rs.next()) {
                     _username = rs.getString(1);
                     _password = rs.getString(2);
                     _email = rs.getString(3);
+                    _piece= rs.getString(4);
+                    _board_name= rs.getString(5);
+                    _sound = rs.getBoolean(6);
+                    _puzzle_failed = rs.getString(7);
+                    _puzzle_solved = rs.getString(8);
                     if (username.equals(_username) && password.equals(_password)) {
                         rs.close();
                         preparedStatement.close();
                         preparedStatement = conn.prepareStatement(
-                                "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND) VALUES (?, ?, ?, ?, ?, ?)");
+                                "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND, PUZZLE_FAILED, PUZZLE_SOLVED) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                         preparedStatement.setString(1, _username);
                         preparedStatement.setString(2, _password);
                         preparedStatement.setString(3, _email);
-                        preparedStatement.setString(4, "src/res/pieces/default.png");
-                        preparedStatement.setString(5, "src/res/board/green.png");
-                        preparedStatement.setBoolean(6, true);
+                        preparedStatement.setString(4, _piece);
+                        preparedStatement.setString(5, _board_name);
+                        preparedStatement.setBoolean(6, _sound);
+                        preparedStatement.setString(7, _puzzle_failed);
+                        preparedStatement.setString(8, _puzzle_solved);
                         preparedStatement.executeUpdate();
                         preparedStatement.close();
                         conn.close();
@@ -89,22 +101,26 @@ public class JDBCConnection {
                     return false;
                 }
                 PreparedStatement insertStatement = conn.prepareStatement(
-                        "INSERT INTO ACCOUNT(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND) VALUES (?, ?, ?, ?, ?, ?)");
+                        "INSERT INTO ACCOUNT(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND, PUZZLE_FAILED, PUZZLE_SOLVED) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 insertStatement.setString(1, username);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
                 insertStatement.setString(4, "src/res/pieces/default.png");
                 insertStatement.setString(5, "src/res/board/green.png");
                 insertStatement.setBoolean(6, true);
+                insertStatement.setString(7, "");
+                insertStatement.setString(8, "");
                 insertStatement.executeUpdate();
                 insertStatement = conn.prepareStatement(
-                        "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND) VALUES (?, ?, ?, ?, ?, ?)");
+                        "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND, PUZZLE_FAILED, PUZZLE_SOLVED) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 insertStatement.setString(1, username);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
                 insertStatement.setString(4, "src/res/pieces/default.png");
                 insertStatement.setString(5, "src/res/board/green.png");
                 insertStatement.setBoolean(6, true);
+                insertStatement.setString(7, "");
+                insertStatement.setString(8, "");
                 insertStatement.executeUpdate();
                 rs.close();
                 checkStatement.close();

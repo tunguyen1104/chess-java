@@ -44,6 +44,7 @@ public class Board extends JPanel{
     public CheckScanner checkScanner = new CheckScanner(this);
     private PuzzleGame puzzleGame;
     public String column = "abcdefgh";
+    public String column_rotate = "hgfedcba";
     private String FEN = "";
     public Board(PuzzleGame puzzleGame, String FEN) {
         if(dataJDBC.get(2) == "1") sound = new Sound();
@@ -157,6 +158,7 @@ public class Board extends JPanel{
             move.piece.xPos = move.getNewCol() * tileSize;
             move.piece.yPos = move.getNewRow() * tileSize;
             if (move.capture != null) {
+                sound.playMusic(3);
                 delete_piece(move.capture);
                 if(FEN.equals("")) input.change_check_delete(true);
             }
@@ -185,6 +187,7 @@ public class Board extends JPanel{
         move.piece.xPos = move.getNewCol() * tileSize;
         move.piece.yPos = move.getNewRow() * tileSize;
         if(move.capture != null) {
+            sound.playMusic(3);
             delete_piece(move.capture);
             if(FEN.equals(""))input.change_check_delete(true);
         }
@@ -222,6 +225,7 @@ public class Board extends JPanel{
                 promotion = 3;
                 break;
         }
+        sound.playMusic(5);
         delete_piece(move.piece);
     }
     public String step(String step,Move move) {
@@ -233,8 +237,14 @@ public class Board extends JPanel{
                 step = "";
             }
         }
-        step += column.charAt(move.getNewCol());
-        step += String.valueOf(8 - move.getNewRow());
+        if(!rotating) {
+            step += column.charAt(move.getNewCol());
+            step += String.valueOf(8 - move.getNewRow());
+        }
+        else {
+            step += column_rotate.charAt(move.getNewCol());
+            step += String.valueOf(move.getNewRow() + 1);
+        }
         if(input.check_promotion) {
             switch (promotion) {
                 case 0:
