@@ -22,16 +22,16 @@ CREATE TABLE CURRENTUSER (
 );
 
 INSERT INTO CURRENTUSER (username, password, email, piece, board_name, sound, puzzle_failed, puzzle_solved)
-VALUES ('moriaty123', 'moriaty123', 'moriaty@gmail.com', 'src/res/pieces/maestro.png', 'src/res/board/metal.png', true, '1,3,4', '2,5');
+VALUES ('moriaty123', 'moriaty123', 'moriaty@gmail.com', 'resources/pieces/maestro.png', 'resources/board/metal.png', true, '1,3,4', '2,5');
 
 INSERT INTO ACCOUNT (username, password, email, piece, board_name, sound, puzzle_failed, puzzle_solved)
-VALUES ('moriaty123', 'moriaty123', 'moriaty@gmail.com', 'src/res/pieces/default.png', 'src/res/board/green.png', true, '1,3,4', '2');
+VALUES ('moriaty123', 'moriaty123', 'moriaty@gmail.com', 'resources/pieces/default.png', 'resources/board/green.png', true, '1,3,4', '2');
 
 INSERT INTO ACCOUNT (username, password, email, piece, board_name, sound, puzzle_failed, puzzle_solved)
-VALUES ('watson1887', 'doctor', 'watson@example.com', 'src/res/pieces/default.png', 'src/res/board/red.png', false, '3,6,7', '1');
+VALUES ('watson1887', 'doctor', 'watson@example.com', 'resources/pieces/default.png', 'resources/board/red.png', false, '3,6,7', '1');
 
 INSERT INTO ACCOUNT (username, password, email, piece, board_name, sound, puzzle_failed, puzzle_solved)
-VALUES ('travelbug', 'adventure', 'michael.brown@gmail.com', 'src/res/pieces/alpha.png', 'src/res/board/metal.png', true, '5', '1,2,3,7,8,9');
+VALUES ('travelbug', 'adventure', 'michael.brown@gmail.com', 'resources/pieces/alpha.png', 'resources/board/metal.png', true, '5', '1,2,3,7,8,9');
 
 INSERT INTO ACCOUNT (username, password, email, piece, board_name, sound, puzzle_failed, puzzle_solved)
-VALUES ('irene_adler', 'sherlocked', 'adler@example.com', 'src/res/pieces/default.png', 'src/res/board/purple.png', false, '1,2,5', '3,9,10');
+VALUES ('irene_adler', 'sherlocked', 'adler@example.com', 'resources/pieces/default.png', 'resources/board/purple.png', false, '1,2,5', '3,9,10');
