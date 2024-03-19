@@ -13,6 +13,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 public class GamePVP extends JPanel {
     public JFrame frame;
     private BufferedImage game_gui;
@@ -45,7 +46,8 @@ public class GamePVP extends JPanel {
     public JLabel getTimeLabelBlack() {
         return timeLabelBlack;
     }
-    //time
+
+    // time
     private JLabel timeLabelWhite = new JLabel();
     private JLabel timeLabelBlack = new JLabel();
     private int seconds_white;
@@ -61,6 +63,7 @@ public class GamePVP extends JPanel {
     public JTextArea textArea;
     public JScrollPane scrollPaneTextArea;
     private Board board = new Board(this);
+
     public GamePVP(int minute) {
         seconds_white = 0;
         minutes_white = minute;
@@ -72,26 +75,26 @@ public class GamePVP extends JPanel {
         minutes_string2 = String.format("%02d", minutes_black);
         // Load image
         try {
-            board_index = ImageIO.read(new File("src/res/gui/board_index_white.png"));
-            board_index_black = ImageIO.read(new File("src/res/gui/board_index_black.png"));
-            back_selected = ImageIO.read(new File("src/res/buttons/back_selected.png"));
-            home_selected = ImageIO.read(new File("src/res/buttons/home_selected.png"));
-            rotate_normal = ImageIO.read(new File("src/res/buttons/rotate_normal.png"));
-            rotate_selected = ImageIO.read(new File("src/res/buttons/rotate_selected.png"));
-            icon_game = ImageIO.read(new File("src/res/gui/icon_game.png"));
-            game_gui = ImageIO.read(new File("src/res/gui/game_gui.png"));
-            title_bar = ImageIO.read(new File("src/res/gui/title_bar.png"));
-            back_normal = ImageIO.read(new File("src/res/buttons/back_normal.png"));
-            home_normal = ImageIO.read(new File("src/res/buttons/home_normal.png"));
+            board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
+            board_index_black = ImageIO.read(new File("resources/gui/board_index_black.png"));
+            back_selected = ImageIO.read(new File("resources/buttons/back_selected.png"));
+            home_selected = ImageIO.read(new File("resources/buttons/home_selected.png"));
+            rotate_normal = ImageIO.read(new File("resources/buttons/rotate_normal.png"));
+            rotate_selected = ImageIO.read(new File("resources/buttons/rotate_selected.png"));
+            icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
+            game_gui = ImageIO.read(new File("resources/gui/game_gui.png"));
+            title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
+            back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
+            home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         // Set preferred size of the panel to match background image size
-        this.setBackground(new Color(41,41,41));
+        this.setBackground(new Color(41, 41, 41));
         this.setPreferredSize(new Dimension(1600, 1000));
         this.setLayout(null);
         initPanel();
-        board.setBounds(280,90,8 * 85,8 * 85);
+        board.setBounds(280, 90, 8 * 85, 8 * 85);
         this.add(board);
         frame = new JFrame("CHESS PVP");
         frame.setIconImage(icon_game);
@@ -99,7 +102,7 @@ public class GamePVP extends JPanel {
         frame.pack();
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(-6,0);
+        frame.setLocation(-6, 0);
         frame.setVisible(true);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -107,22 +110,25 @@ public class GamePVP extends JPanel {
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (option == JOptionPane.YES_OPTION)
                     System.exit(0);
-                else frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                else
+                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             }
         });
     }
+
     public void initPanel() {
-        //setting name
+        // setting name
         white_name = new JLabel("Player2 (Black)");
-        white_name.setBounds(1050,140,490,120);
+        white_name.setBounds(1050, 140, 490, 120);
         white_name.setForeground(Color.WHITE);
-        white_name.setFont(white_name.getFont().deriveFont(20.0f)); // Tạo font mới với kích thước mới và thiết lập cho nhãn
+        white_name.setFont(white_name.getFont().deriveFont(20.0f)); // Tạo font mới với kích thước mới và thiết lập cho
+                                                                    // nhãn
 
         black_name = new JLabel("Player1 (White)");
-        black_name.setBounds(1050,610,490,120);
+        black_name.setBounds(1050, 610, 490, 120);
         black_name.setForeground(Color.WHITE);
         black_name.setFont(black_name.getFont().deriveFont(20.0f));
-        //==========Time_label_white==========
+        // ==========Time_label_white==========
         timeLabelWhite.setText(minutes_string1 + ":" + seconds_string1);
         timeLabelWhite.setBounds(1100, 160, 500, 200);
         timeLabelWhite.setFont(timeLabelWhite.getFont().deriveFont(40.0f));
@@ -130,16 +136,17 @@ public class GamePVP extends JPanel {
         timeLabelBlack.setText(minutes_string2 + ":" + seconds_string2);
         timeLabelBlack.setBounds(1100, 505, 500, 200);
         timeLabelBlack.setFont(timeLabelBlack.getFont().deriveFont(40.0f));
-        //===========Title Bar============
+        // ===========Title Bar============
         title_bar_label = new JLabel("Standard - PvP");
-        title_bar_label.setBounds(680,0,400,60);
+        title_bar_label.setBounds(680, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(18.0f)); // Tạo font mới với kích thước mới và thiết lập cho nhãn
-        //================================
-        back_normal_button = new ButtonImage(back_normal,back_selected,42,42,"");
-        home_normal_button = new ButtonImage(home_normal,home_selected,42,42,"");
-        back_normal_button.setBounds(465,10,42,42);
-        home_normal_button.setBounds(1000,10,42,42);
+        title_bar_label.setFont(title_bar_label.getFont().deriveFont(18.0f)); // Tạo font mới với kích thước mới và
+                                                                              // thiết lập cho nhãn
+        // ================================
+        back_normal_button = new ButtonImage(back_normal, back_selected, 42, 42, "");
+        home_normal_button = new ButtonImage(home_normal, home_selected, 42, 42, "");
+        back_normal_button.setBounds(465, 10, 42, 42);
+        home_normal_button.setBounds(1000, 10, 42, 42);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -157,20 +164,20 @@ public class GamePVP extends JPanel {
             }
         });
         textArea = new JTextArea();
-        textArea.setBackground(new Color(55,55,55));
+        textArea.setBackground(new Color(55, 55, 55));
         textArea.setForeground(Color.WHITE);
         try {
             textArea.setFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("src/res/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 14));
+                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 14));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (FontFormatException e) {
             e.printStackTrace();
         }
         scrollPaneTextArea = new JScrollPane(textArea);
-        scrollPaneTextArea.setBounds(1010,384,308,158);
-        scrollPaneTextArea.setBackground(new Color(55,55,55));
-        Border border = BorderFactory.createLineBorder(new Color(55,55,55));
+        scrollPaneTextArea.setBounds(1010, 384, 308, 158);
+        scrollPaneTextArea.setBackground(new Color(55, 55, 55));
+        Border border = BorderFactory.createLineBorder(new Color(55, 55, 55));
         scrollPaneTextArea.setBorder(border);
         scrollPaneTextArea.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         this.add(scrollPaneTextArea);
@@ -182,9 +189,8 @@ public class GamePVP extends JPanel {
         this.add(home_normal_button);
         this.add(title_bar_label);
 
-
-        ButtonImage rotate = new ButtonImage(rotate_normal,rotate_selected,40,30,"");
-        rotate.setBounds(1252,338,40,30);
+        ButtonImage rotate = new ButtonImage(rotate_normal, rotate_selected, 40, 30, "");
+        rotate.setBounds(1252, 338, 40, 30);
         rotate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -195,14 +201,16 @@ public class GamePVP extends JPanel {
         });
         this.add(rotate);
     }
+
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(game_gui, 250, 70,this);
-        g2d.drawImage(title_bar,530,10,450,42,this);
-        g2d.drawImage(board_index,250,70,this);
+        g2d.drawImage(game_gui, 250, 70, this);
+        g2d.drawImage(title_bar, 530, 10, 450, 42, this);
+        g2d.drawImage(board_index, 250, 70, this);
     }
+
     public Timer timer_white = new Timer(1000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -232,6 +240,7 @@ public class GamePVP extends JPanel {
         }
 
     });
+
     public void start_white() {
         timer_white.start();
     }
@@ -247,6 +256,7 @@ public class GamePVP extends JPanel {
     public void stop_black() {
         timer_black.stop();
     }
+
     public static void main(String[] args) {
         new GamePVP(3);
     }

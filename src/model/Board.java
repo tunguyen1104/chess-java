@@ -20,8 +20,7 @@ public class Board extends JPanel{
     public int rows = 8;
     public int cols = 8;
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
-    private ArrayList<String> whiteMove = new ArrayList<String>();
-    private ArrayList<String> blackMove = new ArrayList<String>();
+    private ArrayList<String> pieceMove = new ArrayList<String>();
     private ArrayList<Piece> rotateList = new ArrayList<Piece>();
     public boolean rotating = false;
     public Piece selectedPiece;// quân cờ lúc bạn trỏ vào
@@ -62,6 +61,8 @@ public class Board extends JPanel{
         this.addMouseListener(inputPuzzle);
         this.addMouseMotionListener(inputPuzzle);
         handleFen(FEN);
+        for(String x: pieceMove)
+            System.out.println(x);
     }
     public Board (GamePVP game) {
         if(dataJDBC.get(2) == "1") sound = new Sound();
@@ -395,10 +396,8 @@ public class Board extends JPanel{
                     }
                     ++cnt;
                 }
-                while (cnt + 5 < fen.length()) {
-                    whiteMove.add(fen.substring(cnt, cnt + 4));
-                    cnt += 5;
-                    blackMove.add(fen.substring(cnt, cnt + 4));
+                while (cnt < fen.length() - 1) {
+                    pieceMove.add(fen.substring(cnt, cnt + 4));
                     cnt += 5;
                 }
             }

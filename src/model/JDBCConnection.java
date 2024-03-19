@@ -41,8 +41,8 @@ public class JDBCConnection {
                     _username = rs.getString(1);
                     _password = rs.getString(2);
                     _email = rs.getString(3);
-                    _piece= rs.getString(4);
-                    _board_name= rs.getString(5);
+                    _piece = rs.getString(4);
+                    _board_name = rs.getString(5);
                     _sound = rs.getBoolean(6);
                     _puzzle_failed = rs.getString(7);
                     _puzzle_solved = rs.getString(8);
@@ -65,7 +65,8 @@ public class JDBCConnection {
                         return true;
                     }
                 }
-                JOptionPane.showMessageDialog(null, "Username or password is incorrect", "Message", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Username or password is incorrect", "Message",
+                        JOptionPane.WARNING_MESSAGE);
                 rs.close();
                 preparedStatement.close();
                 conn.close();
@@ -97,7 +98,8 @@ public class JDBCConnection {
                     rs.close();
                     checkStatement.close();
                     conn.close();
-                    JOptionPane.showMessageDialog(null, "Account already exists!", "Message", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Account already exists!", "Message",
+                            JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
                 PreparedStatement insertStatement = conn.prepareStatement(
@@ -105,8 +107,8 @@ public class JDBCConnection {
                 insertStatement.setString(1, username);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
-                insertStatement.setString(4, "src/res/pieces/default.png");
-                insertStatement.setString(5, "src/res/board/green.png");
+                insertStatement.setString(4, "resources/pieces/maestro.png");
+                insertStatement.setString(5, "resources/board/metal.png");
                 insertStatement.setBoolean(6, true);
                 insertStatement.setString(7, "");
                 insertStatement.setString(8, "");
@@ -116,8 +118,8 @@ public class JDBCConnection {
                 insertStatement.setString(1, username);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
-                insertStatement.setString(4, "src/res/pieces/default.png");
-                insertStatement.setString(5, "src/res/board/green.png");
+                insertStatement.setString(4, "resources/pieces/maestro.png");
+                insertStatement.setString(5, "resources/board/metal.png");
                 insertStatement.setBoolean(6, true);
                 insertStatement.setString(7, "");
                 insertStatement.setString(8, "");
@@ -154,7 +156,8 @@ public class JDBCConnection {
                 throw new RuntimeException(ex);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Connection to database failed!", "Message", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Connection to database failed!", "Message",
+                    JOptionPane.WARNING_MESSAGE);
             System.out.println("Connection to database failed!");
         }
     }
@@ -163,12 +166,10 @@ public class JDBCConnection {
         Connection conn = JDBCConnection.getJDBCConnection();
         if (conn != null) {
             try {
-                PreparedStatement statement = conn.prepareStatement("SELECT username, password, email FROM CURRENTUSER");
+                PreparedStatement statement = conn.prepareStatement("SELECT username FROM CURRENTUSER");
                 ResultSet rs = statement.executeQuery();
                 if (rs.next()) {
-                    String username = rs.getString("username");
-                    String password = rs.getString("password");
-                    String email = rs.getString("email");
+                    rs.getString("username");
                     rs.close();
                     statement.close();
                     return true;
@@ -186,6 +187,7 @@ public class JDBCConnection {
         }
         return false;
     }
+
     public static ArrayList<String> takeDataSetting() {
         ArrayList<String> arr = null;
         Connection conn = null;
@@ -223,6 +225,7 @@ public class JDBCConnection {
         }
         return arr;
     }
+
     public static ArrayList<String> takeDataPuzzle() {
         ArrayList<String> arr = null;
         Connection conn = null;
@@ -258,6 +261,7 @@ public class JDBCConnection {
         }
         return arr;
     }
+
     public static void updateDataSetting(String piece_url, String board_url, Boolean sound) {
         Connection conn = null;
         PreparedStatement statement = null;
@@ -284,6 +288,7 @@ public class JDBCConnection {
             }
         }
     }
+
     public static void updateDataPuzzle(String puzzle_failed, String puzzle_solved) {
         Connection conn = null;
         PreparedStatement statement = null;

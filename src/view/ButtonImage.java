@@ -36,7 +36,7 @@ public class ButtonImage extends JLabel{
         title.setForeground(Color.WHITE);
         try {
             title.setFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("src/res/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 16));
+                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 16));
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
