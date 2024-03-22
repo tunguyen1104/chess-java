@@ -183,6 +183,11 @@ public class ListPuzzle extends JPanel {
         this.add(panel_contains_puzzle_page_1);
         this.add(panel_contains_puzzle_page_2);
         this.add(panel_contains_puzzle_page_3);
+        readFEN();
+        initPuzzleFailed();
+        initPuzzleSolved();
+    }
+    public void readFEN() {
         initController("4R1k1/2p2q1p/4pBpQ/p2pP3/r3p3/4P2P/5PP1/6K1 b - - 0 27,f7e8 h6g7", 1);
         try {
             BufferedReader reader = new BufferedReader(new FileReader("resources/puzzles.csv"));
@@ -196,10 +201,7 @@ public class ListPuzzle extends JPanel {
         } catch (IOException e) {
             System.out.println(e);
         }
-        initPuzzleFailed();
-        initPuzzleSolved();
     }
-
     public void initPage1() {
         panel_contains_puzzle_page_1 = new JPanel();
         panel_contains_puzzle_page_1.setBackground(new Color(41, 41, 41));
@@ -287,28 +289,31 @@ public class ListPuzzle extends JPanel {
             }
         });
     }
-
     public void initPuzzleFailed() {
         String s = arr.get(0);
-        if (s.equals(""))
+        if (s.isEmpty())
             return;
-        String number[] = s.split(",");
-        for (String x : number) {
-            puzzle[Integer.parseInt(x)].setNormal(puzzle_failed_normal);
-            puzzle[Integer.parseInt(x)].setSelected(puzzle_failed_selected);
-            puzzle[Integer.parseInt(x)].setImage(puzzle_failed_normal);
+        else {
+            String number[] = s.split(",");
+            for (String x : number) {
+                puzzle[Integer.parseInt(x)].setNormal(puzzle_failed_normal);
+                puzzle[Integer.parseInt(x)].setSelected(puzzle_failed_selected);
+                puzzle[Integer.parseInt(x)].setImage(puzzle_failed_normal);
+            }
         }
     }
 
     public void initPuzzleSolved() {
         String s = arr.get(1);
-        if (s.equals(""))
+        if (s.isEmpty())
             return;
-        String number[] = s.split(",");
-        for (String x : number) {
-            puzzle[Integer.parseInt(x)].setNormal(puzzle_solved_normal);
-            puzzle[Integer.parseInt(x)].setSelected(puzzle_solved_selected);
-            puzzle[Integer.parseInt(x)].setImage(puzzle_solved_normal);
+        else {
+            String number[] = s.split(",");
+            for (String x : number) {
+                puzzle[Integer.parseInt(x)].setNormal(puzzle_solved_normal);
+                puzzle[Integer.parseInt(x)].setSelected(puzzle_solved_selected);
+                puzzle[Integer.parseInt(x)].setImage(puzzle_solved_normal);
+            }
         }
     }
 
@@ -317,9 +322,5 @@ public class ListPuzzle extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(title_bar, 530, 10, 450, 42, this);
-    }
-
-    public static void main(String[] args) {
-        new ListPuzzle();
     }
 }

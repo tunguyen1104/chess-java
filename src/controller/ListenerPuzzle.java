@@ -15,14 +15,16 @@ public class ListenerPuzzle extends MouseAdapter {
     private Board board;
     public Sound sound;
     public Integer check_delete_or_promotion = -1;
-    public ListenerPuzzle(Board board, Sound sound) {
+    public ListenerPuzzle(PuzzleGame game, Board board, Sound sound) {
+        this.game = game;
         this.board = board;
         this.sound = sound;
     }
     @Override
     public void mousePressed(MouseEvent e) {
+        if(board.done_failed_Puzzle != -1) return;
         if(board.selectedPiece != null) {
-            if(board.color_to_move != board.selectedPiece.isWhite) {
+            if(board.color_to_move == board.selectedPiece.isWhite) {
                 board.selectedPiece = null;
                 return;
             }
@@ -36,8 +38,9 @@ public class ListenerPuzzle extends MouseAdapter {
     }
     @Override
     public void mouseDragged(MouseEvent e) {
+        if(board.done_failed_Puzzle != -1) return;
         if(board.selectedPiece != null) {
-            if(board.color_to_move != board.selectedPiece.isWhite) {
+            if(board.color_to_move == board.selectedPiece.isWhite) {
                 board.selectedPiece = null;
                 return;
             }
@@ -57,8 +60,10 @@ public class ListenerPuzzle extends MouseAdapter {
             if(board.isValidMove(move)){
                 this.check_delete_or_promotion = -1;
                 board.makeMove(move);
+                if(board.index_piecePuzzle < board.piecePuzzle.size()) {
+                    board.solvePuzzle(move);
+                }
                 board.paint_old_new(move.getOldCol(),move.getOldRow(),move.getNewCol(),move.getNewRow());
-                sound.playMusic(2);
             }
             else {
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize;

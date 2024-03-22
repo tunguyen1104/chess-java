@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class Board extends JPanel{
     public int rows = 8;
     public int cols = 8;
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
-    private ArrayList<String> pieceMove = new ArrayList<String>();
+    public ArrayList<String> piecePuzzle = new ArrayList<String>();
     private ArrayList<Piece> rotateList = new ArrayList<Piece>();
     public boolean rotating = false;
     public Piece selectedPiece;// quân cờ lúc bạn trỏ vào
@@ -37,21 +39,35 @@ public class Board extends JPanel{
     private int new_row = -1;
     private int col_in_place = -1;
     private int row_in_place = -1;
-    public ArrayList<String> dataJDBC = JDBCConnection.takeDataSetting();
+    private ArrayList<String> dataJDBC = JDBCConnection.takeDataSetting();
+    private ArrayList<String> dataPuzzle = JDBCConnection.takeDataPuzzle();
     //dataJDBC =
+    Timer timer;
     public boolean color_to_move;
     public CheckScanner checkScanner = new CheckScanner(this);
     private PuzzleGame puzzleGame;
     public String column = "abcdefgh";
     public String column_rotate = "hgfedcba";
     private String FEN = "";
+    public int index_piecePuzzle = 0;
+    public int done_failed_Puzzle = -1;//1 = done, 2 = failed
+    private int col_puzzle = -1;
+    private int row_puzzle = -1;
+    private int col_hint = -1;
+    private int row_hint = -1;
+
+    public void setHint_boolean(boolean hint_boolean) {
+        this.hint_boolean = hint_boolean;
+    }
+
+    private boolean hint_boolean = false;
     public Board(PuzzleGame puzzleGame, String FEN) {
-        if(dataJDBC.get(2) == "1") sound = new Sound();
+        if(dataJDBC.get(2).equals("1")) sound = new Sound();
         else sound = new Sound(1);
         this.puzzleGame = puzzleGame;
         this.FEN = FEN;
         sound.playMusic(0);
-        inputPuzzle = new ListenerPuzzle(this,sound);
+        inputPuzzle = new ListenerPuzzle(puzzleGame,this,sound);
         try {
             board_image = ImageIO.read(new File(dataJDBC.get(1)));
         } catch (IOException e) {
@@ -61,11 +77,10 @@ public class Board extends JPanel{
         this.addMouseListener(inputPuzzle);
         this.addMouseMotionListener(inputPuzzle);
         handleFen(FEN);
-        for(String x: pieceMove)
-            System.out.println(x);
+        animation();
     }
     public Board (GamePVP game) {
-        if(dataJDBC.get(2) == "1") sound = new Sound();
+        if(dataJDBC.get(2).equals("1")) sound = new Sound();
         else sound = new Sound(1);
         this.game = game;
         sound.playMusic(0);
@@ -88,6 +103,161 @@ public class Board extends JPanel{
         }
         return null;
     }
+    public void animation() {
+        done_failed_Puzzle = -1;
+        hint_boolean = false;
+        col_hint = -1;
+        row_hint = -1;
+        col_puzzle = -1;
+        row_puzzle = -1;
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    System.out.println();
+                }
+                animate(8 - (piecePuzzle.get(index_piecePuzzle).charAt(1) - '0'),piecePuzzle.get(index_piecePuzzle).charAt(0) - 'a',8 - (piecePuzzle.get(index_piecePuzzle).charAt(3) - '0'),piecePuzzle.get(index_piecePuzzle).charAt(2) - 'a');
+               ++index_piecePuzzle;
+            }
+        };thread.start();
+    }
+    public void hint(Graphics2D g2d) {
+        col_hint = piecePuzzle.get(index_piecePuzzle).charAt(0) - 'a';
+        row_hint = 8 - (piecePuzzle.get(index_piecePuzzle).charAt(1) - '0');
+        g2d.setColor(new Color(102, 159, 128, 200));
+        g2d.fillRect(col_hint * 85, row_hint * 85, 85, 85);
+        hint_boolean = false;
+        col_hint = -1;
+        row_hint = -1;
+    }
+    public void solvePuzzle(Move move) {
+        int currentCol = piecePuzzle.get(index_piecePuzzle).charAt(0) - 'a';
+        int currentRow = 8 - (piecePuzzle.get(index_piecePuzzle).charAt(1) - '0');
+        int newCol = piecePuzzle.get(index_piecePuzzle).charAt(2) - 'a';
+        int newRow = 8 - (piecePuzzle.get(index_piecePuzzle).charAt(3) - '0');
+        if(currentCol == move.getOldCol() && currentRow == move.getOldRow() && newCol == move.getNewCol() && newRow == move.getNewRow()) {
+            ++index_piecePuzzle;
+            if(index_piecePuzzle < piecePuzzle.size()) {
+                sound.playMusic(7);
+                done_failed_Puzzle = 1;
+                col_puzzle = newCol;
+                row_puzzle = newRow;
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            System.out.println();
+                        }
+                        animation();
+                    }
+                };thread.start();
+            }
+            else {
+                //done puzzle
+                sound.playMusic(1);
+                col_puzzle = newCol;
+                row_puzzle = newRow;
+                puzzleGame.done_panel.setVisible(true);
+                puzzleGame.hint_panel.setVisible(false);
+                puzzleGame.undo_panel.setVisible(false);
+                done_failed_Puzzle = 1;
+                /// handle JDBC
+                String updated_failed = "";
+                int index_failed_puzzle = -1;
+                String lever_string = String.valueOf(puzzleGame.lever);
+
+                if (!dataPuzzle.get(0).isEmpty()) {
+                    String[] numbers = dataPuzzle.get(0).split(",");
+                    for (int i = 0; i < numbers.length; ++i) {
+                        if (numbers[i].equals(lever_string)) {
+                            index_failed_puzzle = i;
+                            break;
+                        }
+                    }
+
+                    if (index_failed_puzzle != -1) {
+                        StringBuilder updatedBuilder = new StringBuilder();
+                        for (int i = 0; i < numbers.length; ++i) {
+                            if (i != index_failed_puzzle) {
+                                updatedBuilder.append(numbers[i]).append(',');
+                            }
+                        }
+                        updated_failed = updatedBuilder.toString();
+                        if (!updated_failed.isEmpty()) {
+                            updated_failed = updated_failed.substring(0, updated_failed.length() - 1);
+                        }
+                    }
+                }
+                String updated_solved = dataPuzzle.get(1);
+                if(index_failed_puzzle == -1) {//nếu trong failed ko có
+                    if(!updated_solved.isEmpty()) {
+                        String number[] = updated_solved.split(",");
+                        for (int i = 0;i < number.length; ++i) {
+                            if(number[i].equals(lever_string)) {//nếu trong solved có rồi thì thôi
+                                return;
+                            }
+                        }
+                    }
+                }
+                if(updated_solved.isEmpty()) updated_solved = lever_string;
+                else updated_solved += ',' + lever_string;
+                JDBCConnection.updateDataPuzzle(updated_failed,updated_solved);
+            }
+        }
+        else {
+            //failed
+            sound.playMusic(6);
+            col_puzzle = move.piece.col;
+            row_puzzle = move.piece.row;
+            puzzleGame.done_panel.setVisible(false);
+            puzzleGame.hint_panel.setVisible(false);
+            puzzleGame.undo_panel.setVisible(true);
+            done_failed_Puzzle = 2;
+            if(!dataPuzzle.get(1).isEmpty()) {
+                String number[] = dataPuzzle.get(1).split(",");// nếu solved có rồi thì thôi
+                for (int i = 0; i < number.length; ++i) {
+                    if (Integer.parseInt(number[i]) == puzzleGame.lever) {
+                        return;
+                    }
+                }
+            }
+            String update_failed = dataPuzzle.get(0);
+                if(!update_failed.isEmpty()) {
+                    String number[] = update_failed.split(",");
+                    for (int i = 0;i < number.length; ++i) {
+                        if(Integer.parseInt(number[i]) == puzzleGame.lever) {// nếu faile có rồi thì thôi
+                            return;
+                        }
+                    }
+                    update_failed += ',' + String.valueOf(puzzleGame.lever);
+                }
+                else update_failed += String.valueOf(puzzleGame.lever);
+            JDBCConnection.updateDataPuzzle(update_failed,dataPuzzle.get(1));
+        }
+    }
+    private void animate(int x, int y,int x_new, int y_new) {
+        paint_old_new(y,x,y_new,x_new);
+        Piece piece = getPiece(y,x);
+        pieceList.remove(piece);
+        if(getPiece(y_new,x_new) != null) {
+            pieceList.remove(getPiece(y_new,x_new));
+            sound.playMusic(3);
+        }
+        else {
+            sound.playMusic(2);
+        }
+        if(piece.name.equals("King")) pieceList.add(new King(this,y_new,x_new,color_to_move));
+        else if(piece.name.equals("Queen")) pieceList.add(new Queen(this,y_new,x_new,color_to_move));
+        else if(piece.name.equals("Rook")) pieceList.add(new Rook(this,y_new,x_new,color_to_move));
+        else if(piece.name.equals("Bishop")) pieceList.add(new Bishop(this,y_new,x_new,color_to_move));
+        else if(piece.name.equals("Knight")) pieceList.add(new Knight(this,y_new,x_new,color_to_move));
+        else if(piece.name.equals("Pawn")) pieceList.add(new Pawn(this,y_new,x_new,color_to_move));
+        repaint();
+    }
     public Piece findKing(boolean isWhite) {
         for(Piece piece: pieceList) {
             if(piece.isWhite == isWhite && piece.name.equals("King")) {
@@ -95,6 +265,16 @@ public class Board extends JPanel{
             }
         }
         return null;
+    }
+    public void notify_done_puzzle(Graphics2D g2d) {
+        int _col = col_puzzle * 85 + 70;
+        int _row = row_puzzle * 85 - 10;
+        if(done_failed_Puzzle == 1) {
+            g2d.drawImage(puzzleGame.circle_check,_col,_row,30,30,puzzleGame);
+        }
+        else if(done_failed_Puzzle == 2) {
+            g2d.drawImage(puzzleGame.circle_xmark,_col,_row,30,30,puzzleGame);
+        }
     }
     public void rotateBoard() {
         rotating = !rotating;
@@ -397,7 +577,7 @@ public class Board extends JPanel{
                     ++cnt;
                 }
                 while (cnt < fen.length() - 1) {
-                    pieceMove.add(fen.substring(cnt, cnt + 4));
+                    piecePuzzle.add(fen.substring(cnt, cnt + 4));
                     cnt += 5;
                 }
             }
@@ -427,8 +607,14 @@ public class Board extends JPanel{
             g2d.fillRect(old_col* 85, old_row * 85, 85, 85);
             g2d.fillRect(new_col* 85, new_row * 85, 85, 85);
         }
+        if(hint_boolean == true) {
+            hint(g2d);
+        }
         for (Piece piece : pieceList) {
             piece.paint(g2d);
+        }
+        if(done_failed_Puzzle != -1) {
+            notify_done_puzzle(g2d);
         }
     }
 }

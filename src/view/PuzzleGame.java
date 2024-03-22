@@ -10,12 +10,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class PuzzleGame extends JPanel {
     private JFrame frame;
     private String FEN;
+    public int lever;
     private BufferedImage title_bar;
     private JLabel title_bar_label;
     private BufferedImage icon_game;
@@ -27,22 +30,24 @@ public class PuzzleGame extends JPanel {
     private ButtonImage home_normal_button;
     private BufferedImage board_index;
     private BufferedImage panel_320_292;
-    Board board;
+    private Board board;
     private BufferedImage normal;
     private BufferedImage selected;
     private ButtonImage hint;
     private ButtonImage undo;
     private ButtonImage try_again;
     private ButtonImage next_lever;
-    private JPanel hint_panel;
-    private JPanel undo_panel;
-    private JPanel done_panel;
+    public JPanel hint_panel;
+    public JPanel undo_panel;
+    public JPanel done_panel;
     private JLabel color_to_move;
     private JLabel correct;
     private JLabel failed;
-
+    public BufferedImage circle_check;
+    public BufferedImage circle_xmark;
     public PuzzleGame(String FEN, int lever) {
         this.FEN = FEN;
+        this.lever = lever;
         board = new Board(this, FEN);
         try {
             normal = ImageIO.read(new File("resources/buttons/menu_normal.png"));
@@ -55,10 +60,12 @@ public class PuzzleGame extends JPanel {
             home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
             back_selected = ImageIO.read(new File("resources/buttons/back_selected.png"));
             home_selected = ImageIO.read(new File("resources/buttons/home_selected.png"));
+            circle_xmark = ImageIO.read(new File("resources/gui/circle_xmark.png"));
+            circle_check = ImageIO.read(new File("resources/gui/circle_check.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        initPanel(lever);
+        initPanel();
         hint_panel.setVisible(true);
         done_panel.setVisible(false);
         undo_panel.setVisible(false);
@@ -82,7 +89,7 @@ public class PuzzleGame extends JPanel {
         });
     }
 
-    public void initPanel(int lever) {
+    public void initPanel() {
         this.setPreferredSize(new Dimension(1600, 1000));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
@@ -93,7 +100,6 @@ public class PuzzleGame extends JPanel {
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
         this.add(title_bar_label);
-        // ----------------------
         // setting back_normal, home_normal
         back_normal_button = new ButtonImage(back_normal, back_selected, 42, 42, "");
         home_normal_button = new ButtonImage(home_normal, home_selected, 42, 42, "");
@@ -123,10 +129,10 @@ public class PuzzleGame extends JPanel {
         hint_panel.setBackground(new Color(55, 55, 55));
         hint_panel.setLayout(null);
         hint = new ButtonImage(normal, selected, 150, 50, "Hint");
-        hint.setBounds(60, 136, 150, 50);
+        hint.setBounds(60, 140, 150, 50);
         hint_panel.add(hint);
         color_to_move = new JLabel();
-        String key = board.color_to_move ? "White to Move" : "Black to Move";
+        String key = board.color_to_move ? "Black to Move" : "White to Move";
         color_to_move.setText(key);
         try {
             color_to_move.setFont(Font.createFont(Font.TRUETYPE_FONT,
@@ -146,7 +152,7 @@ public class PuzzleGame extends JPanel {
         undo_panel.setBackground(new Color(55, 55, 55));
         undo_panel.setLayout(null);
         undo = new ButtonImage(normal, selected, 150, 50, "Undo");
-        undo.setBounds(58, 100, 150, 50);
+        undo.setBounds(58, 120, 150, 50);
         undo_panel.add(undo);
         failed = new JLabel();
         failed.setText("Try Again");
@@ -187,8 +193,62 @@ public class PuzzleGame extends JPanel {
         correct.setForeground(Color.WHITE);
         done_panel.add(correct);
         this.add(done_panel);
+        //listener
+        hint.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                board.setHint_boolean(true);
+                board.repaint();
+            }
+        });
+        undo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                frame.dispose();
+                new PuzzleGame(FEN,lever);
+            }
+        });
+        try_again.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                frame.dispose();
+                new PuzzleGame(FEN,lever);
+            }
+        });
+        next_lever.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                frame.dispose();
+                nextLever(lever);
+            }
+        });
     }
-
+    public void nextLever(int lever) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("resources/puzzles.csv"));
+            int count = 1;
+            String line = reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                if(count == lever) {
+                    new PuzzleGame(line, ++lever);
+                    return;
+                }
+                ++count;
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
