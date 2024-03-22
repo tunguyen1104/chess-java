@@ -67,7 +67,7 @@ public class Board extends JPanel{
         this.puzzleGame = puzzleGame;
         this.FEN = FEN;
         sound.playMusic(0);
-        inputPuzzle = new ListenerPuzzle(puzzleGame,this,sound);
+        inputPuzzle = new ListenerPuzzle(this,sound);
         try {
             board_image = ImageIO.read(new File(dataJDBC.get(1)));
         } catch (IOException e) {
@@ -166,7 +166,7 @@ public class Board extends JPanel{
                 puzzleGame.undo_panel.setVisible(false);
                 done_failed_Puzzle = 1;
                 /// handle JDBC
-                String updated_failed = "";
+                String update_failed = "";
                 int index_failed_puzzle = -1;
                 String lever_string = String.valueOf(puzzleGame.lever);
 
@@ -178,7 +178,6 @@ public class Board extends JPanel{
                             break;
                         }
                     }
-
                     if (index_failed_puzzle != -1) {
                         StringBuilder updatedBuilder = new StringBuilder();
                         for (int i = 0; i < numbers.length; ++i) {
@@ -186,16 +185,19 @@ public class Board extends JPanel{
                                 updatedBuilder.append(numbers[i]).append(',');
                             }
                         }
-                        updated_failed = updatedBuilder.toString();
-                        if (!updated_failed.isEmpty()) {
-                            updated_failed = updated_failed.substring(0, updated_failed.length() - 1);
+                        update_failed = updatedBuilder.toString();
+                        if (!update_failed.isEmpty()) {
+                            update_failed = update_failed.substring(0, update_failed.length() - 1);
                         }
                     }
+                    else {
+                        update_failed = dataPuzzle.get(0);
+                    }
                 }
-                String updated_solved = dataPuzzle.get(1);
+                String update_solved = dataPuzzle.get(1);
                 if(index_failed_puzzle == -1) {//nếu trong failed ko có
-                    if(!updated_solved.isEmpty()) {
-                        String number[] = updated_solved.split(",");
+                    if(!update_solved.isEmpty()) {
+                        String number[] = update_solved.split(",");
                         for (int i = 0;i < number.length; ++i) {
                             if(number[i].equals(lever_string)) {//nếu trong solved có rồi thì thôi
                                 return;
@@ -203,9 +205,9 @@ public class Board extends JPanel{
                         }
                     }
                 }
-                if(updated_solved.isEmpty()) updated_solved = lever_string;
-                else updated_solved += ',' + lever_string;
-                JDBCConnection.updateDataPuzzle(updated_failed,updated_solved);
+                if(update_solved.isEmpty()) update_solved = lever_string;
+                else update_solved += ',' + lever_string;
+                JDBCConnection.updateDataPuzzle(update_failed,update_solved);
             }
         }
         else {
