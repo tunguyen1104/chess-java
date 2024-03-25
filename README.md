@@ -15,6 +15,21 @@
 - Nếu trên đường đi nhập thành mà bị chiếu thì cũng không được.
 <img src="resources/readme/case_castling.jpeg" alt="white not castling through the bishop" width="300">
 
+### En Passant
+Kiểu bắt này là kiểu duy nhất trong cờ vua mà quân bắt không rơi vào cùng ô với nạn nhân của nó.
+Để bắt quân tốt của đối thủ "en passant" cần đủ 3 điều kiện:
+- Quân tốt của bạn phải đi được đúng 3 ô tính cả ô xuất phát.
+- Quân tốt đối thủ phải vừa nhảy hai ô trong một nước đi.
+- Bạn phải bắt quân tốt đối thủ ngay lượt đó. Nếu bạn bỏ qua, cơ hội "en passant" sẽ mất đi.
+
+Nói cách khác, en passant cho phép bạn "phạt" nước đi tham lam của quân tốt đối thủ khi nó cố nhảy hai ô để chiếm lợi thế. Bạn bắt nó như thể nó chỉ đi một ô vậy.
+<img src="resources/readme/phpTGqF2d.gif" alt="video en passant" width="300">
+
+### Checkmate
+Checkmate xảy ra khi vua bị chiếu và không có nước đi nào thoát khỏi thế bị chiếu ấy.
+Trong game này ta sẽ dùng 2 cách là checkmate và timeout để kết thúc ván đấu.
+Nếu muốn hiểu hơn về các kiểu checkmate bạn có thể đọc thêm [ở đây](https://www.chess.com/terms/checkmate-chess).
+
 ### FEN và PGN
 FEN: Chỉ lưu hình cờ tại một thời điểm nhất định.
 

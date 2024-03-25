@@ -10,8 +10,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +42,6 @@ public class Board extends JPanel{
     //dataJDBC =
     Timer timer;
     public boolean color_to_move;
-    public CheckScanner checkScanner = new CheckScanner(this);
     private PuzzleGame puzzleGame;
     public String column = "abcdefgh";
     public String column_rotate = "hgfedcba";
@@ -56,11 +53,11 @@ public class Board extends JPanel{
     private int col_hint = -1;
     private int row_hint = -1;
 
-    public void setHint_boolean(boolean hint_boolean) {
-        this.hint_boolean = hint_boolean;
+    public void setHintBoolean(boolean hintBoolean) {
+        this.hintBoolean = hintBoolean;
     }
 
-    private boolean hint_boolean = false;
+    private boolean hintBoolean = false;
     public Board(PuzzleGame puzzleGame, String FEN) {
         if(dataJDBC.get(2).equals("1")) sound = new Sound();
         else sound = new Sound(1);
@@ -105,7 +102,7 @@ public class Board extends JPanel{
     }
     public void animation() {
         done_failed_Puzzle = -1;
-        hint_boolean = false;
+        hintBoolean = false;
         col_hint = -1;
         row_hint = -1;
         col_puzzle = -1;
@@ -128,7 +125,7 @@ public class Board extends JPanel{
         row_hint = 8 - (piecePuzzle.get(index_piecePuzzle).charAt(1) - '0');
         g2d.setColor(new Color(102, 159, 128, 200));
         g2d.fillRect(col_hint * 85, row_hint * 85, 85, 85);
-        hint_boolean = false;
+        hintBoolean = false;
         col_hint = -1;
         row_hint = -1;
     }
@@ -469,9 +466,25 @@ public class Board extends JPanel{
         if(move.piece.moveCollidesWithPiece(move.getNewCol(),move.getNewRow())){//Nếu quân cờ di chuyển gặp va chạm với một quân cờ cùng team thì dừng trước nó
             return false;
         }
-        if(checkScanner.isKingChecked(move)) {
+        if(isKingChecked(move)) {
             return false;
         }
+        return true;
+    }
+    public boolean isKingChecked(Move move) {
+        Piece king = findKing(move.piece.isWhite);
+        assert king != null;
+
+        int kingCol = king.col;
+        int kingRow = king.row;
+
+        if(selectedPiece != null && selectedPiece.name.equals("King")) {
+            kingCol = move.getNewCol();
+            kingRow = move.getNewRow();
+        }
+        return false;
+    }
+    private boolean hitByRook(int col, int row,Piece King, int kingCol, int kingRow,int colVal, int rowVal) {
         return true;
     }
     public int getTileNum(int col,int row) {
@@ -609,7 +622,7 @@ public class Board extends JPanel{
             g2d.fillRect(old_col* 85, old_row * 85, 85, 85);
             g2d.fillRect(new_col* 85, new_row * 85, 85, 85);
         }
-        if(hint_boolean == true) {
+        if(hintBoolean == true) {
             hint(g2d);
         }
         for (Piece piece : pieceList) {

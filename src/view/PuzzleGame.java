@@ -197,7 +197,7 @@ public class PuzzleGame extends JPanel {
         hint.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                board.setHint_boolean(true);
+                board.setHintBoolean(true);
                 board.repaint();
             }
         });
@@ -221,8 +221,10 @@ public class PuzzleGame extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                nextLever(lever);
+                if(lever < 100) {
+                    frame.dispose();
+                    nextLever(lever);
+                }
             }
         });
     }
