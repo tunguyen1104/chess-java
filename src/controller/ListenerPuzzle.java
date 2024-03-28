@@ -20,7 +20,7 @@ public class ListenerPuzzle extends MouseAdapter {
     }
     @Override
     public void mousePressed(MouseEvent e) {
-        if(board.done_failed_Puzzle != -1) return;
+        if(board.done_failed_puzzle != -1) return;
         if(board.selectedPiece != null) {
             if(board.color_to_move == board.selectedPiece.isWhite) {
                 board.selectedPiece = null;
@@ -36,7 +36,7 @@ public class ListenerPuzzle extends MouseAdapter {
     }
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(board.done_failed_Puzzle != -1) return;
+        if(board.done_failed_puzzle != -1) return;
         if(board.selectedPiece != null) {
             if(board.color_to_move == board.selectedPiece.isWhite) {
                 board.selectedPiece = null;

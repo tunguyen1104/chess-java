@@ -1,6 +1,5 @@
 package view;
 
-import com.company.Main;
 import model.JDBCConnection;
 
 import javax.imageio.ImageIO;
@@ -165,7 +164,6 @@ public class Setting extends JPanel {
             System.out.println("Error url image!");
             throw new RuntimeException(e);
         }
-        // Set preferred size of the panel to match background image size
         setPreferredSize(new Dimension(1600, 1000));
         // ===========Title Bar============
         title_bar_label = new JLabel("Settings");
@@ -458,6 +456,7 @@ public class Setting extends JPanel {
             @Override
             public void mouseClicked(MouseEvent me) {
                 // call database delete current user
+                JDBCConnection.logOut();
                 JDBCConnection.deleteDataCurrentUser();
                 frame.dispose();
                 new Login();

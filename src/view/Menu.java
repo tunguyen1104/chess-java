@@ -152,10 +152,6 @@ public class Menu extends JPanel implements ActionListener {
         this.add(name_title);
     }
 
-    public static void main(String[] args) {
-        new Menu();
-    }
-
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;

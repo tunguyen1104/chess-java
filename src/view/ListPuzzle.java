@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ListPuzzle extends JPanel {
     private JFrame frame;
@@ -45,7 +46,6 @@ public class ListPuzzle extends JPanel {
     String _page[] = { "1/3", "2/3", "3/3" };
     private int index_page = 0;
     private ArrayList<String> arr;
-
     public ListPuzzle() {
         arr = new ArrayList<String>();
         arr = JDBCConnection.takeDataPuzzle();
