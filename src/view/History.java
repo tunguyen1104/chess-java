@@ -5,14 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class History extends JPanel {
-    private JFrame frame;
     private JLabel title_bar_label;
     private BufferedImage title_bar;
     private BufferedImage back_normal;
@@ -21,38 +18,20 @@ public class History extends JPanel {
     private BufferedImage home_selected;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private BufferedImage icon_game;
     private BufferedImage history_normal;
     private BufferedImage history_selected;
     private ButtonImage test;
+
     public History() {
         initPanel();
-        frame = new JFrame("CHESS");
-        frame.setIconImage(icon_game);
-        frame.add(this);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(-6, 0);
-        frame.setVisible(true);
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                } else
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
     }
+
     public void initPanel() {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         try {
             history_normal = ImageIO.read(new File("resources/buttons/history_normal.png"));
             history_selected = ImageIO.read(new File("resources/buttons/history_selected.png"));
-            icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
             title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
             back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
             home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
@@ -75,30 +54,26 @@ public class History extends JPanel {
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         this.add(back_normal_button);
         this.add(home_normal_button);
-        test = new ButtonImage(history_normal,history_selected,580,70,"Day");
-        test.setBounds(462,80,580,70);
+        test = new ButtonImage(history_normal, history_selected, 580, 70, "Day");
+        test.setBounds(462, 80, 580, 70);
         this.add(test);
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(title_bar, 530, 10, 450, 42, this);
-    }
-    public static void main(String[] args) {
-        new History();
     }
 }

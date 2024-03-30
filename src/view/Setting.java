@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Setting extends JPanel {
-    private JFrame frame;
     private JPanel game;
     private JPanel account;
     private JPanel piece_panel;
@@ -26,7 +25,6 @@ public class Setting extends JPanel {
     private JLabel title_bar_label;
     private BufferedImage noavatar;
     private BufferedImage board_image;
-    private BufferedImage icon_game;
     private BufferedImage option_setting_normal;
     private BufferedImage option_setting_selected;
     private BufferedImage option_settingv1;
@@ -97,24 +95,6 @@ public class Setting extends JPanel {
 
     public Setting() {
         initPanel();
-        frame = new JFrame();
-        frame.setIconImage(icon_game);
-        frame.add(this);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(-6, 0);
-        frame.setVisible(true);
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                } else
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
     }
 
     public void initPanel() {
@@ -145,7 +125,6 @@ public class Setting extends JPanel {
             option_settingv2 = option_setting_normal;
             option_settingv1 = option_setting_selected;
             logout_image = option_setting_normal;
-            icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
             String urlBoard = dataJDBC.get(1);
             if (dataJDBC != null)
                 board_image = ImageIO.read(new File(urlBoard));
@@ -180,17 +159,13 @@ public class Setting extends JPanel {
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         this.add(back_normal_button);
@@ -458,7 +433,7 @@ public class Setting extends JPanel {
                 // call database delete current user
                 JDBCConnection.logOut();
                 JDBCConnection.deleteDataCurrentUser();
-                frame.dispose();
+                Menu.frame.dispose();
                 new Login();
             }
         });
@@ -569,9 +544,5 @@ public class Setting extends JPanel {
         g2d.drawImage(option_settingv2, 280, 250, 200, 40, this);
         g2d.drawImage(logout_image, 280, 300, 200, 40, this);
         g2d.drawImage(title_bar, 530, 10, 450, 42, this);
-    }
-
-    public static void main(String[] args) {
-        new Setting();
     }
 }

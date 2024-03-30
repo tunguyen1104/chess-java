@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class GameOptions extends JPanel {
-    private JFrame frame;
     private JLabel title_bar_label;
     private BufferedImage title_bar;
     private BufferedImage back_normal;
@@ -23,7 +22,6 @@ public class GameOptions extends JPanel {
     private JLabel time;
     private JLabel lever;
     private JLabel side;
-    private BufferedImage icon_game;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
     private BufferedImage forward_normal_game;
@@ -99,7 +97,6 @@ public class GameOptions extends JPanel {
             forward_normal_lever_v2 = forward_normal_game_v2;
             forward_selected_lever = forward_selected_game;
             forward_selected_lever_v2 = forward_selected_game_v2;
-            icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
             chess_standard = ImageIO.read(new File("resources/gui/chess_standard.png"));
             title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
             back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
@@ -111,24 +108,6 @@ public class GameOptions extends JPanel {
             e.printStackTrace();
         }
         initPanel();
-        frame = new JFrame("CHESS");
-        frame.setIconImage(icon_game);
-        frame.add(this);
-        frame.pack();
-        frame.setLocation(-6, 0);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setVisible(true);
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                } else
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
     }
 
     public void initPanel() {
@@ -149,17 +128,14 @@ public class GameOptions extends JPanel {
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                frame.dispose();
-                new view.Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         this.add(back_normal_button);
@@ -193,8 +169,8 @@ public class GameOptions extends JPanel {
                             minute = 30;
                             break;
                     }
-                    frame.dispose();
-                    new GamePVP(minute);
+                    Menu.panelCardLayout.add(new GamePVP(minute), "gamePvP");
+                    Menu.cardLayout.show(Menu.panelCardLayout, "gamePvP");
                 }
             }
         });
@@ -415,9 +391,5 @@ public class GameOptions extends JPanel {
         g2d.drawImage(option_box_time, 616, 290, 140, 32, this);
         g2d.drawImage(option_box_side, 616, 370, 140, 32, this);
         g2d.drawImage(option_box_lever, 616, 450, 140, 32, this);
-    }
-
-    public static void main(String[] args) {
-        new GameOptions();
     }
 }

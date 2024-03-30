@@ -12,16 +12,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ListPuzzle extends JPanel {
-    private JFrame frame;
     private JPanel panel_contains_puzzle_page_1;
     private JPanel panel_contains_puzzle_page_2;
     private JPanel panel_contains_puzzle_page_3;
     private BufferedImage title_bar;
     private JLabel title_bar_label;
-    private BufferedImage icon_game;
     private BufferedImage home_normal;
     private BufferedImage home_selected;
     private BufferedImage back_normal;
@@ -46,6 +43,7 @@ public class ListPuzzle extends JPanel {
     String _page[] = { "1/3", "2/3", "3/3" };
     private int index_page = 0;
     private ArrayList<String> arr;
+
     public ListPuzzle() {
         arr = new ArrayList<String>();
         arr = JDBCConnection.takeDataPuzzle();
@@ -60,7 +58,6 @@ public class ListPuzzle extends JPanel {
             puzzle_failed_selected = ImageIO.read(new File("resources/buttons/puzzle_failed_selected.png"));
             puzzle_solved_normal = ImageIO.read(new File("resources/buttons/puzzle_solved_normal.png"));
             puzzle_solved_selected = ImageIO.read(new File("resources/buttons/puzzle_solved_selected.png"));
-            icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
             title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
             back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
             home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
@@ -70,24 +67,6 @@ public class ListPuzzle extends JPanel {
             e.printStackTrace();
         }
         initPanel();
-        frame = new JFrame("CHESS");
-        frame.setIconImage(icon_game);
-        frame.add(this);
-        frame.pack();
-        frame.setLocation(-6, 0);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setVisible(true);
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                } else
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
     }
 
     public void initPanel() {
@@ -109,16 +88,14 @@ public class ListPuzzle extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         this.add(back_normal_button);
@@ -187,11 +164,11 @@ public class ListPuzzle extends JPanel {
         initPuzzleFailed();
         initPuzzleSolved();
     }
+
     public void readFEN() {
-        initController("4R1k1/2p2q1p/4pBpQ/p2pP3/r3p3/4P2P/5PP1/6K1 b - - 0 27,f7e8 h6g7", 1);
         try {
             BufferedReader reader = new BufferedReader(new FileReader("resources/puzzles.csv"));
-            int lever = 2;
+            int lever = 1;
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 initController(line, lever);
@@ -202,6 +179,7 @@ public class ListPuzzle extends JPanel {
             System.out.println(e);
         }
     }
+
     public void initPage1() {
         panel_contains_puzzle_page_1 = new JPanel();
         panel_contains_puzzle_page_1.setBackground(new Color(41, 41, 41));
@@ -284,11 +262,12 @@ public class ListPuzzle extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new PuzzleGame(FEN, lever);
+                Menu.panelCardLayout.add(new PuzzleGame(FEN, lever), "puzzleGame");
+                Menu.cardLayout.show(Menu.panelCardLayout, "puzzleGame");
             }
         });
     }
+
     public void initPuzzleFailed() {
         String s = arr.get(0);
         if (s.isEmpty())

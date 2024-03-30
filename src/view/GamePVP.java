@@ -1,8 +1,6 @@
 package view;
 
 import model.Board;
-import model.Sound;
-import model.pieces.Piece;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,14 +13,12 @@ import java.io.File;
 import java.io.IOException;
 
 public class GamePVP extends JPanel {
-    public JFrame frame;
     private BufferedImage game_gui;
     private BufferedImage title_bar;
     private BufferedImage back_normal;
     private BufferedImage back_selected;
     private BufferedImage home_normal;
     private BufferedImage home_selected;
-    private BufferedImage icon_game;
     private BufferedImage rotate_normal;
     private BufferedImage rotate_selected;
     private BufferedImage board_index_black;
@@ -81,7 +77,6 @@ public class GamePVP extends JPanel {
             home_selected = ImageIO.read(new File("resources/buttons/home_selected.png"));
             rotate_normal = ImageIO.read(new File("resources/buttons/rotate_normal.png"));
             rotate_selected = ImageIO.read(new File("resources/buttons/rotate_selected.png"));
-            icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
             game_gui = ImageIO.read(new File("resources/gui/game_gui.png"));
             title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
             back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
@@ -96,24 +91,6 @@ public class GamePVP extends JPanel {
         initPanel();
         board.setBounds(280, 90, 8 * 85, 8 * 85);
         this.add(board);
-        frame = new JFrame("CHESS PVP");
-        frame.setIconImage(icon_game);
-        frame.add(this);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(-6, 0);
-        frame.setVisible(true);
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION)
-                    System.exit(0);
-                else
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
     }
 
     public void initPanel() {
@@ -151,16 +128,14 @@ public class GamePVP extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new GameOptions();
+                Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         textArea = new JTextArea();
@@ -194,6 +169,7 @@ public class GamePVP extends JPanel {
         rotate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
                 board_index = (board.rotating) ? null : board_index_black;
                 board.rotateBoard();
                 repaint();

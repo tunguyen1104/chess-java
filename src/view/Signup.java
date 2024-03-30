@@ -2,18 +2,13 @@ package view;
 
 import model.JDBCConnection;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Signup extends JFrame implements ActionListener {
-    private JPanel panel;
+public class Signup extends JPanel implements ActionListener {
     private JLabel signup_header;
     private JLabel username;
     private JLabel password;
@@ -24,7 +19,6 @@ public class Signup extends JFrame implements ActionListener {
     private JTextField _email;
     private JButton signup_button;
     private JButton switch_to_login;
-    private BufferedImage icon_game;
     // regex email
     private final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
     private final Pattern pattern = Pattern.compile(EMAIL_REGEX);
@@ -35,22 +29,8 @@ public class Signup extends JFrame implements ActionListener {
     }
 
     public Signup() {
-        this.setTitle("SIGNUP");
-        this.setLayout(new GridLayout(0, 2));
-        try {
-            icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
-            BufferedImage originalImage = ImageIO.read(new File("resources/gui/bg.jpg"));
-            Image scaledImage = originalImage.getScaledInstance(400, 500, Image.SCALE_SMOOTH);
-            ImageIcon imageIcon = new ImageIcon(scaledImage);
-            JLabel bg = new JLabel(imageIcon);
-            this.add(bg, BorderLayout.WEST);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        this.setIconImage(icon_game);
-        panel = new JPanel();
-        panel.setPreferredSize(new Dimension(400, 500));
-        panel.setLayout(null);
+        this.setPreferredSize(new Dimension(400, 500));
+        this.setLayout(null);
         signup_header = new JLabel("SIGNUP");
         signup_header.setBounds(150, 40, 200, 50);
         signup_header.setFont(signup_header.getFont().deriveFont(30.0f));
@@ -81,36 +61,19 @@ public class Signup extends JFrame implements ActionListener {
         switch_to_login = new JButton("Login");
         switch_to_login.setBounds(180, 410, 80, 30);
         switch_to_login.setFocusPainted(false);
-        panel.add(signup_header);
-        panel.add(username);
-        panel.add(password);
-        panel.add(_username);
-        panel.add(email);
-        panel.add(_email);
-        panel.add(_password);
-        panel.add(signup_button);
-        panel.add(switch_to_login);
-        panel.add(you_have_account);
+        this.add(signup_header);
+        this.add(username);
+        this.add(password);
+        this.add(_username);
+        this.add(email);
+        this.add(_email);
+        this.add(_password);
+        this.add(signup_button);
+        this.add(switch_to_login);
+        this.add(you_have_account);
 
         signup_button.addActionListener(this);
         switch_to_login.addActionListener(this);
-
-        this.add(panel, BorderLayout.EAST);
-        this.pack();
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-        this.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION)
-                    System.exit(0);
-                else
-                    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-            }
-        });
     }
 
     @Override
@@ -136,13 +99,12 @@ public class Signup extends JFrame implements ActionListener {
                 if (JDBCConnection.createAccount(username, password, email)) {
                     JOptionPane.showMessageDialog(null, "Registered successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
+                    Login.frame.dispose();
                     new Menu();
                 }
             }
         } else if (e.getSource() == switch_to_login) {
-            this.dispose();
-            new Login();
+            Login.cardLayout.show(Login.panel, "login");
         }
     }
 }

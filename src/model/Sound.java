@@ -48,9 +48,9 @@ public class Sound {
         this.clip.stop();
     }
 
-    public void loop() {
-        this.clip.loop(clip.LOOP_CONTINUOUSLY);
-    }
+    // public void loop() {
+    // this.clip.loop(clip.LOOP_CONTINUOUSLY);
+    // }
 
     public void playMusic(int i) {
         setFile(i);

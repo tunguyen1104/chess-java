@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Menu extends JPanel implements ActionListener {
-    private JFrame frame;
+    public static JFrame frame;
     private JLabel name_title;
     public BufferedImage icon_title;
     private BufferedImage icon_game;
@@ -22,9 +22,12 @@ public class Menu extends JPanel implements ActionListener {
     private BeautifyButton about_menu;
     private BeautifyButton exit_menu;
     private ButtonImage newgame;
+    public static CardLayout cardLayout = new CardLayout();
+    public static JPanel panelCardLayout = new JPanel();
 
     public Menu() {
         frame = new JFrame("CHESS");
+        panelCardLayout.setLayout(cardLayout);
         try {
             menu_normal = ImageIO.read(new File("resources/buttons/menu_normal.png"));
             menu_selected = ImageIO.read(new File("resources/buttons/menu_selected.png"));
@@ -35,7 +38,12 @@ public class Menu extends JPanel implements ActionListener {
         }
         frame.setIconImage(icon_game);
         initPanel();
-        frame.add(this);
+        panelCardLayout.add(this, "menu");
+        panelCardLayout.add(new Setting(), "setting");
+        panelCardLayout.add(new ListPuzzle(), "listPuzzle");
+        panelCardLayout.add(new GameOptions(), "gameOptions");
+        panelCardLayout.add(new History(), "history");
+        frame.add(panelCardLayout);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocation(-6, 0);
@@ -96,28 +104,25 @@ public class Menu extends JPanel implements ActionListener {
         newgame_menu.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.dispose();
-                new GameOptions();
+                cardLayout.show(panelCardLayout, "gameOptions");
             }
         });
         history_menu.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.dispose();
+                cardLayout.show(panelCardLayout, "history");
             }
         });
         puzzles_menu.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.dispose();
-                new ListPuzzle();
+                cardLayout.show(panelCardLayout, "listPuzzle");
             }
         });
         settings_menu.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.dispose();
-                new Setting();
+                cardLayout.show(panelCardLayout, "setting");
             }
         });
         about_menu.addMouseListener(new MouseAdapter() {

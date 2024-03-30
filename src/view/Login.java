@@ -10,8 +10,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Login extends JFrame implements ActionListener {
-    private JPanel panel;
+public class Login extends JPanel implements ActionListener {
+    public static JFrame frame;
+    public static JPanel panel = new JPanel();
     private JLabel login_header;
     private JLabel username;
     private JLabel password;
@@ -21,25 +22,29 @@ public class Login extends JFrame implements ActionListener {
     private JButton login_button;
     private JButton switch_to_signup;
     private BufferedImage icon_game;
+    public static CardLayout cardLayout = new CardLayout();
 
     public Login() {
-        this.setTitle("LOGIN");
-        this.setLayout(new GridLayout(0, 2));
+        frame = new JFrame("CHESS");
+        frame.setLayout(new GridLayout(0, 2));
         try {
             icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
             BufferedImage originalImage = ImageIO.read(new File("resources/gui/bg.jpg"));
             Image scaledImage = originalImage.getScaledInstance(400, 500, Image.SCALE_SMOOTH);
             ImageIcon imageIcon = new ImageIcon(scaledImage);
             JLabel bg = new JLabel(imageIcon);
-            this.add(bg, BorderLayout.WEST);
+            frame.add(bg, BorderLayout.WEST);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        this.setIconImage(icon_game);
-        panel = new JPanel();
-        panel.setPreferredSize(new Dimension(400, 500));
-        panel.setLayout(null);
+        frame.setIconImage(icon_game);
+        panel.setLayout(cardLayout);
+        panel.add(this, "login");
+        panel.add(new Signup(), "signup");
+        frame.add(panel);
+        this.setPreferredSize(new Dimension(400, 500));
+        this.setLayout(null);
         login_header = new JLabel("LOGIN");
         login_header.setBounds(150, 30, 100, 50);
         login_header.setFont(login_header.getFont().deriveFont(30.0f));
@@ -64,32 +69,32 @@ public class Login extends JFrame implements ActionListener {
         switch_to_signup = new JButton("Signup");
         switch_to_signup.setBounds(200, 330, 80, 30);
         switch_to_signup.setFocusPainted(false);
-        panel.add(login_header);
-        panel.add(username);
-        panel.add(password);
-        panel.add(_username);
-        panel.add(_password);
-        panel.add(login_button);
-        panel.add(switch_to_signup);
-        panel.add(do_not_have_an_account);
-        this.add(panel, BorderLayout.EAST);
+        this.add(login_header);
+        this.add(username);
+        this.add(password);
+        this.add(_username);
+        this.add(_password);
+        this.add(login_button);
+        this.add(switch_to_signup);
+        this.add(do_not_have_an_account);
+        frame.add(panel, BorderLayout.EAST);
 
         login_button.addActionListener(this);
         switch_to_signup.addActionListener(this);
 
-        this.pack();
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-        this.addWindowListener(new WindowAdapter() {
+        frame.pack();
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (option == JOptionPane.YES_OPTION)
                     System.exit(0);
                 else
-                    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             }
         });
     }
@@ -112,14 +117,13 @@ public class Login extends JFrame implements ActionListener {
                 if (JDBCConnection.checkValidAccount(username, password)) {
                     JOptionPane.showMessageDialog(null, "Login successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
+                    frame.dispose();
                     new Menu();
                 }
             }
         }
         if (e.getSource() == switch_to_signup) {
-            this.dispose();
-            new Signup();
+            cardLayout.show(panel, "signup");
         }
     }
 }

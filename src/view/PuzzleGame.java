@@ -7,8 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,12 +14,10 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class PuzzleGame extends JPanel {
-    private JFrame frame;
-    private String FEN;
+    public String FEN;
     public int lever;
     private BufferedImage title_bar;
     private JLabel title_bar_label;
-    private BufferedImage icon_game;
     private BufferedImage home_normal;
     private BufferedImage home_selected;
     private BufferedImage back_normal;
@@ -45,6 +41,7 @@ public class PuzzleGame extends JPanel {
     private JLabel failed;
     public BufferedImage circle_check;
     public BufferedImage circle_xmark;
+
     public PuzzleGame(String FEN, int lever) {
         this.FEN = FEN;
         this.lever = lever;
@@ -54,7 +51,6 @@ public class PuzzleGame extends JPanel {
             selected = ImageIO.read(new File("resources/buttons/menu_selected.png"));
             panel_320_292 = ImageIO.read(new File("resources/gui/panel_320_292.png"));
             board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
-            icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
             title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
             back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
             home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
@@ -69,24 +65,6 @@ public class PuzzleGame extends JPanel {
         hint_panel.setVisible(true);
         done_panel.setVisible(false);
         undo_panel.setVisible(false);
-        frame = new JFrame("CHESS");
-        frame.setIconImage(icon_game);
-        frame.add(this);
-        frame.pack();
-        frame.setLocation(-6, 0);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setVisible(true);
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                } else
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
     }
 
     public void initPanel() {
@@ -109,16 +87,15 @@ public class PuzzleGame extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.setVisible(false);
-                new ListPuzzle();
+                Menu.panelCardLayout.add(new ListPuzzle(), "listPuzzle");
+                Menu.cardLayout.show(Menu.panelCardLayout, "listPuzzle");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         this.add(back_normal_button);
@@ -193,7 +170,7 @@ public class PuzzleGame extends JPanel {
         correct.setForeground(Color.WHITE);
         done_panel.add(correct);
         this.add(done_panel);
-        //listener
+        // listener
         hint.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -205,29 +182,29 @@ public class PuzzleGame extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new PuzzleGame(FEN,lever);
+                Menu.panelCardLayout.add(new PuzzleGame(FEN, lever), "puzzleGame");
+                Menu.cardLayout.show(Menu.panelCardLayout, "puzzleGame");
             }
         });
         try_again.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                frame.dispose();
-                new PuzzleGame(FEN,lever);
+                Menu.panelCardLayout.add(new PuzzleGame(FEN, lever), "puzzleGame");
+                Menu.cardLayout.show(Menu.panelCardLayout, "puzzleGame");
             }
         });
         next_lever.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(lever < 100) {
-                    frame.dispose();
-                    nextLever(lever);
+                if (lever < 100) {
+                    nextLever(++lever);
                 }
             }
         });
     }
+
     public void nextLever(int lever) {
         BufferedReader reader = null;
         try {
@@ -235,8 +212,9 @@ public class PuzzleGame extends JPanel {
             int count = 1;
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                if(count == lever) {
-                    new PuzzleGame(line, ++lever);
+                if (count == lever) {
+                    Menu.panelCardLayout.add(new PuzzleGame(line, lever), "puzzleGame");
+                    Menu.cardLayout.show(Menu.panelCardLayout, "puzzleGame");
                     return;
                 }
                 ++count;
@@ -251,6 +229,7 @@ public class PuzzleGame extends JPanel {
             }
         }
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;

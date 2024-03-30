@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 
 import model.*;
 import model.pieces.Piece;
-import view.GameOptions;
 import view.GamePVP;
 import view.Menu;
 
@@ -62,7 +61,8 @@ public class Listener extends MouseAdapter {
         Piece pieceXY = board.getPiece(col, row);
         if (pieceXY != null) {
             board.selectedPiece = pieceXY;
-            board.paint_in_place(col, row);
+            if (board.selectedPiece.isWhite != board.color_to_move)
+                board.paint_in_place(col, row);
         }
     }
 
@@ -152,15 +152,13 @@ public class Listener extends MouseAdapter {
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         switch (select) {
             case 0:
-                game.frame.dispose();
-                new GameOptions();
+                Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
                 break;
             case 1:
-                game.frame.dispose();
-                new Menu();
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
                 break;
             case 2:
-                game.frame.dispose();
+
                 break;
         }
     }
