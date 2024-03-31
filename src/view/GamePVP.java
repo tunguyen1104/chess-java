@@ -146,7 +146,7 @@ public class GamePVP extends JPanel {
         textArea.setForeground(Color.WHITE);
         try {
             textArea.setFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 14));
+                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 16));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (FontFormatException e) {

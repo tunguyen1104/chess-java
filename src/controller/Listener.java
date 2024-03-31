@@ -54,7 +54,7 @@ public class Listener extends MouseAdapter {
         Piece pieceXY = board.getPiece(col, row);
         if (pieceXY != null) {
             board.selectedPiece = pieceXY;
-            if (board.selectedPiece.isWhite != board.color_to_move)
+            if (board.selectedPiece.isWhite == isTurn)
                 board.paint_in_place(col, row);
         }
     }
@@ -112,7 +112,7 @@ public class Listener extends MouseAdapter {
                 if (isTurn)
                     s += board.step(step, move) + "\n";
                 else {
-                    s += String.format("%3s %8s %10s", count_step + ".", board.step(step, move), " ");
+                    s += String.format("%3s %8s %8s", count_step + ".", board.step(step, move), " ");
                     ++count_step;
                 }
                 game.textArea.setText(s);
