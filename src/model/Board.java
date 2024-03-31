@@ -332,7 +332,7 @@ public class Board extends JPanel {
             col_in_place = 7 - col_in_place;
             row_in_place = 7 - row_in_place;
         }
-        if (!rotating) {
+        if (rotating) {
             game.getWhite_name().setBounds(1050, 140, 490, 120);
             game.getBlack_name().setBounds(1050, 610, 490, 120);
             game.getTimeLabelWhite().setBounds(1100, 160, 500, 200);
@@ -567,50 +567,49 @@ public class Board extends JPanel {
     }
 
     public void handleFen(String fen) {
-        // 4R1k1/2p2q1p/4pBpQ/p2pP3/r3p3/4P2P/5PP1/6K1 b - - 0 27,f7e8 h6g7
         int cnt = 0;
-        for (int j = 0; j < 8; ++j) {
-            for (int i = 0; i < 8; ++i) {
+        for (int row = 0; row < 8; ++row) {
+            for (int col = 0; col < 8; ++col) {
                 char ch = fen.charAt(cnt);
                 if (Character.isDigit(ch)) {
-                    i += Character.getNumericValue(ch) - 1;
+                    col += Character.getNumericValue(ch) - 1;
                 } else {
                     switch (ch) {
                         case 'r':
-                            pieceList.add(new Rook(this, i, j, false));
+                            pieceList.add(new Rook(this, col, row, false));
                             break;
                         case 'p':
-                            pieceList.add(new Pawn(this, i, j, false));
+                            pieceList.add(new Pawn(this, col, row, false));
                             break;
                         case 'n':
-                            pieceList.add(new Knight(this, i, j, false));
+                            pieceList.add(new Knight(this, col, row, false));
                             break;
                         case 'b':
-                            pieceList.add(new Bishop(this, i, j, false));
+                            pieceList.add(new Bishop(this, col, row, false));
                             break;
                         case 'q':
-                            pieceList.add(new Queen(this, i, j, false));
+                            pieceList.add(new Queen(this, col, row, false));
                             break;
                         case 'k':
-                            pieceList.add(new King(this, i, j, false));
+                            pieceList.add(new King(this, col, row, false));
                             break;
                         case 'R':
-                            pieceList.add(new Rook(this, i, j, true));
+                            pieceList.add(new Rook(this, col, row, true));
                             break;
                         case 'P':
-                            pieceList.add(new Pawn(this, i, j, true));
+                            pieceList.add(new Pawn(this, col, row, true));
                             break;
                         case 'N':
-                            pieceList.add(new Knight(this, i, j, true));
+                            pieceList.add(new Knight(this, col, row, true));
                             break;
                         case 'B':
-                            pieceList.add(new Bishop(this, i, j, true));
+                            pieceList.add(new Bishop(this, col, row, true));
                             break;
                         case 'Q':
-                            pieceList.add(new Queen(this, i, j, true));
+                            pieceList.add(new Queen(this, col, row, true));
                             break;
                         case 'K':
-                            pieceList.add(new King(this, i, j, true));
+                            pieceList.add(new King(this, col, row, true));
                             break;
                     }
                 }
@@ -619,7 +618,7 @@ public class Board extends JPanel {
             if (fen.charAt(cnt) == '/') {
                 ++cnt;
             }
-            if (j == 7) {
+            if (row == 7) {
                 ++cnt;
                 color_to_move = (fen.charAt(cnt) == 'b') ? false : true;
                 while (cnt < fen.length()) {

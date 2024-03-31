@@ -1,6 +1,7 @@
 package view;
 
 import model.Board;
+import model.Sound;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -43,6 +44,7 @@ public class GamePVP extends JPanel {
         return timeLabelBlack;
     }
 
+    Sound sound = new Sound();
     // time
     private JLabel timeLabelWhite = new JLabel();
     private JLabel timeLabelBlack = new JLabel();
@@ -91,27 +93,28 @@ public class GamePVP extends JPanel {
         initPanel();
         board.setBounds(280, 90, 8 * 85, 8 * 85);
         this.add(board);
+        start_white();
     }
 
     public void initPanel() {
         // setting name
-        white_name = new JLabel("Player2 (Black)");
-        white_name.setBounds(1050, 140, 490, 120);
-        white_name.setForeground(Color.WHITE);
-        white_name.setFont(white_name.getFont().deriveFont(20.0f)); // Tạo font mới với kích thước mới và thiết lập cho
+        black_name = new JLabel("Player2 (Black)");
+        black_name.setBounds(1050, 140, 490, 120);
+        black_name.setForeground(Color.WHITE);
+        black_name.setFont(black_name.getFont().deriveFont(20.0f)); // Tạo font mới với kích thước mới và thiết lập cho
                                                                     // nhãn
 
-        black_name = new JLabel("Player1 (White)");
-        black_name.setBounds(1050, 610, 490, 120);
-        black_name.setForeground(Color.WHITE);
-        black_name.setFont(black_name.getFont().deriveFont(20.0f));
+        white_name = new JLabel("Player1 (White)");
+        white_name.setBounds(1050, 610, 490, 120);
+        white_name.setForeground(Color.WHITE);
+        white_name.setFont(white_name.getFont().deriveFont(20.0f));
         // ==========Time_label_white==========
         timeLabelWhite.setText(minutes_string1 + ":" + seconds_string1);
-        timeLabelWhite.setBounds(1100, 160, 500, 200);
+        timeLabelWhite.setBounds(1100, 505, 500, 200);
         timeLabelWhite.setFont(timeLabelWhite.getFont().deriveFont(40.0f));
         // ==========Time_label_black==========
         timeLabelBlack.setText(minutes_string2 + ":" + seconds_string2);
-        timeLabelBlack.setBounds(1100, 505, 500, 200);
+        timeLabelBlack.setBounds(1100, 160, 500, 200);
         timeLabelBlack.setFont(timeLabelBlack.getFont().deriveFont(40.0f));
         // ===========Title Bar============
         title_bar_label = new JLabel("Standard - PvP");
@@ -199,6 +202,12 @@ public class GamePVP extends JPanel {
             seconds_string1 = String.format("%02d", seconds_white);
             minutes_string1 = String.format("%02d", minutes_white);
             timeLabelWhite.setText(minutes_string1 + ":" + seconds_string1);
+            if ("00:00".equals(minutes_string1 + ":" + seconds_string1)) {
+                sound.playMusic(1);
+                stop_white();
+                stop_black();
+                noti_end_game("Black", "Time out");
+            }
         }
     });
     public Timer timer_black = new Timer(1000, new ActionListener() {
@@ -213,6 +222,12 @@ public class GamePVP extends JPanel {
             seconds_string2 = String.format("%02d", seconds_black);
             minutes_string2 = String.format("%02d", minutes_black);
             timeLabelBlack.setText(minutes_string2 + ":" + seconds_string2);
+            if ("00:00".equals(minutes_string2 + ":" + seconds_string2)) {
+                sound.playMusic(1);
+                stop_white();
+                stop_black();
+                noti_end_game("White", "Time out");
+            }
         }
 
     });
@@ -233,7 +248,21 @@ public class GamePVP extends JPanel {
         timer_black.stop();
     }
 
-    public static void main(String[] args) {
-        new GamePVP(3);
+    public void noti_end_game(String name_win, String reason) {
+        Object[] options = { "New Game", "Home", "Review" };
+        int select = JOptionPane.showOptionDialog(null, name_win + " Win (" + reason + " )", "Notification",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        switch (select) {
+            case 0:
+                Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
+                break;
+            case 1:
+                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
+                break;
+            case 2:
+
+                break;
+        }
     }
 }

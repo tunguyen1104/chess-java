@@ -6,9 +6,6 @@ import java.awt.event.MouseEvent;
 import model.*;
 import model.pieces.Piece;
 import view.GamePVP;
-import view.Menu;
-
-import javax.swing.*;
 
 public class Listener extends MouseAdapter {
     private GamePVP game;
@@ -41,14 +38,10 @@ public class Listener extends MouseAdapter {
             return;
         if ("00:00".equals(game.getTimeLabelWhite().getText())) {
             sound.playMusic(1);
-            game.stop_white();
-            game.stop_black();
-            noti_end_game("White", "Time out");
+            game.noti_end_game("Black", "Time out");
         } else if ("00:00".equals(game.getTimeLabelBlack().getText())) {
             sound.playMusic(1);
-            game.stop_white();
-            game.stop_black();
-            noti_end_game("Black", "Time out");
+            game.noti_end_game("White", "Time out");
         }
         if (board.selectedPiece != null) {
             if (isTurn != board.selectedPiece.isWhite) {
@@ -104,11 +97,11 @@ public class Listener extends MouseAdapter {
                 this.check_promotion = false;
                 board.makeMove(move);
                 if (isTurn == true) {
-                    game.start_white();
-                    game.stop_black();
-                } else {
                     game.start_black();
                     game.stop_white();
+                } else {
+                    game.start_white();
+                    game.stop_black();
                 }
                 isTurn = !isTurn;
                 board.paint_old_new(move.getOldCol(), move.getOldRow(), move.getNewCol(), move.getNewRow());
@@ -135,31 +128,14 @@ public class Listener extends MouseAdapter {
             sound.playMusic(1);
             game.stop_white();
             game.stop_black();
-            noti_end_game("Black", "Checkmate");
+            game.noti_end_game("Black", "Checkmate");
         } else if (board.findKing(false) == null) {
             isEnd = true;
             sound.playMusic(1);
             game.stop_white();
             game.stop_black();
-            noti_end_game("White", "Checkmate");
+            game.noti_end_game("White", "Checkmate");
         }
     }
 
-    public void noti_end_game(String name_win, String reason) {
-        Object[] options = { "New Game", "Home", "Review" };
-        int select = JOptionPane.showOptionDialog(null, name_win + " Win (" + reason + " )", "Notification",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        switch (select) {
-            case 0:
-                Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
-                break;
-            case 1:
-                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
-                break;
-            case 2:
-
-                break;
-        }
-    }
 }

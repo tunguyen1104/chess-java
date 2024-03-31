@@ -95,6 +95,7 @@ public class PuzzleGame extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                Menu.panelCardLayout.add(new ListPuzzle(), "listPuzzle");
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
