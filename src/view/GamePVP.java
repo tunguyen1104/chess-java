@@ -111,11 +111,19 @@ public class GamePVP extends JPanel {
         // ==========Time_label_white==========
         timeLabelWhite.setText(minutes_string1 + ":" + seconds_string1);
         timeLabelWhite.setBounds(1100, 505, 500, 200);
-        timeLabelWhite.setFont(timeLabelWhite.getFont().deriveFont(40.0f));
         // ==========Time_label_black==========
         timeLabelBlack.setText(minutes_string2 + ":" + seconds_string2);
         timeLabelBlack.setBounds(1100, 160, 500, 200);
-        timeLabelBlack.setFont(timeLabelBlack.getFont().deriveFont(40.0f));
+        try {
+            timeLabelWhite.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 40));
+            timeLabelBlack.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 40));
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // ===========Title Bar============
         title_bar_label = new JLabel("Standard - PvP");
         title_bar_label.setBounds(680, 0, 400, 60);
@@ -131,6 +139,8 @@ public class GamePVP extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                stop_white();
+                stop_black();
                 Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
             }
         });
@@ -138,12 +148,15 @@ public class GamePVP extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                stop_white();
+                stop_white();
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         textArea = new JTextArea();
         textArea.setBackground(new Color(55, 55, 55));
         textArea.setForeground(Color.WHITE);
+        textArea.setEditable(false);
         try {
             textArea.setFont(Font.createFont(Font.TRUETYPE_FONT,
                     new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 16));

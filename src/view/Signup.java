@@ -33,7 +33,7 @@ public class Signup extends JPanel implements ActionListener {
         this.setLayout(null);
         signup_header = new JLabel("SIGNUP");
         signup_header.setBounds(150, 40, 200, 50);
-        signup_header.setFont(signup_header.getFont().deriveFont(30.0f));
+        signup_header.setFont(new Font("",Font.BOLD,30));
         username = new JLabel("Username");
         username.setBounds(50, 110, 100, 30);
 

@@ -48,10 +48,6 @@ public class Setting extends JPanel {
     private ButtonImage home_normal_button;
     private BufferedImage back_selected;
     private BufferedImage home_selected;
-    private BufferedImage save_normal;
-    private BufferedImage save_selected;
-    private ButtonImage save;
-    private ButtonImage change_password;
     private BufferedImage forward_normal_piece;
     private BufferedImage forward_normal_piece_v2;
     private BufferedImage forward_selected_piece;
@@ -75,6 +71,8 @@ public class Setting extends JPanel {
     private JLabel option_box_sound_label;
     private ButtonImage forward_left_sound;
     private ButtonImage forward_right_sound;
+    private JButton save;
+    private JButton change_password;
     ArrayList<String> dataJDBC;
     String[] piece_url = {
             "resources/pieces/default.png",
@@ -117,8 +115,6 @@ public class Setting extends JPanel {
             forward_normal_sound_v2 = forward_normal_piece_v2;
             forward_selected_sound = forward_selected_piece;
             forward_selected_sound_v2 = forward_selected_piece_v2;
-            save_normal = ImageIO.read(new File("resources/buttons/save_normal.png"));
-            save_selected = ImageIO.read(new File("resources/buttons/save_selected.png"));
             noavatar = ImageIO.read(new File("resources/gui/noavatar.gif"));
             option_setting_normal = ImageIO.read(new File("resources/buttons/history_normal.png"));
             option_setting_selected = ImageIO.read(new File("resources/buttons/history_selected.png"));
@@ -182,7 +178,7 @@ public class Setting extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
                 super.paintComponent(g2d);
-                g2d.drawImage(option_box_sound, 276, 276, 160, 40, game);
+                g2d.drawImage(option_box_sound, 276, 280, 160, 32, game);
             }
         };
         game.setBounds(500, 180, 540, 420);
@@ -193,19 +189,19 @@ public class Setting extends JPanel {
         piece_set = new JLabel("Piece Set");
         piece_set.setBounds(50, 30, 90, 40);
         piece_set.setForeground(Color.WHITE);
-        piece_set.setFont(piece_set.getFont().deriveFont(20.0f));
+        piece_set.setFont(new Font("",Font.PLAIN,20));
         game.add(piece_set);
         // ------------------------
         board_label = new JLabel("Board");
         board_label.setBounds(50, 150, 90, 40);
         board_label.setForeground(Color.WHITE);
-        board_label.setFont(board_label.getFont().deriveFont(20.0f));
+        board_label.setFont(new Font("",Font.PLAIN,20));
         game.add(board_label);
         // ------------------------
         sound_label = new JLabel("Sound");
         sound_label.setBounds(50, 270, 90, 40);
         sound_label.setForeground(Color.WHITE);
-        sound_label.setFont(sound_label.getFont().deriveFont(20.0f));
+        sound_label.setFont(new Font("",Font.PLAIN,20));
         game.add(sound_label);
         // setting type pieces
         forward_left_piece = new ButtonImage(forward_normal_piece, forward_selected_piece, 32, 32, "");
@@ -356,8 +352,12 @@ public class Setting extends JPanel {
         game.add(forward_right_sound);
         game.add(option_box_sound_label);
         //
-        save = new ButtonImage(save_normal, save_selected, 100, 40, "Save");
-        save.setBounds(340, 350, 100, 40);
+        save = new JButton("Save");
+        save.setFont(new Font("", Font.PLAIN, 18));
+        save.setBackground(new Color(38, 117, 191));
+        save.setForeground(Color.WHITE);
+        save.setFocusPainted(false);
+        save.setBounds(300, 350, 120, 35);
         game.add(save);
         // option_setting
         option_setting_labelv1 = new JLabel("Game");
@@ -462,32 +462,32 @@ public class Setting extends JPanel {
         name = new JLabel("user2024");
         name.setBounds(140, 20, 90, 30);
         name.setForeground(Color.WHITE);
-        name.setFont(new Font("", Font.PLAIN, 20));
+        name.setFont(name.getFont().deriveFont(20.0f));
         account.add(name);
         lever = new JLabel("Lever 1");
         lever.setBounds(140, 50, 90, 30);
         lever.setForeground(Color.WHITE);
-        lever.setFont(new Font("", Font.PLAIN, 14));
+        lever.setFont(lever.getFont().deriveFont(14f));
         account.add(lever);
         email = new JLabel("Email : ");
         email.setBounds(50, 140, 90, 30);
         email.setForeground(Color.WHITE);
-        email.setFont(new Font("", Font.PLAIN, 18));
+        email.setFont(email.getFont().deriveFont(18f));
         account.add(email);
         changePassword = new JLabel("Change Password");
         changePassword.setBounds(50, 200, 200, 30);
         changePassword.setForeground(Color.WHITE);
-        changePassword.setFont(new Font("", Font.BOLD, 20));
+        changePassword.setFont(changePassword.getFont().deriveFont(20.0f));
         account.add(changePassword);
         newPassword = new JLabel("New Password");
         newPassword.setBounds(50, 260, 200, 20);
         newPassword.setForeground(Color.WHITE);
-        newPassword.setFont(new Font("", Font.PLAIN, 15));
+        newPassword.setFont(newPassword.getFont().deriveFont(15f));
         account.add(newPassword);
         retypeNewPassword = new JLabel("Retype New Password");
         retypeNewPassword.setBounds(50, 320, 200, 20);
         retypeNewPassword.setForeground(Color.WHITE);
-        retypeNewPassword.setFont(new Font("", Font.PLAIN, 15));
+        retypeNewPassword.setFont(retypeNewPassword.getFont().deriveFont(15f));
         account.add(retypeNewPassword);
         newPasswordBox = new JPasswordField();
         newPasswordBox.setBounds(260, 260, 200, 26);
@@ -495,7 +495,11 @@ public class Setting extends JPanel {
         retypeNewPasswordBox = new JPasswordField();
         retypeNewPasswordBox.setBounds(260, 320, 200, 26);
         account.add(retypeNewPasswordBox);
-        change_password = new ButtonImage(save_normal, save_selected, 180, 40, "Change Password");
+        change_password = new JButton("Change Password");
+        change_password.setFont(new Font("", Font.PLAIN, 16));
+        change_password.setBackground(new Color(80,161,191));
+        change_password.setForeground(Color.WHITE);
+        change_password.setFocusPainted(false);
         change_password.setBounds(50, 360, 180, 40);
         account.add(change_password);
         option_setting_labelv2.addMouseListener(new MouseAdapter() {

@@ -203,7 +203,7 @@ public class GameOptions extends JPanel {
         option_box_game_label.setText(game_mode_string[index_game]);
         option_box_game_label.setForeground(Color.WHITE);
         option_box_game_label.setFont(new Font("", Font.PLAIN, 18));
-        option_box_game_label.setBounds(650, 210, 100, 32);
+        option_box_game_label.setBounds(665, 210, 100, 32);
         forward_left_game = new ButtonImage(forward_normal_game, forward_selected_game, 32, 32, "");
         forward_right_game = new ButtonImage(forward_normal_game_v2, forward_selected_game_v2, 32, 32, "");
         forward_left_game.setBounds(580, 210, 32, 32);
@@ -283,7 +283,7 @@ public class GameOptions extends JPanel {
         option_box_time_label.setText(time_string[index_time]);
         option_box_time_label.setForeground(Color.WHITE);
         option_box_time_label.setFont(new Font("", Font.PLAIN, 18));
-        option_box_time_label.setBounds(648, 290, 100, 32);
+        option_box_time_label.setBounds(660, 290, 100, 32);
         forward_left_time = new ButtonImage(forward_normal_time, forward_selected_time, 32, 32, "");
         forward_right_time = new ButtonImage(forward_normal_time_v2, forward_selected_time_v2, 32, 32, "");
         forward_left_time.setBounds(580, 290, 32, 32);
@@ -317,7 +317,7 @@ public class GameOptions extends JPanel {
         option_box_side_label.setText(side_string[index_side]);
         option_box_side_label.setForeground(Color.WHITE);
         option_box_side_label.setFont(new Font("", Font.PLAIN, 18));
-        option_box_side_label.setBounds(648, 370, 100, 32);
+        option_box_side_label.setBounds(660, 370, 100, 32);
         forward_left_side = new ButtonImage(forward_normal_side, forward_selected_side, 32, 32, "");
         forward_right_side = new ButtonImage(forward_normal_side_v2, forward_selected_side_v2, 32, 32, "");
         forward_left_side.setBounds(580, 370, 32, 32);
@@ -350,7 +350,7 @@ public class GameOptions extends JPanel {
         option_box_lever_label.setText(lever_string[index_lever]);
         option_box_lever_label.setForeground(Color.WHITE);
         option_box_lever_label.setFont(new Font("", Font.PLAIN, 18));
-        option_box_lever_label.setBounds(650, 450, 100, 32);
+        option_box_lever_label.setBounds(662, 450, 100, 32);
         forward_left_lever = new ButtonImage(forward_normal_lever, forward_selected_lever, 32, 32, "");
         forward_right_lever = new ButtonImage(forward_normal_lever_v2, forward_selected_lever_v2, 32, 32, "");
         forward_left_lever.setBounds(580, 450, 32, 32);

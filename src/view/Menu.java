@@ -13,15 +13,12 @@ public class Menu extends JPanel implements ActionListener {
     private JLabel name_title;
     public BufferedImage icon_title;
     private BufferedImage icon_game;
-    private BufferedImage menu_normal;
-    private BufferedImage menu_selected;
     private BeautifyButton newgame_menu;
     private BeautifyButton history_menu;
     private BeautifyButton puzzles_menu;
     private BeautifyButton settings_menu;
     private BeautifyButton about_menu;
     private BeautifyButton exit_menu;
-    private ButtonImage newgame;
     public static CardLayout cardLayout = new CardLayout();
     public static JPanel panelCardLayout = new JPanel();
 
@@ -29,8 +26,6 @@ public class Menu extends JPanel implements ActionListener {
         frame = new JFrame("CHESS");
         panelCardLayout.setLayout(cardLayout);
         try {
-            menu_normal = ImageIO.read(new File("resources/buttons/menu_normal.png"));
-            menu_selected = ImageIO.read(new File("resources/buttons/menu_selected.png"));
             icon_title = ImageIO.read(new File("resources/gui/icon_title.jpg"));
             icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
         } catch (IOException e) {
@@ -70,7 +65,7 @@ public class Menu extends JPanel implements ActionListener {
         name_title.setBounds(600, 240, 400, 46);
         name_title.setForeground(Color.WHITE);
         name_title.setFocusable(false);
-        name_title.setFont(name_title.getFont().deriveFont(50.0f));
+        name_title.setFont(new Font("", Font.BOLD, 50));
         newgame_menu = new BeautifyButton("New Game");
         newgame_menu.setBounds(574, 378, 170, 46);
         newgame_menu.setForeground(Color.WHITE);

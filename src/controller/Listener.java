@@ -3,7 +3,9 @@ package controller;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import model.*;
+import model.Board;
+import model.Sound;
+import model.Move;
 import model.pieces.Piece;
 import view.GamePVP;
 
@@ -112,7 +114,7 @@ public class Listener extends MouseAdapter {
                 if (isTurn)
                     s += board.step(step, move) + "\n";
                 else {
-                    s += String.format("%3s %8s %8s", count_step + ".", board.step(step, move), " ");
+                    s += String.format("%3s %8s %6s", count_step + ".", board.step(step, move), " ");
                     ++count_step;
                 }
                 game.textArea.setText(s);

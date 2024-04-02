@@ -47,7 +47,7 @@ public class Login extends JPanel implements ActionListener {
         this.setLayout(null);
         login_header = new JLabel("LOGIN");
         login_header.setBounds(150, 30, 100, 50);
-        login_header.setFont(login_header.getFont().deriveFont(30.0f));
+        login_header.setFont(new Font("",Font.BOLD,30));
         username = new JLabel("Username");
         username.setBounds(50, 100, 100, 30);
 
