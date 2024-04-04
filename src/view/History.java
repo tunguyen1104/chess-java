@@ -41,7 +41,7 @@ public class History extends JPanel {
             System.out.println("Error url image!");
             throw new RuntimeException(e);
         }
-        this.setPreferredSize(new Dimension(1600, 1000));
+        this.setPreferredSize(new Dimension(1536, 864));
         title_bar_label = new JLabel("History");
         title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);

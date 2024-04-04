@@ -13,7 +13,7 @@ public class Pawn extends Piece {
         this.yPos = row * board.tileSize;
         this.isWhite = isWhite;
         this.name = "Pawn";
-        this.sprite = sheet.getSubimage(5 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        this.sprite = sheet.getSubimage(5 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(sheetScale, sheetScale, BufferedImage.SCALE_SMOOTH);
     }
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {
         int colorIndex;

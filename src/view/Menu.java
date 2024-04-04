@@ -26,7 +26,7 @@ public class Menu extends JPanel implements ActionListener {
         frame = new JFrame("CHESS");
         panelCardLayout.setLayout(cardLayout);
         try {
-            icon_title = ImageIO.read(new File("resources/gui/icon_title.jpg"));
+            icon_title = ImageIO.read(new File("resources/gui/icon_title.png"));
             icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class Menu extends JPanel implements ActionListener {
     }
 
     public void initPanel() {
-        this.setPreferredSize(new Dimension(1600, 860));
+        this.setPreferredSize(new Dimension(1536, 864));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         name_title = new JLabel("CHESS GAME");
@@ -156,7 +156,7 @@ public class Menu extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(icon_title, 670, 28, 190, 180, this);
+        g2d.drawImage(icon_title, 670, 28, 180, 180, this);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class King extends Piece {
         this.yPos = row * board.tileSize;
         this.isWhite = isWhite;
         this.name = "King";
-        this.sprite = sheet.getSubimage(0 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        this.sprite = sheet.getSubimage(0 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(sheetScale, sheetScale, BufferedImage.SCALE_SMOOTH);
     }
     @Override
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {

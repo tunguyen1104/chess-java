@@ -33,7 +33,7 @@ public class Signup extends JPanel implements ActionListener {
         this.setLayout(null);
         signup_header = new JLabel("SIGNUP");
         signup_header.setBounds(150, 40, 200, 50);
-        signup_header.setFont(new Font("",Font.BOLD,30));
+        signup_header.setFont(new Font("", Font.BOLD, 30));
         username = new JLabel("Username");
         username.setBounds(50, 110, 100, 30);
 
@@ -85,22 +85,29 @@ public class Signup extends JPanel implements ActionListener {
             String email = _email.getText().trim();
             if (username.equals("")) {
                 JOptionPane.showMessageDialog(null, "username is blank", "Message", JOptionPane.WARNING_MESSAGE);
+                _username.requestFocus();
             } else if (email.equals("")) {
                 JOptionPane.showMessageDialog(null, "email is blank", "Message", JOptionPane.WARNING_MESSAGE);
+                _email.requestFocus();
             } else if (password.equals("")) {
                 JOptionPane.showMessageDialog(null, "password is blank", "Message", JOptionPane.WARNING_MESSAGE);
+                _password.requestFocus();
             } else if (username.length() < 8) {
                 JOptionPane.showMessageDialog(null, "username < 8", "Message", JOptionPane.WARNING_MESSAGE);
+                _username.requestFocus();
             } else if (password.length() < 8) {
                 JOptionPane.showMessageDialog(null, "password < 8", "Message", JOptionPane.WARNING_MESSAGE);
+                _password.requestFocus();
             } else if (!isValidEmail(email)) {
                 JOptionPane.showMessageDialog(null, "Invalid email!", "Message", JOptionPane.WARNING_MESSAGE);
+                _email.requestFocus();
             } else {
                 if (JDBCConnection.createAccount(username, password, email)) {
                     JOptionPane.showMessageDialog(null, "Registered successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
-                    Login.frame.dispose();
-                    new Menu();
+                    Login._username.setText(username);
+                    Login._password.setText(password);
+                    Login.cardLayout.show(Login.panel, "login");
                 }
             }
         } else if (e.getSource() == switch_to_login) {

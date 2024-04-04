@@ -5,7 +5,6 @@ import model.Board;
 import java.awt.image.BufferedImage;
 
 public class Queen extends Piece {
-
     public Queen(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
@@ -14,7 +13,7 @@ public class Queen extends Piece {
         this.yPos = row * board.tileSize;
         this.isWhite = isWhite;
         this.name = "Queen";
-        this.sprite = sheet.getSubimage(1 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize,BufferedImage.SCALE_SMOOTH);
+        this.sprite = sheet.getSubimage(1 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(sheetScale, sheetScale,BufferedImage.SCALE_SMOOTH);
     }
     @Override
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {

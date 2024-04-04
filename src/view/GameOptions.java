@@ -111,7 +111,7 @@ public class GameOptions extends JPanel {
     }
 
     public void initPanel() {
-        this.setPreferredSize(new Dimension(1600, 1000));
+        this.setPreferredSize(new Dimension(1536, 864));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         title_bar_label = new JLabel("Game Options");
@@ -143,7 +143,7 @@ public class GameOptions extends JPanel {
         // setting button
         go = new JButton("Go");
         go.setFont(new Font("", Font.BOLD, 30));
-        go.setBounds(890, 490, 240, 88);
+        go.setBounds(890, 490, 246, 88);
         go.setBackground(new Color(140, 181, 90));
         go.setForeground(Color.WHITE);
         go.setFocusPainted(false);
@@ -386,7 +386,7 @@ public class GameOptions extends JPanel {
         super.paintComponent(g2d);
         g2d.drawImage(title_bar, 530, 10, 450, 42, this);
         g2d.drawImage(game_options_panel, 360, 160, 520, 420, this);
-        g2d.drawImage(chess_standard, 890, 160, 240, 320, this);
+        g2d.drawImage(chess_standard, 890, 160, 245, 323, this);
         g2d.drawImage(option_box_game, 616, 210, 140, 32, this);
         g2d.drawImage(option_box_time, 616, 290, 140, 32, this);
         g2d.drawImage(option_box_side, 616, 370, 140, 32, this);

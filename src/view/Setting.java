@@ -90,6 +90,7 @@ public class Setting extends JPanel {
             "resources/board/blue.png", "resources/board/metal.png", "resources/board/wood.png"
     };
     String turn[] = { "On", "Off" };
+    ArrayList<String> inforAccount = null;
 
     public Setting() {
         initPanel();
@@ -98,6 +99,8 @@ public class Setting extends JPanel {
     public void initPanel() {
         dataJDBC = new ArrayList<String>();
         dataJDBC = JDBCConnection.takeDataSetting();
+        inforAccount = new ArrayList<>();
+        inforAccount = JDBCConnection.takeInforAccount();
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         // Load image
@@ -115,7 +118,7 @@ public class Setting extends JPanel {
             forward_normal_sound_v2 = forward_normal_piece_v2;
             forward_selected_sound = forward_selected_piece;
             forward_selected_sound_v2 = forward_selected_piece_v2;
-            noavatar = ImageIO.read(new File("resources/gui/noavatar.gif"));
+            noavatar = ImageIO.read(new File("resources/gui/noavatar.png"));
             option_setting_normal = ImageIO.read(new File("resources/buttons/history_normal.png"));
             option_setting_selected = ImageIO.read(new File("resources/buttons/history_selected.png"));
             option_settingv2 = option_setting_normal;
@@ -139,7 +142,7 @@ public class Setting extends JPanel {
             System.out.println("Error url image!");
             throw new RuntimeException(e);
         }
-        setPreferredSize(new Dimension(1600, 1000));
+        this.setPreferredSize(new Dimension(1536, 864));
         // ===========Title Bar============
         title_bar_label = new JLabel("Settings");
         title_bar_label.setBounds(720, 0, 400, 60);
@@ -189,19 +192,19 @@ public class Setting extends JPanel {
         piece_set = new JLabel("Piece Set");
         piece_set.setBounds(50, 30, 90, 40);
         piece_set.setForeground(Color.WHITE);
-        piece_set.setFont(new Font("",Font.PLAIN,20));
+        piece_set.setFont(new Font("", Font.PLAIN, 20));
         game.add(piece_set);
         // ------------------------
         board_label = new JLabel("Board");
         board_label.setBounds(50, 150, 90, 40);
         board_label.setForeground(Color.WHITE);
-        board_label.setFont(new Font("",Font.PLAIN,20));
+        board_label.setFont(new Font("", Font.PLAIN, 20));
         game.add(board_label);
         // ------------------------
         sound_label = new JLabel("Sound");
         sound_label.setBounds(50, 270, 90, 40);
         sound_label.setForeground(Color.WHITE);
-        sound_label.setFont(new Font("",Font.PLAIN,20));
+        sound_label.setFont(new Font("", Font.PLAIN, 20));
         game.add(sound_label);
         // setting type pieces
         forward_left_piece = new ButtonImage(forward_normal_piece, forward_selected_piece, 32, 32, "");
@@ -459,8 +462,8 @@ public class Setting extends JPanel {
         account.setBackground(new Color(55, 55, 55));
         account.setLayout(null);
         account.setVisible(false);
-        name = new JLabel("user2024");
-        name.setBounds(140, 20, 90, 30);
+        name = new JLabel(inforAccount.get(0));
+        name.setBounds(140, 20, 200, 30);
         name.setForeground(Color.WHITE);
         name.setFont(name.getFont().deriveFont(20.0f));
         account.add(name);
@@ -469,8 +472,8 @@ public class Setting extends JPanel {
         lever.setForeground(Color.WHITE);
         lever.setFont(lever.getFont().deriveFont(14f));
         account.add(lever);
-        email = new JLabel("Email : ");
-        email.setBounds(50, 140, 90, 30);
+        email = new JLabel("Email : " + inforAccount.get(2));
+        email.setBounds(50, 140, 300, 30);
         email.setForeground(Color.WHITE);
         email.setFont(email.getFont().deriveFont(18f));
         account.add(email);
@@ -497,10 +500,42 @@ public class Setting extends JPanel {
         account.add(retypeNewPasswordBox);
         change_password = new JButton("Change Password");
         change_password.setFont(new Font("", Font.PLAIN, 16));
-        change_password.setBackground(new Color(80,161,191));
+        change_password.setBackground(new Color(80, 161, 191));
         change_password.setForeground(Color.WHITE);
         change_password.setFocusPainted(false);
         change_password.setBounds(50, 360, 180, 40);
+        change_password.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inforAccount = JDBCConnection.takeInforAccount();
+                char[] new_password_char = newPasswordBox.getPassword();
+                String new_password = new String(new_password_char).trim();
+                char[] new_retype_password_char = retypeNewPasswordBox.getPassword();
+                String new_retype_password = new String(new_retype_password_char).trim();
+                if (new_password.equals("")) {
+                    JOptionPane.showMessageDialog(null, "Please enter new Password", "Message",
+                            JOptionPane.WARNING_MESSAGE);
+                } else if (new_password.length() < 8) {
+                    JOptionPane.showMessageDialog(null, "Please enter new Password length < 8", "Message",
+                            JOptionPane.WARNING_MESSAGE);
+                } else if (new_password.equals(new_retype_password)) {
+                    if (!new_password.equals(inforAccount.get(1))) {
+                        JDBCConnection.updatePasswordCurrentUser(new_password);
+                        JDBCConnection.logOut();
+                        JOptionPane.showMessageDialog(null, "Change password success", "Message",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        newPasswordBox.setText("");
+                        retypeNewPasswordBox.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "The new password is not valid", "Message",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "The retype new password is not valid", "Message",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
         account.add(change_password);
         option_setting_labelv2.addMouseListener(new MouseAdapter() {
             @Override

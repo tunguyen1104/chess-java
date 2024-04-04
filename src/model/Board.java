@@ -120,7 +120,7 @@ public class Board extends JPanel {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(800);
                 } catch (InterruptedException e) {
                     System.out.println();
                 }
@@ -138,7 +138,7 @@ public class Board extends JPanel {
         col_hint = piecePuzzle.get(index_piecePuzzle).charAt(0) - 'a';
         row_hint = 8 - (piecePuzzle.get(index_piecePuzzle).charAt(1) - '0');
         g2d.setColor(new Color(102, 159, 128, 200));
-        g2d.fillRect(col_hint * 85, row_hint * 85, 85, 85);
+        g2d.fillRect(col_hint * tileSize, row_hint * tileSize, tileSize, tileSize);
         hintBoolean = false;
         col_hint = -1;
         row_hint = -1;
@@ -290,12 +290,12 @@ public class Board extends JPanel {
     }
 
     public void notify_done_puzzle(Graphics2D g2d) {
-        int _col = col_puzzle * 85 + 70;
-        int _row = row_puzzle * 85 - 10;
+        int _col = col_puzzle * tileSize + 70;
+        int _row = row_puzzle * tileSize - 10;
         if (done_failed_puzzle == 1) {
-            g2d.drawImage(puzzleGame.circle_check, _col, _row, 30, 30, puzzleGame);
+            g2d.drawImage(puzzleGame.circle_check, _col, _row, 28, 28, puzzleGame);
         } else if (done_failed_puzzle == 2) {
-            g2d.drawImage(puzzleGame.circle_xmark, _col, _row, 30, 30, puzzleGame);
+            g2d.drawImage(puzzleGame.circle_xmark, _col, _row, 28, 28, puzzleGame);
         }
     }
 
@@ -413,26 +413,31 @@ public class Board extends JPanel {
     public void promotePawn(Move move) {
         promotion = -1;
         Object[] options = { "Queen", "Rook", "Knight", "Bishop" };
-        int select = JOptionPane.showOptionDialog(null, "Choose Piece To Promote to", null,
+        int select = JOptionPane.showOptionDialog(null, "Choose Piece To Promote to", "Promote",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        switch (select) {
-            case 0:
-                pieceList.add(new Queen(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
-                promotion = 0;
-                break;
-            case 1:
-                pieceList.add(new Rook(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
-                promotion = 1;
-                break;
-            case 2:
-                pieceList.add(new Knight(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
-                promotion = 2;
-                break;
-            case 3:
-                pieceList.add(new Bishop(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
-                promotion = 3;
-                break;
+        if (select == -1) {
+            pieceList.add(new Queen(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+            promotion = 0;
+        } else {
+            switch (select) {
+                case 0:
+                    pieceList.add(new Queen(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+                    promotion = 0;
+                    break;
+                case 1:
+                    pieceList.add(new Rook(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+                    promotion = 1;
+                    break;
+                case 2:
+                    pieceList.add(new Knight(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+                    promotion = 2;
+                    break;
+                case 3:
+                    pieceList.add(new Bishop(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+                    promotion = 3;
+                    break;
+            }
         }
         sound.playMusic(5);
         delete_piece(move.piece);
@@ -496,7 +501,7 @@ public class Board extends JPanel {
             return false;
         }
         if (move.piece.moveCollidesWithPiece(move.getNewCol(), move.getNewRow())) {// Nếu quân cờ di chuyển gặp va chạm
-                                                                                   // với một quân cờ cùng team thì dừng
+                                                                                   // với một quân cờ thì dừng
                                                                                    // trước nó
             return false;
         }
@@ -567,6 +572,7 @@ public class Board extends JPanel {
     }
 
     public void handleFen(String fen) {
+        // 4R1k1/2p2q1p/4pBpQ/p2pP3/r3p3/4P2P/5PP1/6K1 b - - 0 27,f7e8 h6g7
         int cnt = 0;
         for (int row = 0; row < 8; ++row) {
             for (int col = 0; col < 8; ++col) {
@@ -643,7 +649,7 @@ public class Board extends JPanel {
         g2d.drawImage(board_image, 0, 0, tileSize * 8, tileSize * 8, this);
         if (col_in_place != -1) {
             g2d.setColor(new Color(224, 207, 56, 131));
-            g2d.fillRect(col_in_place * 85, row_in_place * 85, 85, 85);
+            g2d.fillRect(col_in_place * tileSize, row_in_place * tileSize, tileSize, tileSize);
         }
         if (selectedPiece != null) {
             for (int i = 0; i < rows; ++i) {
@@ -657,8 +663,8 @@ public class Board extends JPanel {
         }
         if (old_col != -1) {
             g2d.setColor(new Color(36, 144, 193, 151));
-            g2d.fillRect(old_col * 85, old_row * 85, 85, 85);
-            g2d.fillRect(new_col * 85, new_row * 85, 85, 85);
+            g2d.fillRect(old_col * tileSize, old_row * tileSize, tileSize, tileSize);
+            g2d.fillRect(new_col * tileSize, new_row * tileSize, tileSize, tileSize);
         }
         if (hintBoolean == true) {
             hint(g2d);

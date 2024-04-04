@@ -5,7 +5,6 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import model.JDBCConnection;
 import view.*;
-
 public class Main {
     public static void main(String[] args) {
         try {

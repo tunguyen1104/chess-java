@@ -88,10 +88,10 @@ public class GamePVP extends JPanel {
         }
         // Set preferred size of the panel to match background image size
         this.setBackground(new Color(41, 41, 41));
-        this.setPreferredSize(new Dimension(1600, 1000));
+        this.setPreferredSize(new Dimension(1536, 864));
         this.setLayout(null);
         initPanel();
-        board.setBounds(280, 90, 8 * 85, 8 * 85);
+        board.setBounds(280, 90, 8 * board.tileSize, 8 * board.tileSize);
         this.add(board);
         start_white();
     }

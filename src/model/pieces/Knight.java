@@ -13,7 +13,7 @@ public class Knight extends Piece {
         this.yPos = row * board.tileSize;
         this.isWhite = isWhite;
         this.name = "Knight";
-        this.sprite = sheet.getSubimage(3 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        this.sprite = sheet.getSubimage(3 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(sheetScale, sheetScale, BufferedImage.SCALE_SMOOTH);
         //(x,y,w,h)
         // getSubimage : cắt hình từ vị trí y = 3 * sheetScale, x = 0 || 1, ứng với tỉ lệ width = 1, height = 1
         //getScaledInstance là một phương thức chuyển đổi hình ảnh theo tỉ lệ mới ứng với hằng số co giãn mềm

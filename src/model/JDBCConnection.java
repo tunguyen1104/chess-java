@@ -78,7 +78,7 @@ public class JDBCConnection {
                         rs.close();
                     conn.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    System.out.println(e);
                 }
             }
         } else {
@@ -107,17 +107,6 @@ public class JDBCConnection {
                 }
                 PreparedStatement insertStatement = conn.prepareStatement(
                         "INSERT INTO ACCOUNT(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND, PUZZLE_FAILED, PUZZLE_SOLVED) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                insertStatement.setString(1, username);
-                insertStatement.setString(2, password);
-                insertStatement.setString(3, email);
-                insertStatement.setString(4, "resources/pieces/maestro.png");
-                insertStatement.setString(5, "resources/board/metal.png");
-                insertStatement.setBoolean(6, true);
-                insertStatement.setString(7, "");
-                insertStatement.setString(8, "");
-                insertStatement.executeUpdate();
-                insertStatement = conn.prepareStatement(
-                        "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND, PUZZLE_FAILED, PUZZLE_SOLVED) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 insertStatement.setString(1, username);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
@@ -237,6 +226,45 @@ public class JDBCConnection {
         } else
             System.out.println("Services not turned!");
         return false;
+    }
+
+    public static ArrayList<String> takeInforAccount() {
+        ArrayList<String> arr = null;
+        Connection conn = JDBCConnection.getJDBCConnection();
+        if (conn != null) {
+            PreparedStatement statement = null;
+            ResultSet rs = null;
+            try {
+                statement = conn.prepareStatement("SELECT USERNAME, PASSWORD, EMAIL FROM CURRENTUSER");
+                rs = statement.executeQuery();
+                if (rs.next()) {
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    String email = rs.getString("email");
+                    arr = new ArrayList<String>();
+                    arr.add(username);
+                    arr.add(password);
+                    arr.add(email);
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+            }
+        } else {
+            System.out.println("Connection to database failed!");
+        }
+        return arr;
     }
 
     public static ArrayList<String> takeDataSetting() {
@@ -367,4 +395,28 @@ public class JDBCConnection {
             System.out.println("Connection to database failed!");
         }
     }
+
+     public static void updatePasswordCurrentUser(String new_password) {
+         Connection conn = JDBCConnection.getJDBCConnection();
+         if (conn != null) {
+             PreparedStatement statement = null;
+             try {
+                 statement = conn.prepareStatement("UPDATE CURRENTUSER SET password = ?");
+                 statement.setString(1, new_password);
+                 statement.executeUpdate();
+             } catch (SQLException ex) {
+                 throw new RuntimeException(ex);
+             } finally {
+                 try {
+                     if (statement != null) {
+                         statement.close();
+                     }
+                     conn.close();
+                 } catch (SQLException ex) {
+                     System.err.println(ex);
+                 }
+             }
+         }
+         else System.out.println("Connection to database failed!");
+     }
 }
