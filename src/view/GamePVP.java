@@ -46,16 +46,8 @@ public class GamePVP extends JPanel {
 
     Sound sound = new Sound();
     // time
-    private JLabel timeLabelWhite = new JLabel();
-    private JLabel timeLabelBlack = new JLabel();
-    private int seconds_white;
-    private int minutes_white;
-    private int seconds_black;
-    private int minutes_black;
-    public String seconds_string1;
-    public String minutes_string1;
-    public String seconds_string2;
-    public String minutes_string2;
+    public TimeLabel timeLabelWhite;
+    public TimeLabel timeLabelBlack;
     ButtonImage back_normal_button;
     ButtonImage home_normal_button;
     public JTextArea textArea;
@@ -63,14 +55,6 @@ public class GamePVP extends JPanel {
     private Board board = new Board(this);
 
     public GamePVP(int minute) {
-        seconds_white = 0;
-        minutes_white = minute;
-        seconds_black = 0;
-        minutes_black = minute;
-        seconds_string1 = String.format("%02d", seconds_white);
-        minutes_string1 = String.format("%02d", minutes_white);
-        seconds_string2 = String.format("%02d", seconds_black);
-        minutes_string2 = String.format("%02d", minutes_black);
         // Load image
         try {
             board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
@@ -90,10 +74,13 @@ public class GamePVP extends JPanel {
         this.setBackground(new Color(41, 41, 41));
         this.setPreferredSize(new Dimension(1536, 864));
         this.setLayout(null);
+        timeLabelWhite = new TimeLabel(minute);
+        timeLabelBlack = new TimeLabel(minute);
         initPanel();
         board.setBounds(280, 90, 8 * board.tileSize, 8 * board.tileSize);
         this.add(board);
-        start_white();
+        timeLabelWhite.start();
+        timer.start();
     }
 
     public void initPanel() {
@@ -103,16 +90,13 @@ public class GamePVP extends JPanel {
         black_name.setForeground(Color.WHITE);
         black_name.setFont(black_name.getFont().deriveFont(20.0f)); // Tạo font mới với kích thước mới và thiết lập cho
                                                                     // nhãn
-
         white_name = new JLabel("Player1 (White)");
         white_name.setBounds(1050, 610, 490, 120);
         white_name.setForeground(Color.WHITE);
         white_name.setFont(white_name.getFont().deriveFont(20.0f));
         // ==========Time_label_white==========
-        timeLabelWhite.setText(minutes_string1 + ":" + seconds_string1);
         timeLabelWhite.setBounds(1100, 505, 500, 200);
         // ==========Time_label_black==========
-        timeLabelBlack.setText(minutes_string2 + ":" + seconds_string2);
         timeLabelBlack.setBounds(1100, 160, 500, 200);
         try {
             timeLabelWhite.setFont(Font.createFont(Font.TRUETYPE_FONT,
@@ -139,8 +123,9 @@ public class GamePVP extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                stop_white();
-                stop_black();
+                timeLabelWhite.stop();
+                timeLabelBlack.stop();
+                timer.stop();
                 Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
             }
         });
@@ -148,8 +133,9 @@ public class GamePVP extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                stop_white();
-                stop_white();
+                timeLabelWhite.stop();
+                timeLabelBlack.stop();
+                timer.stop();
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
@@ -203,63 +189,25 @@ public class GamePVP extends JPanel {
         g2d.drawImage(board_index, 250, 70, this);
     }
 
-    public Timer timer_white = new Timer(1000, new ActionListener() {
+    public Timer timer = new Timer(1000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (seconds_white > 0) {
-                seconds_white = seconds_white - 1;
-            } else if (seconds_white == 0 && minutes_white > 0) {
-                minutes_white = minutes_white - 1;
-                seconds_white = 59;
-            }
-            seconds_string1 = String.format("%02d", seconds_white);
-            minutes_string1 = String.format("%02d", minutes_white);
-            timeLabelWhite.setText(minutes_string1 + ":" + seconds_string1);
-            if ("00:00".equals(minutes_string1 + ":" + seconds_string1)) {
+            if ("00:00".equals(timeLabelBlack.getText())) {
                 sound.playMusic(1);
-                stop_white();
-                stop_black();
+                timeLabelWhite.stop();
+                timeLabelBlack.stop();
+                timer.stop();
+                noti_end_game("White", "Time out");
+            }
+            if ("00:00".equals(timeLabelWhite.getText())) {
+                sound.playMusic(1);
+                timeLabelWhite.stop();
+                timeLabelBlack.stop();
+                timer.stop();
                 noti_end_game("Black", "Time out");
             }
         }
     });
-    public Timer timer_black = new Timer(1000, new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (seconds_black > 0) {
-                seconds_black = seconds_black - 1;
-            } else if (seconds_black == 0 && minutes_black > 0) {
-                minutes_black = minutes_black - 1;
-                seconds_black = 59;
-            }
-            seconds_string2 = String.format("%02d", seconds_black);
-            minutes_string2 = String.format("%02d", minutes_black);
-            timeLabelBlack.setText(minutes_string2 + ":" + seconds_string2);
-            if ("00:00".equals(minutes_string2 + ":" + seconds_string2)) {
-                sound.playMusic(1);
-                stop_white();
-                stop_black();
-                noti_end_game("White", "Time out");
-            }
-        }
-
-    });
-
-    public void start_white() {
-        timer_white.start();
-    }
-
-    public void start_black() {
-        timer_black.start();
-    }
-
-    public void stop_white() {
-        timer_white.stop();
-    }
-
-    public void stop_black() {
-        timer_black.stop();
-    }
 
     public void noti_end_game(String name_win, String reason) {
         Object[] options = { "New Game", "Home", "Review" };

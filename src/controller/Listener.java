@@ -99,11 +99,11 @@ public class Listener extends MouseAdapter {
                 this.check_promotion = false;
                 board.makeMove(move);
                 if (isTurn == true) {
-                    game.start_black();
-                    game.stop_white();
+                    game.timeLabelBlack.start();
+                    game.timeLabelWhite.stop();
                 } else {
-                    game.start_white();
-                    game.stop_black();
+                    game.timeLabelWhite.start();
+                    game.timeLabelBlack.stop();
                 }
                 isTurn = !isTurn;
                 board.paint_old_new(move.getOldCol(), move.getOldRow(), move.getNewCol(), move.getNewRow());
@@ -128,14 +128,14 @@ public class Listener extends MouseAdapter {
         if (board.findKing(true) == null) {
             isEnd = true;
             sound.playMusic(1);
-            game.stop_white();
-            game.stop_black();
+            game.timeLabelWhite.stop();
+            game.timeLabelBlack.stop();
             game.noti_end_game("Black", "Checkmate");
         } else if (board.findKing(false) == null) {
             isEnd = true;
             sound.playMusic(1);
-            game.stop_white();
-            game.stop_black();
+            game.timeLabelWhite.stop();
+            game.timeLabelBlack.stop();
             game.noti_end_game("White", "Checkmate");
         }
     }

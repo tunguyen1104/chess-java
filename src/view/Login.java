@@ -23,10 +23,19 @@ public class Login extends JFrame implements ActionListener {
     private JButton switch_to_signup;
     private BufferedImage icon_game;
     private BufferedImage originalImage;
+    public static BufferedImage eye;
+    public static BufferedImage eye_hide;
+    private Boolean hide = true;
+    private JLabel eye_label;
     public static CardLayout cardLayout = new CardLayout();
+    private ImageIcon icon_loading;
+    private JLabel loading;
+    private final Color color_back_ground_root = this.getBackground();
 
     public Login() {
         try {
+            eye = ImageIO.read(new File("resources/buttons/eye.png"));
+            eye_hide = ImageIO.read(new File("resources/buttons/eye_hide.png"));
             icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
             originalImage = ImageIO.read(new File("resources/gui/bg.png"));
         } catch (IOException e) {
@@ -36,7 +45,14 @@ public class Login extends JFrame implements ActionListener {
         this.setIconImage(icon_game);
         this.setLayout(null);
         panel.setBounds(400, 0, 400, 500);
-        panel_login = new JPanel();
+        panel_login = new JPanel() {
+            @Override
+            public void paint(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g;
+                super.paint(g2d);
+                g2d.drawImage(hide ? eye_hide : eye, 310, 232, 16, 16, panel_login);
+            }
+        };
         panel_login.setLayout(null);
         panel_login.setPreferredSize(new Dimension(400, 500));
         login_header = new JLabel("LOGIN");
@@ -44,7 +60,6 @@ public class Login extends JFrame implements ActionListener {
         login_header.setFont(new Font("", Font.BOLD, 30));
         username = new JLabel("Username");
         username.setBounds(50, 100, 100, 30);
-
         password = new JLabel("Password");
         password.setBounds(50, 190, 100, 30);
 
@@ -52,6 +67,7 @@ public class Login extends JFrame implements ActionListener {
         _username.setBounds(50, 130, 300, 40);
         _password = new JPasswordField();
         _password.setBounds(50, 220, 300, 40);
+        _password.setEchoChar('*');
         login_button = new JButton("Login");
         login_button.setBounds(50, 280, 80, 30);
         login_button.setBackground(new Color(140, 181, 90));
@@ -62,6 +78,21 @@ public class Login extends JFrame implements ActionListener {
         switch_to_signup = new JButton("Signup");
         switch_to_signup.setBounds(200, 330, 80, 30);
         switch_to_signup.setFocusPainted(false);
+        eye_label = new JLabel();
+        eye_label.setBounds(310, 232, 16, 16);
+        eye_label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                hide = !hide;
+                if (hide) {
+                    _password.setEchoChar('*');
+                } else {
+                    _password.setEchoChar((char) 0);
+                }
+                panel_login.repaint();
+            }
+        });
+        panel_login.add(eye_label);
         panel_login.add(login_header);
         panel_login.add(username);
         panel_login.add(password);
@@ -94,6 +125,16 @@ public class Login extends JFrame implements ActionListener {
         });
     }
 
+    public void load() {
+        icon_loading = new ImageIcon("resources/gui/loading.gif");
+        loading = new JLabel(icon_loading);
+        loading.setBounds(180, 180, 28, 28);
+        loading.setOpaque(false);
+        panel_login.add(loading);
+        panel_login.setBackground(new Color(255, 255, 255));
+        panel_login.repaint();
+    }
+
     @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -104,29 +145,47 @@ public class Login extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == login_button) {
-            String username = _username.getText().trim();
-            char[] password_char = _password.getPassword();
-            String password = new String(password_char).trim();
-            if (username.equals("")) {
-                JOptionPane.showMessageDialog(null, "username is blank", "Message", JOptionPane.WARNING_MESSAGE);
-                _username.requestFocus();
-            } else if (password.equals("")) {
-                JOptionPane.showMessageDialog(null, "password is blank", "Message", JOptionPane.WARNING_MESSAGE);
-                _password.requestFocus();
-            } else if (username.length() < 8) {
-                JOptionPane.showMessageDialog(null, "username < 8", "Message", JOptionPane.WARNING_MESSAGE);
-                _username.requestFocus();
-            } else if (password.length() < 8) {
-                JOptionPane.showMessageDialog(null, "password < 8", "Message", JOptionPane.WARNING_MESSAGE);
-                _password.requestFocus();
-            } else {
-                if (JDBCConnection.checkValidAccount(username, password)) {
-                    JOptionPane.showMessageDialog(null, "Login successfully!", "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                    new Menu();
+            load();
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    panel_login.remove(loading);
+                    panel_login.setBackground(color_back_ground_root);
+                    panel_login.repaint();
+
+                    String username = _username.getText().trim();
+                    char[] password_char = _password.getPassword();
+                    String password = new String(password_char).trim();
+                    if (username.equals("")) {
+                        JOptionPane.showMessageDialog(null, "username is blank", "Message",
+                                JOptionPane.WARNING_MESSAGE);
+                        _username.requestFocus();
+                    } else if (password.equals("")) {
+                        JOptionPane.showMessageDialog(null, "password is blank", "Message",
+                                JOptionPane.WARNING_MESSAGE);
+                        _password.requestFocus();
+                    } else if (username.length() < 8) {
+                        JOptionPane.showMessageDialog(null, "username < 8", "Message", JOptionPane.WARNING_MESSAGE);
+                        _username.requestFocus();
+                    } else if (password.length() < 8) {
+                        JOptionPane.showMessageDialog(null, "password < 8", "Message", JOptionPane.WARNING_MESSAGE);
+                        _password.requestFocus();
+                    } else {
+                        if (JDBCConnection.checkValidAccount(username, password)) {
+                            JOptionPane.showMessageDialog(null, "Login successfully!", "Success",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            dispose();
+                            new Menu();
+                        }
+                    }
                 }
-            }
+            };
+            thread.start();
         }
         if (e.getSource() == switch_to_signup) {
             cardLayout.show(panel, "signup");
