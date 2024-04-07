@@ -12,12 +12,13 @@ public class TimeLabel extends JLabel {
     public String seconds_string;
     public String minutes_string;
 
-    public TimeLabel(int minute) {
+    public TimeLabel(int minute, int x, int y) {
         seconds = 0;
         minutes = minute;
         seconds_string = String.format("%02d", seconds);
         minutes_string = String.format("%02d", minutes);
         this.setText(minutes_string + ":" + seconds_string);
+        this.setBounds(x, y, 500, 200);
     }
 
     public Timer timer = new Timer(1000, new ActionListener() {

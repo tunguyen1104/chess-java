@@ -74,8 +74,8 @@ public class GamePVP extends JPanel {
         this.setBackground(new Color(41, 41, 41));
         this.setPreferredSize(new Dimension(1536, 864));
         this.setLayout(null);
-        timeLabelWhite = new TimeLabel(minute);
-        timeLabelBlack = new TimeLabel(minute);
+        timeLabelWhite = new TimeLabel(minute, 1100, 505);
+        timeLabelBlack = new TimeLabel(minute, 1100, 160);
         initPanel();
         board.setBounds(280, 90, 8 * board.tileSize, 8 * board.tileSize);
         this.add(board);
@@ -88,16 +88,11 @@ public class GamePVP extends JPanel {
         black_name = new JLabel("Player2 (Black)");
         black_name.setBounds(1050, 140, 490, 120);
         black_name.setForeground(Color.WHITE);
-        black_name.setFont(black_name.getFont().deriveFont(20.0f)); // Tạo font mới với kích thước mới và thiết lập cho
-                                                                    // nhãn
+        black_name.setFont(black_name.getFont().deriveFont(20.0f));
         white_name = new JLabel("Player1 (White)");
         white_name.setBounds(1050, 610, 490, 120);
         white_name.setForeground(Color.WHITE);
         white_name.setFont(white_name.getFont().deriveFont(20.0f));
-        // ==========Time_label_white==========
-        timeLabelWhite.setBounds(1100, 505, 500, 200);
-        // ==========Time_label_black==========
-        timeLabelBlack.setBounds(1100, 160, 500, 200);
         try {
             timeLabelWhite.setFont(Font.createFont(Font.TRUETYPE_FONT,
                     new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 40));
@@ -110,15 +105,14 @@ public class GamePVP extends JPanel {
         }
         // ===========Title Bar============
         title_bar_label = new JLabel("Standard - PvP");
-        title_bar_label.setBounds(680, 0, 400, 60);
+        title_bar_label.setBounds(700, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(18.0f)); // Tạo font mới với kích thước mới và
-                                                                              // thiết lập cho nhãn
+        title_bar_label.setFont(title_bar_label.getFont().deriveFont(18.0f));
         // ================================
-        back_normal_button = new ButtonImage(back_normal, back_selected, 42, 42, "");
-        home_normal_button = new ButtonImage(home_normal, home_selected, 42, 42, "");
-        back_normal_button.setBounds(465, 10, 42, 42);
-        home_normal_button.setBounds(1000, 10, 42, 42);
+        back_normal_button = new ButtonImage(back_normal, back_selected, 44, 44, "");
+        home_normal_button = new ButtonImage(home_normal, home_selected, 44, 44, "");
+        back_normal_button.setBounds(465, 10, 44, 44);
+        home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -185,7 +179,7 @@ public class GamePVP extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(game_gui, 250, 70, this);
-        g2d.drawImage(title_bar, 530, 10, 450, 42, this);
+        g2d.drawImage(title_bar, 530, 10, 450, 44, this);
         g2d.drawImage(board_index, 250, 70, this);
     }
 

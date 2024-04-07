@@ -1,6 +1,9 @@
 package view;
 
 import javax.swing.*;
+
+import model.ReadImage;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -10,13 +13,8 @@ import java.io.IOException;
 
 public class GameOptions extends JPanel {
     private JLabel title_bar_label;
-    private BufferedImage title_bar;
-    private BufferedImage back_normal;
-    private BufferedImage home_normal;
     private BufferedImage game_options_panel;
     private BufferedImage chess_standard;
-    private BufferedImage back_selected;
-    private BufferedImage home_selected;
     private JButton go;
     private JLabel game_mode;
     private JLabel time;
@@ -98,11 +96,6 @@ public class GameOptions extends JPanel {
             forward_selected_lever = forward_selected_game;
             forward_selected_lever_v2 = forward_selected_game_v2;
             chess_standard = ImageIO.read(new File("resources/gui/chess_standard.png"));
-            title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
-            back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
-            home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
-            back_selected = ImageIO.read(new File("resources/buttons/back_selected.png"));
-            home_selected = ImageIO.read(new File("resources/buttons/home_selected.png"));
             game_options_panel = ImageIO.read(new File("resources/gui/game_options_panel.png"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,10 +114,10 @@ public class GameOptions extends JPanel {
         this.add(title_bar_label);
         // ----------------------
         // setting back_normal, home_normal
-        back_normal_button = new ButtonImage(back_normal, back_selected, 42, 42, "");
-        home_normal_button = new ButtonImage(home_normal, home_selected, 42, 42, "");
-        back_normal_button.setBounds(465, 10, 42, 42);
-        home_normal_button.setBounds(1000, 10, 42, 42);
+        back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
+        home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
+        back_normal_button.setBounds(465, 10, 44, 44);
+        home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -384,7 +377,7 @@ public class GameOptions extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(title_bar, 530, 10, 450, 42, this);
+        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
         g2d.drawImage(game_options_panel, 360, 160, 520, 420, this);
         g2d.drawImage(chess_standard, 890, 160, 245, 323, this);
         g2d.drawImage(option_box_game, 616, 210, 140, 32, this);

@@ -1,6 +1,7 @@
 package view;
 
 import model.JDBCConnection;
+import model.ReadImage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,12 +18,7 @@ public class ListPuzzle extends JPanel {
     private JPanel panel_contains_puzzle_page_1;
     private JPanel panel_contains_puzzle_page_2;
     private JPanel panel_contains_puzzle_page_3;
-    private BufferedImage title_bar;
     private JLabel title_bar_label;
-    private BufferedImage home_normal;
-    private BufferedImage home_selected;
-    private BufferedImage back_normal;
-    private BufferedImage back_selected;
     private BufferedImage puzzle_normal;
     private BufferedImage puzzle_selected;
     private BufferedImage puzzle_failed_normal;
@@ -58,11 +54,6 @@ public class ListPuzzle extends JPanel {
             puzzle_failed_selected = ImageIO.read(new File("resources/buttons/puzzle_failed_selected.png"));
             puzzle_solved_normal = ImageIO.read(new File("resources/buttons/puzzle_solved_normal.png"));
             puzzle_solved_selected = ImageIO.read(new File("resources/buttons/puzzle_solved_selected.png"));
-            title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
-            back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
-            home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
-            back_selected = ImageIO.read(new File("resources/buttons/back_selected.png"));
-            home_selected = ImageIO.read(new File("resources/buttons/home_selected.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,10 +71,10 @@ public class ListPuzzle extends JPanel {
         this.add(title_bar_label);
         // ----------------------
         // setting back_normal, home_normal
-        back_normal_button = new ButtonImage(back_normal, back_selected, 42, 42, "");
-        home_normal_button = new ButtonImage(home_normal, home_selected, 42, 42, "");
-        back_normal_button.setBounds(465, 10, 42, 42);
-        home_normal_button.setBounds(1000, 10, 42, 42);
+        back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
+        home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
+        back_normal_button.setBounds(465, 10, 44, 44);
+        home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -300,6 +291,6 @@ public class ListPuzzle extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(title_bar, 530, 10, 450, 42, this);
+        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
     }
 }

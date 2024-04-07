@@ -1,6 +1,7 @@
 package view;
 
 import model.JDBCConnection;
+import model.ReadImage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,9 +19,6 @@ public class Setting extends JPanel {
     private JLabel piece_set;
     private JLabel board_label;
     private JLabel sound_label;
-    private BufferedImage title_bar;
-    private BufferedImage back_normal;
-    private BufferedImage home_normal;
     private BufferedImage piece_image;
     private JLabel title_bar_label;
     private BufferedImage noavatar;
@@ -46,8 +44,6 @@ public class Setting extends JPanel {
     private JPasswordField retypeNewPasswordBox;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private BufferedImage back_selected;
-    private BufferedImage home_selected;
     private BufferedImage forward_normal_piece;
     private BufferedImage forward_normal_piece_v2;
     private BufferedImage forward_selected_piece;
@@ -132,11 +128,6 @@ public class Setting extends JPanel {
             int tilesize = board_image.getWidth() / 8;
             board_image_cut = board_image.getSubimage(0, 0, tilesize * 6, tilesize * 3).getScaledInstance(tilesize * 6,
                     tilesize * 3, BufferedImage.SCALE_SMOOTH);
-            title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
-            back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
-            home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
-            back_selected = ImageIO.read(new File("resources/buttons/back_selected.png"));
-            home_selected = ImageIO.read(new File("resources/buttons/home_selected.png"));
             piece_image = ImageIO.read(new File(dataJDBC.get(0)));
         } catch (IOException e) {
             System.out.println("Error url image!");
@@ -151,10 +142,10 @@ public class Setting extends JPanel {
         this.add(title_bar_label);
         // ----------------------
         // setting back_normal, home_normal
-        back_normal_button = new ButtonImage(back_normal, back_selected, 42, 42, "");
-        home_normal_button = new ButtonImage(home_normal, home_selected, 42, 42, "");
-        back_normal_button.setBounds(465, 10, 42, 42);
-        home_normal_button.setBounds(1000, 10, 42, 42);
+        back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
+        home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
+        back_normal_button.setBounds(465, 10, 44, 44);
+        home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -582,6 +573,6 @@ public class Setting extends JPanel {
         g2d.drawImage(option_settingv1, 280, 200, 200, 40, this);
         g2d.drawImage(option_settingv2, 280, 250, 200, 40, this);
         g2d.drawImage(logout_image, 280, 300, 200, 40, this);
-        g2d.drawImage(title_bar, 530, 10, 450, 42, this);
+        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
     }
 }

@@ -2,6 +2,9 @@ package view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import model.ReadImage;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -21,6 +24,7 @@ public class Menu extends JPanel implements ActionListener {
     private BeautifyButton exit_menu;
     public static CardLayout cardLayout = new CardLayout();
     public static JPanel panelCardLayout = new JPanel();
+    private ReadImage readImage = new ReadImage();
 
     public Menu() {
         frame = new JFrame("CHESS");
