@@ -1,6 +1,7 @@
 package view;
 
 import model.Board;
+import model.ReadImage;
 import model.Sound;
 
 import javax.imageio.ImageIO;
@@ -15,11 +16,6 @@ import java.io.IOException;
 
 public class GamePVP extends JPanel {
     private BufferedImage game_gui;
-    private BufferedImage title_bar;
-    private BufferedImage back_normal;
-    private BufferedImage back_selected;
-    private BufferedImage home_normal;
-    private BufferedImage home_selected;
     private BufferedImage rotate_normal;
     private BufferedImage rotate_selected;
     private BufferedImage board_index_black;
@@ -59,14 +55,9 @@ public class GamePVP extends JPanel {
         try {
             board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
             board_index_black = ImageIO.read(new File("resources/gui/board_index_black.png"));
-            back_selected = ImageIO.read(new File("resources/buttons/back_selected.png"));
-            home_selected = ImageIO.read(new File("resources/buttons/home_selected.png"));
             rotate_normal = ImageIO.read(new File("resources/buttons/rotate_normal.png"));
             rotate_selected = ImageIO.read(new File("resources/buttons/rotate_selected.png"));
             game_gui = ImageIO.read(new File("resources/gui/game_gui.png"));
-            title_bar = ImageIO.read(new File("resources/gui/title_bar.png"));
-            back_normal = ImageIO.read(new File("resources/buttons/back_normal.png"));
-            home_normal = ImageIO.read(new File("resources/buttons/home_normal.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,8 +100,8 @@ public class GamePVP extends JPanel {
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(title_bar_label.getFont().deriveFont(18.0f));
         // ================================
-        back_normal_button = new ButtonImage(back_normal, back_selected, 44, 44, "");
-        home_normal_button = new ButtonImage(home_normal, home_selected, 44, 44, "");
+        back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
+        home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
         back_normal_button.setBounds(465, 10, 44, 44);
         home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
@@ -179,7 +170,7 @@ public class GamePVP extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(game_gui, 250, 70, this);
-        g2d.drawImage(title_bar, 530, 10, 450, 44, this);
+        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
         g2d.drawImage(board_index, 250, 70, this);
     }
 

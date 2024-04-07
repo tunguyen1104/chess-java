@@ -69,6 +69,7 @@ public class Setting extends JPanel {
     private ButtonImage forward_right_sound;
     private JButton save;
     private JButton change_password;
+    private BufferedImage panel_options;
     ArrayList<String> dataJDBC;
     String[] piece_url = {
             "resources/pieces/default.png",
@@ -101,6 +102,7 @@ public class Setting extends JPanel {
         this.setLayout(null);
         // Load image
         try {
+            panel_options = ImageIO.read(new File("resources/gui/game_options_panel.png"));
             option_box_sound = ImageIO.read(new File("resources/gui/option_box.png"));
             forward_normal_piece = ImageIO.read(new File("resources/buttons/forward_normal.png"));
             forward_normal_piece_v2 = ImageIO.read(new File("resources/buttons/forward_normalv2.png"));
@@ -175,7 +177,7 @@ public class Setting extends JPanel {
                 g2d.drawImage(option_box_sound, 276, 280, 160, 32, game);
             }
         };
-        game.setBounds(500, 180, 540, 420);
+        game.setBounds(508, 180, 526, 408);
         game.setBackground(new Color(55, 55, 55));
         game.setLayout(null);
         this.add(game);
@@ -449,7 +451,7 @@ public class Setting extends JPanel {
                 g2d.drawImage(noavatar, 50, 20, 80, 80, account);
             }
         };
-        account.setBounds(500, 180, 540, 420);
+        account.setBounds(508, 180, 526, 408);
         account.setBackground(new Color(55, 55, 55));
         account.setLayout(null);
         account.setVisible(false);
@@ -574,5 +576,6 @@ public class Setting extends JPanel {
         g2d.drawImage(option_settingv2, 280, 250, 200, 40, this);
         g2d.drawImage(logout_image, 280, 300, 200, 40, this);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
+        g2d.drawImage(panel_options, 500, 174, 540, 420, this);
     }
 }
