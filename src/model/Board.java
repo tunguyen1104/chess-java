@@ -290,8 +290,23 @@ public class Board extends JPanel {
     }
 
     public void notify_done_puzzle(Graphics2D g2d) {
-        int _col = col_puzzle * tileSize + 70;
-        int _row = row_puzzle * tileSize - 10;
+        int _col = 0;// distance to x
+        int _row = 0;// distance to y
+        if (row_puzzle == 0) {
+            _row = row_puzzle * tileSize + 70;
+            if (col_puzzle == 7) {
+                _col = col_puzzle * tileSize - 12;
+            } else {
+                _col = col_puzzle * tileSize + 70;
+            }
+        } else if (col_puzzle == 7) {
+            _col = col_puzzle * tileSize - 12;
+            _row = row_puzzle * tileSize - 10;
+        } else {
+            _col = col_puzzle * tileSize + 70;
+            _row = row_puzzle * tileSize - 10;
+        }
+
         if (done_failed_puzzle == 1) {
             g2d.drawImage(puzzleGame.circle_check, _col, _row, 28, 28, puzzleGame);
         } else if (done_failed_puzzle == 2) {

@@ -42,6 +42,7 @@ public class Menu extends JPanel implements ActionListener {
         panelCardLayout.add(new ListPuzzle(), "listPuzzle");
         panelCardLayout.add(new GameOptions(), "gameOptions");
         panelCardLayout.add(new History(), "history");
+        panelCardLayout.add(new About(), "about");
         frame.add(panelCardLayout);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,7 +128,7 @@ public class Menu extends JPanel implements ActionListener {
         about_menu.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.dispose();
+                cardLayout.show(panelCardLayout, "about");
             }
         });
         exit_menu.addMouseListener(new MouseAdapter() {

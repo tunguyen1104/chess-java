@@ -35,7 +35,7 @@ public class Piece {
     protected int sheetScale = sheet.getWidth() / 6;
 
     public void paint(Graphics2D g2d) {
-        g2d.drawImage(sprite, xPos + 8, yPos + 8, 68, 68, null);
+        g2d.drawImage(sprite, xPos + 2, yPos + 2, 80, 80, null);
     }
 
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {
