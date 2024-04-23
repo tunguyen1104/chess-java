@@ -108,13 +108,15 @@ public class Listener extends MouseAdapter {
                 isTurn = !isTurn;
                 board.paint_old_new(move.getOldCol(), move.getOldRow(), move.getNewCol(), move.getNewRow());
                 board.paint_in_place(-1, -1);
+                boolean checkMate = board.paintKingCheckMate(isTurn);
                 if (!this.check_delete && !this.check_promotion)
                     sound.playMusic(2);
                 String s = game.textArea.getText();
+                String plus = checkMate ? "+" : "";
                 if (isTurn)
-                    s += board.step(step, move) + "\n";
+                    s += board.step(step, move) + plus + "\n";
                 else {
-                    s += String.format("%3s %8s %6s", count_step + ".", board.step(step, move), " ");
+                    s += String.format("%3s %8s %6s", count_step + ".", board.step(step, move) + plus, " ");
                     ++count_step;
                 }
                 game.textArea.setText(s);
@@ -125,18 +127,20 @@ public class Listener extends MouseAdapter {
         }
         board.selectedPiece = null;
         board.repaint();
-        if (board.findKing(true) == null) {
-            isEnd = true;
-            sound.playMusic(1);
-            game.timeLabelWhite.stop();
-            game.timeLabelBlack.stop();
-            game.noti_end_game("Black", "Checkmate");
-        } else if (board.findKing(false) == null) {
-            isEnd = true;
-            sound.playMusic(1);
-            game.timeLabelWhite.stop();
-            game.timeLabelBlack.stop();
-            game.noti_end_game("White", "Checkmate");
+        if (board.checkMateEndGame(isTurn)) {
+            if(isTurn) {
+                isEnd = true;
+                sound.playMusic(1);
+                game.timeLabelWhite.stop();
+                game.timeLabelBlack.stop();
+                game.noti_end_game("Black", "Checkmate");
+            } else {
+                isEnd = true;
+                sound.playMusic(1);
+                game.timeLabelWhite.stop();
+                game.timeLabelBlack.stop();
+                game.noti_end_game("White", "Checkmate");
+            }
         }
     }
 

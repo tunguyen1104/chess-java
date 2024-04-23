@@ -53,10 +53,29 @@ public class Board extends JPanel {
     private int row_puzzle = -1;
     private int col_hint = -1;
     private int row_hint = -1;
+    private boolean hintBoolean = false;
+    private boolean checkMateWhite = false;
+    private boolean checkMateBlack = false;
+    private int colKingCheckMate = -1;
+    private int rowKingCheckMate = -1;
     public void setHintBoolean(boolean hintBoolean) {
         this.hintBoolean = hintBoolean;
     }
-    private boolean hintBoolean = false;
+    public boolean isCheckMateWhite() {
+        return checkMateWhite;
+    }
+
+    public void setCheckMateWhite(boolean checkMateWhite) {
+        this.checkMateWhite = checkMateWhite;
+    }
+    public boolean isCheckMateBlack() {
+        return checkMateBlack;
+    }
+
+    public void setCheckMateBlack(boolean checkMateBlack) {
+        this.checkMateBlack = checkMateBlack;
+    }
+    
     public Board(PuzzleGame puzzleGame, String FEN) {
         if (dataJDBC.get(2).equals("1"))
             sound = new Sound();
@@ -363,6 +382,9 @@ public class Board extends JPanel {
         if (move.piece.name.equals("Pawn")) {
             movePawn(move);
         } else {
+            if (move.piece.name.equals("King")) {
+                moveKing(move);
+            }
             move.piece.col = move.getNewCol();
             move.piece.row = move.getNewRow();
             move.piece.xPos = move.getNewCol() * tileSize;
@@ -376,14 +398,20 @@ public class Board extends JPanel {
             }
         }
     }
-
-    public void paint_old_new(int col1, int row1, int col2, int row2) {
-        old_col = col1;
-        old_row = row1;
-        new_col = col2;
-        new_row = row2;
+    private void moveKing(Move move) {
+        if(Math.abs(move.piece.col - move.getNewCol()) == 2) {
+            Piece rook;
+            if(move.piece.col < move.getNewCol()) {
+                rook = getPiece(7, move.piece.row);
+                rook.col = 5;
+                
+            } else {
+                rook = getPiece(0, move.piece.row);
+                rook.col = 3;
+            }
+            rook.xPos = rook.col * tileSize;
+        }
     }
-
     private void movePawn(Move move) {
         // enPassant
         int colorIndex;
@@ -422,7 +450,12 @@ public class Board extends JPanel {
                 input.change_check_promotion(true);
         }
     }
-
+    public void paint_old_new(int col1, int row1, int col2, int row2) {
+        old_col = col1;
+        old_row = row1;
+        new_col = col2;
+        new_row = row2;
+    }
     public void promotePawn(Move move) {
         promotion = -1;
         Object[] options = { "Queen", "Rook", "Knight", "Bishop" };
@@ -505,17 +538,45 @@ public class Board extends JPanel {
         col_in_place = col;
         row_in_place = row;
     }
-
+    public boolean checkMateEndGame(boolean color) {
+        for(Piece piece: pieceList) {
+            if(piece.isWhite == color) {
+                for (int i = 0; i < rows; ++i) {
+                    for (int j = 0; j < cols; ++j) {
+                        if (isValidMove(new Move(this, piece, i, j))) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    public boolean paintKingCheckMate(boolean color) {
+        Piece king = findKing(color);
+        assert king != null;
+        boolean check = checkMate(color, king.col, king.row);
+        if(check) {
+            if(color) checkMateWhite = true;
+            else checkMateBlack = true;
+            colKingCheckMate = king.col;
+            rowKingCheckMate = king.row;
+            return true;
+        } else {
+            colKingCheckMate = -1;
+            rowKingCheckMate = -1;
+            return false;
+        }
+    }
     public boolean isValidMove(Move move) {// check nước đi
         if (sameTeam(move.piece, move.capture)) {
             return false;
         }
-        if(move.piece.name.equals("Pawn")) {
+        if(move.piece.name.equals("Pawn") || move.piece.name.equals("King")) {
             if (!move.piece.check_the_valid_moves_of_the_chess_pieces(this, move.getNewCol(), move.getNewRow())) {
                 return false;
             }
-        }
-        else {
+        } else {
             if (!move.piece.check_the_valid_moves_of_the_chess_pieces(move.getNewCol(), move.getNewRow())) {
                 return false;
             }
@@ -528,7 +589,6 @@ public class Board extends JPanel {
         }
         return true;
     }
-
     public boolean isKingChecked(Move move) {
         Piece king = findKing(move.piece.isWhite);
         assert king != null;
@@ -545,6 +605,122 @@ public class Board extends JPanel {
                 hitByKnight(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
                 hitByPawn(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
                 hitByKing(king.isWhite,kingCol,kingRow);
+    }
+    public boolean checkMate(boolean color, int kingCol, int kingRow) {
+        //Rook
+        for(int i = kingCol - 1;i >= 0; --i) {//left
+            Piece piece = getPiece(i, kingRow);
+            if(piece != null) {
+                if(piece.isWhite != color && (piece.name.equals("Rook") || piece.name.equals("Queen"))) {
+                    return true;
+                }
+                break;
+            }
+        }
+        for(int i = kingCol + 1;i < 8; ++i) {//right
+            Piece piece = getPiece(i, kingRow);
+            if(piece != null) {
+                if(piece.isWhite != color && (piece.name.equals("Rook") || piece.name.equals("Queen"))) {
+                    return true;
+                }
+                break;
+            }
+        }
+        for(int i = kingRow - 1;i >= 0; --i) {//up
+            Piece piece = getPiece(kingCol, i);
+            if(piece != null) {
+                if(piece.isWhite != color && (piece.name.equals("Rook") || piece.name.equals("Queen"))) {
+                    return true;
+                }
+                break;
+            }
+        }
+        for(int i = kingRow + 1;i < 8; ++i) {//down
+            Piece piece = getPiece(kingCol, i);
+            if(piece != null) {
+                if(piece.isWhite != color && (piece.name.equals("Rook") || piece.name.equals("Queen"))) {
+                    return true;
+                }
+                break;
+            }
+        }
+        //Bishop
+        // up left
+        for (int i = 1; kingCol - i >= 0 && kingRow - i >= 0; ++i) {
+            Piece piece = getPiece(kingCol - i, kingRow - i);
+            if (piece != null) {
+                if (piece.isWhite != color && (piece.name.equals("Bishop") || piece.name.equals("Queen"))) {
+                    return true;
+                }
+                break;
+            }
+        }
+        // down left
+        for (int i = 1; kingCol - i >= 0 && kingRow + i < 8; ++i) {
+            Piece piece = getPiece(kingCol - i, kingRow + i);
+            if (piece != null) {
+                if (piece.isWhite != color && (piece.name.equals("Bishop") || piece.name.equals("Queen"))) {
+                    return true;
+                }
+                break;
+            }
+        }
+        // up right
+        for (int i = 1; kingCol + i < 8 && kingRow - i >= 0; ++i) {
+            Piece piece = getPiece(kingCol + i, kingRow - i);
+            if (piece != null) {
+                if (piece.isWhite != color && (piece.name.equals("Bishop") || piece.name.equals("Queen"))) {
+                    return true;
+                }
+                break;
+            }
+        }
+        // down right
+        for (int i = 1; kingCol + i < 8 && kingRow + i < 8; ++i) {
+            Piece piece = getPiece(kingCol + i, kingRow + i);
+            if (piece != null) {
+                if (piece.isWhite != color && (piece.name.equals("Bishop") || piece.name.equals("Queen"))) {
+                    return true;
+                }
+                break;
+            }
+        }
+        //Knight
+        for (int[] move : KNIGHT_MOVES) {
+            int newCol = kingCol + move[0];
+            int newRow = kingRow + move[1];
+            if (isValidPosition(newCol, newRow)) {
+                Piece piece = getPiece(newCol, newRow);
+                if (piece != null && piece.name.equals("Knight") && piece.isWhite != color) {
+                    return true;
+                }
+            }
+        }
+        //King
+        for (int col_index = -1; col_index <= 1; col_index++) {
+            for (int row_index = -1; row_index <= 1; row_index++) {
+                if (col_index == 0 && row_index == 0) {
+                    continue;
+                }
+                int newCol = kingCol + col_index;
+                int newRow = kingRow + row_index;
+                if (isValidPosition(newCol, newRow)) {
+                    Piece piece = getPiece(newCol, newRow);
+                    if (piece != null && piece.isWhite != color && piece.name.equals("King")) {
+                        return true;
+                    }
+                }
+            }
+        }
+        //Pawn
+        int colorVal = color ? -1 : 1;
+        Piece piece_left = getPiece(kingCol - 1,kingRow + colorVal);
+        Piece piece_right = getPiece(kingCol + 1,kingRow + colorVal);
+        if(piece_left != null && piece_left.isWhite != color && piece_left.name.equals("Pawn") ||
+            piece_right != null && piece_right.isWhite != color && piece_right.name.equals("Pawn")) {
+            return true;
+        }
+        return false;
     }
     private final int[][] ROOK_MOVES = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
     private boolean hitByRook(int col, int row,boolean kingIsWhite, int kingCol, int kingRow) {
@@ -757,6 +933,10 @@ public class Board extends JPanel {
         if (col_in_place != -1) {
             g2d.setColor(new Color(224, 207, 56, 131));
             g2d.fillRect(col_in_place * tileSize, row_in_place * tileSize, tileSize, tileSize);
+        }
+        if(colKingCheckMate != -1) {
+            g2d.setColor(new Color(214,114,114));
+            g2d.fillRect(colKingCheckMate * tileSize, rowKingCheckMate * tileSize, tileSize, tileSize);
         }
         if (selectedPiece != null) {
             for (int i = 0; i < rows; ++i) {
