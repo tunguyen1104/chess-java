@@ -62,12 +62,12 @@ public class PuzzleGame extends JPanel {
         this.setPreferredSize(new Dimension(1536, 864));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
-        board.setBounds(308, 94, board.tileSize * 8, board.tileSize * 8);
+        board.setBounds(308, 100, board.tileSize * 8, board.tileSize * 8);
         this.add(board);
         title_bar_label = new JLabel("Puzzle - Lever " + lever);
         title_bar_label.setBounds(680, 4, 400, 50);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
+        title_bar_label.setFont(new Font("",Font.BOLD,20));
         this.add(title_bar_label);
         // setting back_normal, home_normal
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
@@ -94,7 +94,7 @@ public class PuzzleGame extends JPanel {
         this.add(home_normal_button);
         // setting menu hint
         hint_panel = new JPanel();
-        hint_panel.setBounds(1026, 266, 268, 250);
+        hint_panel.setBounds(986, 266, 268, 250);
         hint_panel.setBackground(new Color(55, 55, 55));
         hint_panel.setLayout(null);
         hint = new ButtonImage(normal, selected, 150, 50, "Hint");
@@ -117,7 +117,7 @@ public class PuzzleGame extends JPanel {
         this.add(hint_panel);
         // setting menu try again
         undo_panel = new JPanel();
-        undo_panel.setBounds(1026, 266, 268, 250);
+        undo_panel.setBounds(986, 266, 268, 250);
         undo_panel.setBackground(new Color(55, 55, 55));
         undo_panel.setLayout(null);
         undo = new ButtonImage(normal, selected, 150, 50, "Undo");
@@ -139,7 +139,7 @@ public class PuzzleGame extends JPanel {
         this.add(undo_panel);
         // setting menu done
         done_panel = new JPanel();
-        done_panel.setBounds(1026, 266, 268, 250);
+        done_panel.setBounds(986, 266, 268, 250);
         done_panel.setBackground(new Color(55, 55, 55));
         done_panel.setLayout(null);
         next_lever = new ButtonImage(normal, selected, 150, 50, "Next Lever");
@@ -227,7 +227,7 @@ public class PuzzleGame extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(board_index, 280, 70, this);
-        g2d.drawImage(panel_320_292, 1020, 260, 280, 260, this);
+        g2d.drawImage(board_index, 280, 80,690,690, this);
+        g2d.drawImage(panel_320_292, 980, 260, 280, 260, this);
     }
 }

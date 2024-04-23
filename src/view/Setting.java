@@ -140,7 +140,7 @@ public class Setting extends JPanel {
         title_bar_label = new JLabel("Settings");
         title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
+        title_bar_label.setFont(new Font("",Font.BOLD,20));
         this.add(title_bar_label);
         // ----------------------
         // setting back_normal, home_normal
@@ -486,10 +486,10 @@ public class Setting extends JPanel {
         retypeNewPassword.setFont(retypeNewPassword.getFont().deriveFont(15f));
         account.add(retypeNewPassword);
         newPasswordBox = new JPasswordField();
-        newPasswordBox.setBounds(260, 260, 200, 26);
+        newPasswordBox.setBounds(260, 254, 200, 30);
         account.add(newPasswordBox);
         retypeNewPasswordBox = new JPasswordField();
-        retypeNewPasswordBox.setBounds(260, 320, 200, 26);
+        retypeNewPasswordBox.setBounds(260, 314, 200, 30);
         account.add(retypeNewPasswordBox);
         change_password = new JButton("Change Password");
         change_password.setFont(new Font("", Font.PLAIN, 16));

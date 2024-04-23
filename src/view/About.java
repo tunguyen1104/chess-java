@@ -39,7 +39,7 @@ public class About extends JPanel {
         title_bar_label = new JLabel("About");
         title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
+        title_bar_label.setFont(new Font("",Font.BOLD,20));
         this.add(title_bar_label);
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");

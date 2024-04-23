@@ -49,7 +49,6 @@ public class Menu extends JPanel implements ActionListener {
         frame.setLocation(-6, 0);
         frame.setVisible(true);
         frame.setResizable(false);
-
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",

@@ -65,10 +65,10 @@ public class GamePVP extends JPanel {
         this.setBackground(new Color(41, 41, 41));
         this.setPreferredSize(new Dimension(1536, 864));
         this.setLayout(null);
-        timeLabelWhite = new TimeLabel(minute, 1100, 505);
-        timeLabelBlack = new TimeLabel(minute, 1100, 160);
+        timeLabelWhite = new TimeLabel(minute, 1050, 490);
+        timeLabelBlack = new TimeLabel(minute, 1050, 160);
         initPanel();
-        board.setBounds(280, 90, 8 * board.tileSize, 8 * board.tileSize);
+        board.setBounds(280, 100, 8 * board.tileSize, 8 * board.tileSize);
         this.add(board);
         timeLabelWhite.start();
         timer.start();
@@ -77,11 +77,11 @@ public class GamePVP extends JPanel {
     public void initPanel() {
         // setting name
         black_name = new JLabel("Player2 (Black)");
-        black_name.setBounds(1050, 140, 490, 120);
+        black_name.setBounds(1000, 140, 490, 120);
         black_name.setForeground(Color.WHITE);
         black_name.setFont(black_name.getFont().deriveFont(20.0f));
         white_name = new JLabel("Player1 (White)");
-        white_name.setBounds(1050, 610, 490, 120);
+        white_name.setBounds(1000, 590, 490, 120);
         white_name.setForeground(Color.WHITE);
         white_name.setFont(white_name.getFont().deriveFont(20.0f));
         try {
@@ -98,7 +98,7 @@ public class GamePVP extends JPanel {
         title_bar_label = new JLabel("Standard - PvP");
         title_bar_label.setBounds(700, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(18.0f));
+        title_bar_label.setFont(new Font("",Font.BOLD,18));
         // ================================
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
@@ -137,8 +137,7 @@ public class GamePVP extends JPanel {
             e.printStackTrace();
         }
         scrollPaneTextArea = new JScrollPane(textArea);
-        scrollPaneTextArea.setBounds(1010, 384, 308, 158);
-        scrollPaneTextArea.setBackground(new Color(55, 55, 55));
+        scrollPaneTextArea.setBounds(962, 380, 298, 148);
         Border border = BorderFactory.createLineBorder(new Color(55, 55, 55));
         scrollPaneTextArea.setBorder(border);
         scrollPaneTextArea.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
@@ -151,8 +150,8 @@ public class GamePVP extends JPanel {
         this.add(home_normal_button);
         this.add(title_bar_label);
 
-        ButtonImage rotate = new ButtonImage(rotate_normal, rotate_selected, 40, 30, "");
-        rotate.setBounds(1252, 338, 40, 30);
+        ButtonImage rotate = new ButtonImage(rotate_normal, rotate_selected, 50, 40, "");
+        rotate.setBounds(1200, 326, 50, 40);
         rotate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -169,9 +168,9 @@ public class GamePVP extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(game_gui, 250, 70, this);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(board_index, 250, 70, this);
+        g2d.drawImage(game_gui, 250, 80,1014,690, this);
+        g2d.drawImage(board_index, 250, 80,690,690, this);
     }
 
     public Timer timer = new Timer(1000, new ActionListener() {

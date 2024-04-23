@@ -5,12 +5,11 @@ import model.Board;
 import java.awt.image.BufferedImage;
 
 public class Queen extends Piece {
-    public Queen(Board board, int col, int row, boolean isWhite) {
-        super(board);
+    public Queen(int col, int row, boolean isWhite) {
         this.col = col;
         this.row = row;
-        this.xPos = col * board.tileSize;
-        this.yPos = row * board.tileSize;
+        this.xPos = col * 80;
+        this.yPos = row * 80;
         this.isWhite = isWhite;
         this.name = "Queen";
         this.sprite = sheet.getSubimage(1 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(sheetScale, sheetScale,BufferedImage.SCALE_SMOOTH);
@@ -20,7 +19,7 @@ public class Queen extends Piece {
         return ((Math.abs(this.col - col) == Math.abs(this.row - row)) || (this.col == col || this.row == row)) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
     @Override
-    public boolean moveCollidesWithPiece(int col,int row) {
+    public boolean moveCollidesWithPiece(Board board, int col,int row) {
         if(this.col == col || this.row == row) {
             //up
             if(this.row > row) {

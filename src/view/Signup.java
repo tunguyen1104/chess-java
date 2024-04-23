@@ -115,7 +115,7 @@ public class Signup extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == signup_button) {
+        if (e.getSource().equals(signup_button)) {
             load();
             Thread thread = new Thread() {
                 @Override
@@ -164,7 +164,7 @@ public class Signup extends JPanel implements ActionListener {
                 }
             };
             thread.start();
-        } else if (e.getSource() == switch_to_login) {
+        } else if (e.getSource().equals(switch_to_login)) {
             Login.cardLayout.show(Login.panel, "login");
         }
     }

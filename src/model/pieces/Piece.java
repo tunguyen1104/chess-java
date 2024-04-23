@@ -17,13 +17,7 @@ public class Piece {
     public boolean isWhite;
     public String name;
     Image sprite;
-    Board board;
-    public boolean the_pawn_first_move = true;
-
-    public Piece(Board board) {
-        this.board = board;
-    }
-
+    public boolean isFirstMove = true;
     protected BufferedImage sheet;
     {
         try {
@@ -35,14 +29,16 @@ public class Piece {
     protected int sheetScale = sheet.getWidth() / 6;
 
     public void paint(Graphics2D g2d) {
-        g2d.drawImage(sprite, xPos + 2, yPos + 2, 80, 80, null);
+        g2d.drawImage(sprite, xPos, yPos, 80, 80, null);
     }
 
     public boolean check_the_valid_moves_of_the_chess_pieces(int col, int row) {
         return true;
     }
-
-    public boolean moveCollidesWithPiece(int col, int row) {
+    public boolean check_the_valid_moves_of_the_chess_pieces(Board board, int col, int row) {
+        return true;
+    }
+    public boolean moveCollidesWithPiece(Board board, int col, int row) {
         return false;
     }
 }

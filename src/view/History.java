@@ -38,7 +38,7 @@ public class History extends JPanel {
         title_bar_label = new JLabel("History");
         title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
+        title_bar_label.setFont(new Font("",Font.BOLD,20));
         this.add(title_bar_label);
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
@@ -58,9 +58,17 @@ public class History extends JPanel {
         });
         this.add(back_normal_button);
         this.add(home_normal_button);
-        test = new ButtonImage(history_normal, history_selected, 580, 70, "Day");
-        test.setBounds(462, 80, 580, 70);
+        test = new ButtonImage(history_normal, history_selected, 509, 72, "Mon Apr 22 15:06:30 2024    PvP   3 min   Black win");
+        test.setBounds(500, 80, 509, 72);
         this.add(test);
+        test.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                Menu.panelCardLayout.add(new Review(),"review");
+                Menu.cardLayout.show(Menu.panelCardLayout,"review");
+            }
+        });
     }
 
     @Override

@@ -4,12 +4,11 @@ import model.Board;
 import java.awt.image.BufferedImage;
 public class Rook extends Piece {
 
-    public Rook(Board board, int col, int row, boolean isWhite) {
-        super(board);
+    public Rook(int col, int row, boolean isWhite) {
         this.col = col;
         this.row = row;
-        this.xPos = col * board.tileSize;
-        this.yPos = row * board.tileSize;
+        this.xPos = col * 80;
+        this.yPos = row * 80;
         this.isWhite = isWhite;
         this.name = "Rook";
         this.sprite = sheet.getSubimage(4 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(sheetScale, sheetScale, BufferedImage.SCALE_SMOOTH);
@@ -19,7 +18,7 @@ public class Rook extends Piece {
         return (this.col == col || this.row == row) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
     @Override
-    public boolean moveCollidesWithPiece(int col,int row){
+    public boolean moveCollidesWithPiece(Board board, int col,int row){
         //up
         if(this.row > row) {
             for(int r = this.row - 1;r > row; --r){

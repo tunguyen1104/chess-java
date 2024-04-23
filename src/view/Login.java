@@ -144,7 +144,7 @@ public class Login extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == login_button) {
+        if (e.getSource().equals(login_button)) {
             load();
             Thread thread = new Thread() {
                 @Override
@@ -187,7 +187,7 @@ public class Login extends JFrame implements ActionListener {
             };
             thread.start();
         }
-        if (e.getSource() == switch_to_signup) {
+        if (e.getSource().equals(switch_to_signup)) {
             cardLayout.show(panel, "signup");
         }
     }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class Board extends JPanel {
     private GamePVP game;
-    public int tileSize = 85;
+    public int tileSize = 80;
     public int rows = 8;
     public int cols = 8;
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
@@ -53,13 +53,10 @@ public class Board extends JPanel {
     private int row_puzzle = -1;
     private int col_hint = -1;
     private int row_hint = -1;
-
     public void setHintBoolean(boolean hintBoolean) {
         this.hintBoolean = hintBoolean;
     }
-
     private boolean hintBoolean = false;
-
     public Board(PuzzleGame puzzleGame, String FEN) {
         if (dataJDBC.get(2).equals("1"))
             sound = new Sound();
@@ -266,17 +263,17 @@ public class Board extends JPanel {
             sound.playMusic(2);
         }
         if (piece.name.equals("King"))
-            pieceList.add(new King(this, y_new, x_new, color_to_move));
+            pieceList.add(new King(y_new, x_new, color_to_move));
         else if (piece.name.equals("Queen"))
-            pieceList.add(new Queen(this, y_new, x_new, color_to_move));
+            pieceList.add(new Queen(y_new, x_new, color_to_move));
         else if (piece.name.equals("Rook"))
-            pieceList.add(new Rook(this, y_new, x_new, color_to_move));
+            pieceList.add(new Rook(y_new, x_new, color_to_move));
         else if (piece.name.equals("Bishop"))
-            pieceList.add(new Bishop(this, y_new, x_new, color_to_move));
+            pieceList.add(new Bishop( y_new, x_new, color_to_move));
         else if (piece.name.equals("Knight"))
-            pieceList.add(new Knight(this, y_new, x_new, color_to_move));
+            pieceList.add(new Knight(y_new, x_new, color_to_move));
         else if (piece.name.equals("Pawn"))
-            pieceList.add(new Pawn(this, y_new, x_new, color_to_move));
+            pieceList.add(new Pawn(y_new, x_new, color_to_move));
         repaint();
     }
 
@@ -319,19 +316,19 @@ public class Board extends JPanel {
         rotateList.clear();
         for (Piece piece : pieceList) {
             if (piece.name.equals("Pawn")) {
-                Piece pawn = new Pawn(this, 7 - piece.col, 7 - piece.row, piece.isWhite);
-                pawn.the_pawn_first_move = piece.the_pawn_first_move;
+                Piece pawn = new Pawn(7 - piece.col, 7 - piece.row, piece.isWhite);
+                pawn.isFirstMove = piece.isFirstMove;
                 rotateList.add(pawn);
             } else if (piece.name.equals("King")) {
-                rotateList.add(new King(this, 7 - piece.col, 7 - piece.row, piece.isWhite));
+                rotateList.add(new King(7 - piece.col, 7 - piece.row, piece.isWhite));
             } else if (piece.name.equals("Queen")) {
-                rotateList.add(new Queen(this, 7 - piece.col, 7 - piece.row, piece.isWhite));
+                rotateList.add(new Queen(7 - piece.col, 7 - piece.row, piece.isWhite));
             } else if (piece.name.equals("Rook")) {
-                rotateList.add(new Rook(this, 7 - piece.col, 7 - piece.row, piece.isWhite));
+                rotateList.add(new Rook(7 - piece.col, 7 - piece.row, piece.isWhite));
             } else if (piece.name.equals("Bishop")) {
-                rotateList.add(new Bishop(this, 7 - piece.col, 7 - piece.row, piece.isWhite));
+                rotateList.add(new Bishop(7 - piece.col, 7 - piece.row, piece.isWhite));
             } else if (piece.name.equals("Knight")) {
-                rotateList.add(new Knight(this, 7 - piece.col, 7 - piece.row, piece.isWhite));
+                rotateList.add(new Knight(7 - piece.col, 7 - piece.row, piece.isWhite));
             }
         }
         enPassantTile = 63 - enPassantTile;
@@ -348,15 +345,15 @@ public class Board extends JPanel {
             row_in_place = 7 - row_in_place;
         }
         if (rotating) {
-            game.getWhite_name().setBounds(1050, 140, 490, 120);
-            game.getBlack_name().setBounds(1050, 610, 490, 120);
-            game.getTimeLabelWhite().setBounds(1100, 160, 500, 200);
-            game.getTimeLabelBlack().setBounds(1100, 505, 500, 200);
+            game.getWhite_name().setBounds(1000, 140, 490, 120);
+            game.getBlack_name().setBounds(1000, 590, 490, 120);
+            game.getTimeLabelWhite().setBounds(1050, 160, 500, 200);
+            game.getTimeLabelBlack().setBounds(1050, 490, 500, 200);
         } else {
-            game.getWhite_name().setBounds(1050, 610, 490, 120);
-            game.getBlack_name().setBounds(1050, 140, 490, 120);
-            game.getTimeLabelWhite().setBounds(1100, 505, 500, 200);
-            game.getTimeLabelBlack().setBounds(1100, 160, 500, 200);
+            game.getWhite_name().setBounds(1000, 590, 490, 120);
+            game.getBlack_name().setBounds(1000, 140, 490, 120);
+            game.getTimeLabelWhite().setBounds(1050, 490, 500, 200);
+            game.getTimeLabelBlack().setBounds(1050, 160, 500, 200);
         }
         sound.playMusic(4);
         repaint();
@@ -370,6 +367,7 @@ public class Board extends JPanel {
             move.piece.row = move.getNewRow();
             move.piece.xPos = move.getNewCol() * tileSize;
             move.piece.yPos = move.getNewRow() * tileSize;
+            move.piece.isFirstMove = false;
             if (move.capture != null) {
                 sound.playMusic(3);
                 delete_piece(move.capture);
@@ -411,7 +409,7 @@ public class Board extends JPanel {
                 input.change_check_delete(true);
         }
         this.repaint();
-        move.piece.the_pawn_first_move = false;
+        move.piece.isFirstMove = false;
         // promotions
         if (!rotating)
             colorIndex = move.piece.isWhite ? 0 : 7;
@@ -432,24 +430,24 @@ public class Board extends JPanel {
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         if (select == -1) {
-            pieceList.add(new Queen(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+            pieceList.add(new Queen(move.getNewCol(), move.getNewRow(), move.piece.isWhite));
             promotion = 0;
         } else {
             switch (select) {
                 case 0:
-                    pieceList.add(new Queen(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+                    pieceList.add(new Queen(move.getNewCol(), move.getNewRow(), move.piece.isWhite));
                     promotion = 0;
                     break;
                 case 1:
-                    pieceList.add(new Rook(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+                    pieceList.add(new Rook( move.getNewCol(), move.getNewRow(), move.piece.isWhite));
                     promotion = 1;
                     break;
                 case 2:
-                    pieceList.add(new Knight(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+                    pieceList.add(new Knight(move.getNewCol(), move.getNewRow(), move.piece.isWhite));
                     promotion = 2;
                     break;
                 case 3:
-                    pieceList.add(new Bishop(this, move.getNewCol(), move.getNewRow(), move.piece.isWhite));
+                    pieceList.add(new Bishop(move.getNewCol(), move.getNewRow(), move.piece.isWhite));
                     promotion = 3;
                     break;
             }
@@ -512,13 +510,18 @@ public class Board extends JPanel {
         if (sameTeam(move.piece, move.capture)) {
             return false;
         }
-        if (!move.piece.check_the_valid_moves_of_the_chess_pieces(move.getNewCol(), move.getNewRow())) {
-            return false;
+        if(move.piece.name.equals("Pawn")) {
+            if (!move.piece.check_the_valid_moves_of_the_chess_pieces(this, move.getNewCol(), move.getNewRow())) {
+                return false;
+            }
         }
-        if (move.piece.moveCollidesWithPiece(move.getNewCol(), move.getNewRow())) {// Nếu quân cờ di chuyển gặp va chạm
-                                                                                   // với một quân cờ thì dừng
-                                                                                   // trước nó
-            return false;
+        else {
+            if (!move.piece.check_the_valid_moves_of_the_chess_pieces(move.getNewCol(), move.getNewRow())) {
+                return false;
+            }
+            if (move.piece.moveCollidesWithPiece(this, move.getNewCol(), move.getNewRow())) {// Nếu quân cờ di chuyển gặp va chạm với một quân cờ thì dừng trước nó
+                return false;
+            }
         }
         if (isKingChecked(move)) {
             return false;
@@ -532,16 +535,105 @@ public class Board extends JPanel {
 
         int kingCol = king.col;
         int kingRow = king.row;
-
-        if (selectedPiece != null && selectedPiece.name.equals("King")) {
+        
+        if(selectedPiece != null && selectedPiece.name.equals("King")) {
             kingCol = move.getNewCol();
             kingRow = move.getNewRow();
         }
+        return hitByRook(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
+                hitByBishop(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
+                hitByKnight(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
+                hitByPawn(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
+                hitByKing(king.isWhite,kingCol,kingRow);
+    }
+    private final int[][] ROOK_MOVES = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    private boolean hitByRook(int col, int row,boolean kingIsWhite, int kingCol, int kingRow) {
+        for (int[] dir : ROOK_MOVES) {
+            int colDir = dir[0];
+            int rowDir = dir[1];
+            for (int i = 1; i < 8; ++i) {
+                int newCol = kingCol + (i * colDir);
+                int newRow = kingRow + (i * rowDir);
+                if (!isValidPosition(newCol, newRow)) break;
+                if (newCol == col && newRow == row) {
+                    break;
+                }
+                Piece piece = getPiece(newCol, newRow);
+                if (piece != null && piece != selectedPiece) {
+                    if (piece.isWhite != kingIsWhite && (piece.name.equals("Rook") || piece.name.equals("Queen"))) {
+                        return true;
+                    }
+                    break;
+                }
+            }
+        }
         return false;
     }
+    private final int[][] BISHOP_MOVES = {{-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+    private boolean hitByBishop(int col, int row,boolean kingIsWhite, int kingCol, int kingRow) {
+        for (int[] dir : BISHOP_MOVES) {
+            int colDir = dir[0];
+            int rowDir = dir[1];
+            for (int i = 1; i < 8; ++i) {
+                int newCol = kingCol - (i * colDir);
+                int newRow = kingRow - (i * rowDir);
+                if (!isValidPosition(newCol, newRow)) break;
+                if (newCol == col && newRow == row) {
+                    break;
+                }
+                Piece piece = getPiece(newCol, newRow);
+                if (piece != null && piece != selectedPiece) {
+                    if (piece.isWhite != kingIsWhite && (piece.name.equals("Bishop") || piece.name.equals("Queen"))) {
+                        return true;
+                    }
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+    private final int[][] KNIGHT_MOVES = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
+    private boolean hitByKnight(int col, int row, boolean kingIsWhite, int kingCol, int kingRow) {
+        for (int[] move : KNIGHT_MOVES) {
+            int newCol = kingCol + move[0];
+            int newRow = kingRow + move[1];
 
-    private boolean hitByRook(int col, int row, Piece King, int kingCol, int kingRow, int colVal, int rowVal) {
-        return true;
+            if (isValidPosition(newCol, newRow)) {
+                Piece piece = getPiece(newCol, newRow);
+                if (piece != null && piece.isWhite != kingIsWhite  && piece.name.equals("Knight") && !(newCol == col && newRow == row)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private boolean isValidPosition(int col, int row) {
+        return col >= 0 && col < 8 && row >= 0 && row < 8;
+    }
+    private boolean hitByKing(boolean kingIsWhite, int kingCol, int kingRow) {
+        for (int col_index = -1; col_index <= 1; col_index++) {
+            for (int row_index = -1; row_index <= 1; row_index++) {
+                if (col_index == 0 && row_index == 0) {
+                    continue;
+                }
+                int newCol = kingCol + col_index;
+                int newRow = kingRow + row_index;
+                if (isValidPosition(newCol, newRow)) {
+                    Piece piece = getPiece(newCol, newRow);
+                    if (piece != null && piece.isWhite != kingIsWhite && piece.name.equals("King")) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    private boolean hitByPawn(int col,int row,boolean kingIsWhite, int kingCol, int kingRow) {
+        int colorVal = kingIsWhite ? -1 : 1;
+        Piece piece_left = getPiece(kingCol - 1,kingRow + colorVal);
+        Piece piece_right = getPiece(kingCol + 1,kingRow + colorVal);
+        return piece_left != null && piece_left.isWhite != kingIsWhite && piece_left.name.equals("Pawn") && !(piece_left.col == col && piece_left.row == row) ||
+                piece_right != null && piece_right.isWhite != kingIsWhite && piece_right.name.equals("Pawn") && !(piece_right.col == col && piece_right.row == row);
     }
 
     public int getTileNum(int col, int row) {
@@ -549,41 +641,41 @@ public class Board extends JPanel {
     }
 
     public void addPiece() {
-        pieceList.add(new Knight(this, 1, 0, false));
-        pieceList.add(new Bishop(this, 2, 0, false));
-        pieceList.add(new Rook(this, 0, 0, false));
-        pieceList.add(new Bishop(this, 5, 0, false));
-        pieceList.add(new Knight(this, 6, 0, false));
-        pieceList.add(new Rook(this, 7, 0, false));
-        pieceList.add(new King(this, 4, 0, false));
-        pieceList.add(new Queen(this, 3, 0, false));
+        pieceList.add(new Rook(0, 0, false));
+        pieceList.add(new Knight(1, 0, false));
+        pieceList.add(new Bishop(2, 0, false));
+        pieceList.add(new Queen(3, 0, false));
+        pieceList.add(new King(4, 0, false));
+        pieceList.add(new Bishop(5, 0, false));
+        pieceList.add(new Knight(6, 0, false));
+        pieceList.add(new Rook(7, 0, false));
+        
+        pieceList.add(new Pawn(0, 1, false));
+        pieceList.add(new Pawn(1, 1, false));
+        pieceList.add(new Pawn(2, 1, false));
+        pieceList.add(new Pawn(3, 1, false));
+        pieceList.add(new Pawn(4, 1, false));
+        pieceList.add(new Pawn(5, 1, false));
+        pieceList.add(new Pawn(6, 1, false));
+        pieceList.add(new Pawn(7, 1, false));
 
-        pieceList.add(new Pawn(this, 0, 1, false));
-        pieceList.add(new Pawn(this, 1, 1, false));
-        pieceList.add(new Pawn(this, 2, 1, false));
-        pieceList.add(new Pawn(this, 3, 1, false));
-        pieceList.add(new Pawn(this, 4, 1, false));
-        pieceList.add(new Pawn(this, 5, 1, false));
-        pieceList.add(new Pawn(this, 6, 1, false));
-        pieceList.add(new Pawn(this, 7, 1, false));
-
-        pieceList.add(new Bishop(this, 2, 7, true));
-        pieceList.add(new Knight(this, 1, 7, true));
-        pieceList.add(new Rook(this, 0, 7, true));
-        pieceList.add(new Bishop(this, 5, 7, true));
-        pieceList.add(new Knight(this, 6, 7, true));
-        pieceList.add(new Rook(this, 7, 7, true));
-        pieceList.add(new King(this, 4, 7, true));
-        pieceList.add(new Queen(this, 3, 7, true));
-
-        pieceList.add(new Pawn(this, 0, 6, true));
-        pieceList.add(new Pawn(this, 1, 6, true));
-        pieceList.add(new Pawn(this, 2, 6, true));
-        pieceList.add(new Pawn(this, 3, 6, true));
-        pieceList.add(new Pawn(this, 4, 6, true));
-        pieceList.add(new Pawn(this, 5, 6, true));
-        pieceList.add(new Pawn(this, 6, 6, true));
-        pieceList.add(new Pawn(this, 7, 6, true));
+        pieceList.add(new Rook(0, 7, true));
+        pieceList.add(new Knight(1, 7, true));
+        pieceList.add(new Bishop(2, 7, true));
+        pieceList.add(new Queen(3, 7, true));
+        pieceList.add(new King(4, 7, true));
+        pieceList.add(new Bishop(5, 7, true));
+        pieceList.add(new Knight(6, 7, true));
+        pieceList.add(new Rook(7, 7, true));
+        
+        pieceList.add(new Pawn(0, 6, true));
+        pieceList.add(new Pawn(1, 6, true));
+        pieceList.add(new Pawn(2, 6, true));
+        pieceList.add(new Pawn(3, 6, true));
+        pieceList.add(new Pawn(4, 6, true));
+        pieceList.add(new Pawn(5, 6, true));
+        pieceList.add(new Pawn(6, 6, true));
+        pieceList.add(new Pawn(7, 6, true));
     }
 
     public void handleFen(String fen) {
@@ -597,40 +689,40 @@ public class Board extends JPanel {
                 } else {
                     switch (ch) {
                         case 'r':
-                            pieceList.add(new Rook(this, col, row, false));
+                            pieceList.add(new Rook(col, row, false));
                             break;
                         case 'p':
-                            pieceList.add(new Pawn(this, col, row, false));
+                            pieceList.add(new Pawn(col, row, false));
                             break;
                         case 'n':
-                            pieceList.add(new Knight(this, col, row, false));
+                            pieceList.add(new Knight(col, row, false));
                             break;
                         case 'b':
-                            pieceList.add(new Bishop(this, col, row, false));
+                            pieceList.add(new Bishop(col, row, false));
                             break;
                         case 'q':
-                            pieceList.add(new Queen(this, col, row, false));
+                            pieceList.add(new Queen(col, row, false));
                             break;
                         case 'k':
-                            pieceList.add(new King(this, col, row, false));
+                            pieceList.add(new King(col, row, false));
                             break;
                         case 'R':
-                            pieceList.add(new Rook(this, col, row, true));
+                            pieceList.add(new Rook(col, row, true));
                             break;
                         case 'P':
-                            pieceList.add(new Pawn(this, col, row, true));
+                            pieceList.add(new Pawn(col, row, true));
                             break;
                         case 'N':
-                            pieceList.add(new Knight(this, col, row, true));
+                            pieceList.add(new Knight(col, row, true));
                             break;
                         case 'B':
-                            pieceList.add(new Bishop(this, col, row, true));
+                            pieceList.add(new Bishop(col, row, true));
                             break;
                         case 'Q':
-                            pieceList.add(new Queen(this, col, row, true));
+                            pieceList.add(new Queen(col, row, true));
                             break;
                         case 'K':
-                            pieceList.add(new King(this, col, row, true));
+                            pieceList.add(new King(col, row, true));
                             break;
                     }
                 }

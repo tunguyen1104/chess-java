@@ -110,7 +110,7 @@ public class GameOptions extends JPanel {
         title_bar_label = new JLabel("Game Options");
         title_bar_label.setBounds(700, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
+        title_bar_label.setFont(new Font("",Font.BOLD,20));
         this.add(title_bar_label);
         // ----------------------
         // setting back_normal, home_normal
