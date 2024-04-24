@@ -1,8 +1,11 @@
 package view;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.IOException;
+import java.io.File;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
@@ -19,6 +22,14 @@ public class TimeLabel extends JLabel {
         minutes_string = String.format("%02d", minutes);
         this.setText(minutes_string + ":" + seconds_string);
         this.setBounds(x, y, 500, 200);
+        try {
+            this.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 40));
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Timer timer = new Timer(1000, new ActionListener() {

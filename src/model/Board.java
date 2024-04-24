@@ -38,6 +38,7 @@ public class Board extends JPanel {
     private int new_row = -1;
     private int col_in_place = -1;
     private int row_in_place = -1;
+    private int castLing = -1;
     private ArrayList<String> dataJDBC = JDBCConnection.takeDataSetting();
     private ArrayList<String> dataPuzzle = JDBCConnection.takeDataPuzzle();
     // dataJDBC =
@@ -350,7 +351,7 @@ public class Board extends JPanel {
                 rotateList.add(new Knight(7 - piece.col, 7 - piece.row, piece.isWhite));
             }
         }
-        enPassantTile = 63 - enPassantTile;
+        if(enPassantTile != -1) enPassantTile = 63 - enPassantTile;
         pieceList.clear();
         pieceList.addAll(rotateList);
         if (old_col != -1) {
@@ -379,6 +380,7 @@ public class Board extends JPanel {
     }
 
     public void makeMove(Move move) {
+        castLing = -1;
         if (move.piece.name.equals("Pawn")) {
             movePawn(move);
         } else {
@@ -402,10 +404,12 @@ public class Board extends JPanel {
         if(Math.abs(move.piece.col - move.getNewCol()) == 2) {
             Piece rook;
             if(move.piece.col < move.getNewCol()) {
+                castLing = 1;
                 rook = getPiece(7, move.piece.row);
                 rook.col = 5;
                 
             } else {
+                castLing = 2;
                 rook = getPiece(0, move.piece.row);
                 rook.col = 3;
             }
@@ -444,7 +448,7 @@ public class Board extends JPanel {
         else
             colorIndex = move.piece.isWhite ? 7 : 0;
 
-        if (move.getNewRow() == colorIndex && findKing(true) != null && findKing(false) != null) {
+        if (move.getNewRow() == colorIndex) {
             promotePawn(move);
             if (FEN.equals(""))
                 input.change_check_promotion(true);
@@ -488,8 +492,30 @@ public class Board extends JPanel {
         sound.playMusic(5);
         delete_piece(move.piece);
     }
-
-    public String step(String step, Move move) {
+    public String step_begin(Move move) {
+        String step = "";
+        Piece check = getPiece(move.getOldCol(), move.getOldRow());
+        if (check.name.equals("Pawn")) {
+            if (!rotating)
+                step += column.charAt(move.getOldCol());
+            else
+                step += column_rotate.charAt(move.getOldCol());
+        } else if (check.name.equals("Knight")) {
+            step += 'N';
+        } else {
+            step += check.name.charAt(0);
+        }
+        return step;
+    }
+    public String step_end(String step, Move move) {
+        if(castLing != -1) {
+            if(castLing == 1) {
+                step = "O-O";
+            } else if(castLing == 2) {
+                step = "O-O-O";
+            }
+            return step;
+        }
         if (input.check_delete) {
             step += 'x';
         } else {
@@ -541,9 +567,9 @@ public class Board extends JPanel {
     public boolean checkMateEndGame(boolean color) {
         for(Piece piece: pieceList) {
             if(piece.isWhite == color) {
-                for (int i = 0; i < rows; ++i) {
-                    for (int j = 0; j < cols; ++j) {
-                        if (isValidMove(new Move(this, piece, i, j))) {
+                for (int r = 0; r < rows; ++r) {
+                    for (int c = 0; c < cols; ++c) {
+                        if (isValidMove(new Move(this, piece, c, r))) {
                             return false;
                         }
                     }
@@ -596,7 +622,7 @@ public class Board extends JPanel {
         int kingCol = king.col;
         int kingRow = king.row;
         
-        if(selectedPiece != null && selectedPiece.name.equals("King")) {
+        if((selectedPiece != null && selectedPiece.name.equals("King") ) || move.piece.name.equals("King")) {
             kingCol = move.getNewCol();
             kingRow = move.getNewRow();
         }
@@ -935,15 +961,15 @@ public class Board extends JPanel {
             g2d.fillRect(col_in_place * tileSize, row_in_place * tileSize, tileSize, tileSize);
         }
         if(colKingCheckMate != -1) {
-            g2d.setColor(new Color(214,114,114));
+            g2d.setColor(new Color(214,114,114,190));
             g2d.fillRect(colKingCheckMate * tileSize, rowKingCheckMate * tileSize, tileSize, tileSize);
         }
         if (selectedPiece != null) {
-            for (int i = 0; i < rows; ++i) {
-                for (int j = 0; j < cols; ++j) {
-                    if (isValidMove(new Move(this, selectedPiece, i, j))) {
+            for (int r = 0; r < rows; ++r) {
+                for (int c = 0; c < cols; ++c) {
+                    if (isValidMove(new Move(this, selectedPiece, c, r))) {
                         g2d.setColor(new Color(90, 171, 93, 190));
-                        g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
+                        g2d.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
                     }
                 }
             }

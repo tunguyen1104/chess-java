@@ -84,16 +84,6 @@ public class GamePVP extends JPanel {
         white_name.setBounds(1000, 590, 490, 120);
         white_name.setForeground(Color.WHITE);
         white_name.setFont(white_name.getFont().deriveFont(20.0f));
-        try {
-            timeLabelWhite.setFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 40));
-            timeLabelBlack.setFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 40));
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // ===========Title Bar============
         title_bar_label = new JLabel("Standard - PvP");
         title_bar_label.setBounds(700, 0, 400, 60);
@@ -130,7 +120,7 @@ public class GamePVP extends JPanel {
         textArea.setEditable(false);
         try {
             textArea.setFont(Font.createFont(Font.TRUETYPE_FONT,
-                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 16));
+                    new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 15));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (FontFormatException e) {
@@ -177,6 +167,7 @@ public class GamePVP extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if ("00:00".equals(timeLabelBlack.getText())) {
+                System.out.println(textArea.getText());
                 sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
@@ -184,6 +175,7 @@ public class GamePVP extends JPanel {
                 noti_end_game("White", "Time out");
             }
             if ("00:00".equals(timeLabelWhite.getText())) {
+                System.out.println(textArea.getText());
                 sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();

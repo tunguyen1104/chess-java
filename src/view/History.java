@@ -58,7 +58,7 @@ public class History extends JPanel {
         });
         this.add(back_normal_button);
         this.add(home_normal_button);
-        test = new ButtonImage(history_normal, history_selected, 509, 72, "Mon Apr 22 15:06:30 2024    PvP   3 min   Black win");
+        test = new ButtonImage(history_normal, history_selected, 509, 72, "Mon Apr 22 15:06:30 2024   PvP   3 min   CheckMate   Black win");
         test.setBounds(500, 80, 509, 72);
         this.add(test);
         test.addMouseListener(new MouseAdapter() {

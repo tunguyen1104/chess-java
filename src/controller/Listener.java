@@ -17,7 +17,7 @@ public class Listener extends MouseAdapter {
     public boolean isEnd = false;// end because King die
     public boolean check_delete = false;
     public boolean check_promotion = true;
-
+    private boolean checkMateEndGame;
     public Listener(Board board, GamePVP game, Sound sound) {
         this.board = board;
         this.game = game;
@@ -83,21 +83,12 @@ public class Listener extends MouseAdapter {
         if (board.selectedPiece != null) {
             Move move = new Move(board, board.selectedPiece, col, row);
             if (board.isValidMove(move)) {
-                String step = "";
-                Piece check = board.getPiece(move.getOldCol(), move.getOldRow());
-                if (check.name.equals("Pawn")) {
-                    if (!board.rotating)
-                        step += board.column.charAt(move.getOldCol());
-                    else
-                        step += board.column_rotate.charAt(move.getOldCol());
-                } else if (check.name.equals("Knight")) {
-                    step += 'N';
-                } else {
-                    step += check.name.charAt(0);
-                }
+                String step = board.step_begin(move);
                 this.check_delete = false;
                 this.check_promotion = false;
+
                 board.makeMove(move);
+
                 if (isTurn == true) {
                     game.timeLabelBlack.start();
                     game.timeLabelWhite.stop();
@@ -113,21 +104,26 @@ public class Listener extends MouseAdapter {
                     sound.playMusic(2);
                 String s = game.textArea.getText();
                 String plus = checkMate ? "+" : "";
+                board.selectedPiece = null;
+                board.repaint();
+                checkMateEndGame = board.checkMateEndGame(isTurn);
+                if(checkMateEndGame) plus = "#";
                 if (isTurn)
-                    s += board.step(step, move) + plus + "\n";
+                    s += board.step_end(step, move) + plus + "\n";
                 else {
-                    s += String.format("%3s %8s %6s", count_step + ".", board.step(step, move) + plus, " ");
+                    s += String.format("%3s %8s %6s", count_step + ".", board.step_end(step, move) + plus, " ");
                     ++count_step;
                 }
                 game.textArea.setText(s);
             } else {
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize;
                 board.selectedPiece.yPos = board.selectedPiece.row * board.tileSize;
+                
             }
         }
         board.selectedPiece = null;
         board.repaint();
-        if (board.checkMateEndGame(isTurn)) {
+        if (checkMateEndGame) {
             if(isTurn) {
                 isEnd = true;
                 sound.playMusic(1);
@@ -141,6 +137,7 @@ public class Listener extends MouseAdapter {
                 game.timeLabelBlack.stop();
                 game.noti_end_game("White", "Checkmate");
             }
+            System.out.println(game.textArea.getText());
         }
     }
 
