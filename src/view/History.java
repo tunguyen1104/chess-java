@@ -8,7 +8,7 @@ import model.ReadImage;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
@@ -16,8 +16,8 @@ public class History extends JPanel {
     private JLabel title_bar_label;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private BufferedImage history_normal;
-    private BufferedImage history_selected;
+    private Image history_normal;
+    private Image history_selected;
     private ButtonImage test;
 
     public History() {

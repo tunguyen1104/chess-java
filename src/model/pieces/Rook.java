@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 public class Rook extends Piece {
 
     public Rook(int col, int row, boolean isWhite) {
+        super();
         this.col = col;
         this.row = row;
         this.xPos = col * 80;

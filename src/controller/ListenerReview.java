@@ -18,7 +18,9 @@ public class ListenerReview extends MouseAdapter{
     public void mouseClicked(MouseEvent e) {
         super.mouseClicked(e);
         if(e.getSource().equals(review.getRotate())) {
-
+            review.board_index = (board.rotating) ? null : review.board_index_black;
+            board.rotateBoard();
+            review.repaint();
         } else if(e.getSource().equals(review.getFirst_normal_button())) {
 
         } else if(e.getSource().equals(review.getNext_normal_button())) {

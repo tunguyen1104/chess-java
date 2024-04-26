@@ -8,7 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class About extends JPanel {
     private JLabel title_bar_label;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private BufferedImage panel_about;
+    private Image panel_about;
     private JTextArea about_game;
 
     public About() {

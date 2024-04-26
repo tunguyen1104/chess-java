@@ -1,6 +1,7 @@
 package view;
 
-import model.Board;
+import controller.MoveController;
+import controller.SelectPromotion;
 import model.ReadImage;
 import model.Sound;
 
@@ -14,7 +15,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
-public class GamePVP extends JPanel {
+public class GamePVC extends JPanel {
     private Image game_gui;
     private Image rotate_normal;
     private Image rotate_selected;
@@ -41,17 +42,15 @@ public class GamePVP extends JPanel {
     }
 
     Sound sound = new Sound();
-    // time
     public TimeLabel timeLabelWhite;
     public TimeLabel timeLabelBlack;
     ButtonImage back_normal_button;
     ButtonImage home_normal_button;
     public JTextArea textArea;
     public JScrollPane scrollPaneTextArea;
-    private Board board = new Board(this);
-
-    public GamePVP(int minute) {
-        // Load image
+    private ViewBoard board;
+    public GamePVC(int minute) {
+        this.setLayout(null);
         try {
             board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
             board_index_black = ImageIO.read(new File("resources/gui/board_index_black.png"));
@@ -61,30 +60,40 @@ public class GamePVP extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.setBackground(new Color(41, 41, 41));
-        this.setPreferredSize(new Dimension(1536, 864));
-        this.setLayout(null);
-        timeLabelWhite = new TimeLabel(minute, 1050, 490);
-        timeLabelBlack = new TimeLabel(minute, 1050, 160);
-        initPanel();
-        board.setBounds(280, 100, 8 * board.tileSize, 8 * board.tileSize);
+        initPanel(minute);
+        DialogPromotion dialog_promo=new DialogPromotion(this,"ok sir",true);
+        ThreadDialog thread_dialog_promo=new ThreadDialog(dialog_promo);
+        board = new ViewBoard();
+        board.setMy_dialog(thread_dialog_promo);
+        board.setBounds(280, 100, 8 * 80, 8 * 80);
+        MoveController m_ctrl=new MoveController(board,board.getP(),dialog_promo);
+        board.addMouseListener(m_ctrl);
+        board.addMouseMotionListener(m_ctrl);
+
+        SelectPromotion choosing = new SelectPromotion(dialog_promo,board);
+        dialog_promo.addMouseListener(choosing);
+        dialog_promo.addMouseMotionListener(choosing);
         this.add(board);
-        timeLabelWhite.start();
-        timer.start();
+        //timeLabelWhite.start();
+        //timer.start();
     }
 
-    public void initPanel() {
+    public void initPanel(int minute) {
+        this.setBackground(new Color(41, 41, 41));
+        this.setPreferredSize(new Dimension(1536, 864));
+        timeLabelWhite = new TimeLabel(minute, 1050, 490);
+        timeLabelBlack = new TimeLabel(minute, 1050, 160);
         // setting name
-        black_name = new JLabel("Player2 (Black)");
+        black_name = new JLabel("Computer (Black)");
         black_name.setBounds(1000, 140, 490, 120);
         black_name.setForeground(Color.WHITE);
         black_name.setFont(black_name.getFont().deriveFont(20.0f));
-        white_name = new JLabel("Player1 (White)");
+        white_name = new JLabel("Player (White)");
         white_name.setBounds(1000, 590, 490, 120);
         white_name.setForeground(Color.WHITE);
         white_name.setFont(white_name.getFont().deriveFont(20.0f));
         // ===========Title Bar============
-        title_bar_label = new JLabel("Standard - PvP");
+        title_bar_label = new JLabel("Standard - PvC");
         title_bar_label.setBounds(700, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(new Font("",Font.BOLD,18));
@@ -145,9 +154,7 @@ public class GamePVP extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                board_index = (board.rotating) ? null : board_index_black;
-                board.rotateBoard();
-                repaint();
+
             }
         });
         this.add(rotate);

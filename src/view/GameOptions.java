@@ -6,15 +6,15 @@ import model.ReadImage;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
 public class GameOptions extends JPanel {
     private JLabel title_bar_label;
-    private BufferedImage game_options_panel;
-    private BufferedImage chess_standard;
+    private Image game_options_panel;
+    private Image chess_standard;
     private JButton go;
     private JLabel game_mode;
     private JLabel time;
@@ -22,38 +22,38 @@ public class GameOptions extends JPanel {
     private JLabel side;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private BufferedImage forward_normal_game;
-    private BufferedImage forward_normal_game_v2;
-    private BufferedImage forward_selected_game;
-    private BufferedImage forward_selected_game_v2;
-    private BufferedImage option_box_game;
-    private BufferedImage option_box_time;
-    private BufferedImage option_box_side;
-    private BufferedImage option_box_lever;
+    private Image forward_normal_game;
+    private Image forward_normal_game_v2;
+    private Image forward_selected_game;
+    private Image forward_selected_game_v2;
+    private Image option_box_game;
+    private Image option_box_time;
+    private Image option_box_side;
+    private Image option_box_lever;
     private ButtonImage forward_left_game;
     private ButtonImage forward_right_game;
     private JLabel option_box_game_label;
     private int index_game = 0;
-    private BufferedImage forward_normal_time;
-    private BufferedImage forward_normal_time_v2;
-    private BufferedImage forward_selected_time;
-    private BufferedImage forward_selected_time_v2;
+    private Image forward_normal_time;
+    private Image forward_normal_time_v2;
+    private Image forward_selected_time;
+    private Image forward_selected_time_v2;
     private ButtonImage forward_left_time;
     private ButtonImage forward_right_time;
     private JLabel option_box_time_label;
     private int index_time = 0;
-    private BufferedImage forward_normal_side;
-    private BufferedImage forward_normal_side_v2;
-    private BufferedImage forward_selected_side;
-    private BufferedImage forward_selected_side_v2;
+    private Image forward_normal_side;
+    private Image forward_normal_side_v2;
+    private Image forward_selected_side;
+    private Image forward_selected_side_v2;
     private ButtonImage forward_left_side;
     private ButtonImage forward_right_side;
     private JLabel option_box_side_label;
     private int index_side = 0;
-    private BufferedImage forward_normal_lever;
-    private BufferedImage forward_normal_lever_v2;
-    private BufferedImage forward_selected_lever;
-    private BufferedImage forward_selected_lever_v2;
+    private Image forward_normal_lever;
+    private Image forward_normal_lever_v2;
+    private Image forward_selected_lever;
+    private Image forward_selected_lever_v2;
     private ButtonImage forward_left_lever;
     private ButtonImage forward_right_lever;
     private JLabel option_box_lever_label;
@@ -144,24 +144,25 @@ public class GameOptions extends JPanel {
         go.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int minute = 1;
+                switch (index_time) {
+                    case 0:
+                        minute = 1;
+                        break;
+                    case 1:
+                        minute = 3;
+                        break;
+                    case 2:
+                        minute = 10;
+                        break;
+                    case 3:
+                        minute = 30;
+                        break;
+                }
                 if (option_box_game_label.getText().equals("PvC")) {
-                    // new Game PvC (time,side,lever)
+                    Menu.panelCardLayout.add(new GamePVC(minute), "gamePvC");
+                    Menu.cardLayout.show(Menu.panelCardLayout, "gamePvC");
                 } else {
-                    int minute = 1;
-                    switch (index_time) {
-                        case 0:
-                            minute = 1;
-                            break;
-                        case 1:
-                            minute = 3;
-                            break;
-                        case 2:
-                            minute = 10;
-                            break;
-                        case 3:
-                            minute = 30;
-                            break;
-                    }
                     Menu.panelCardLayout.add(new GamePVP(minute), "gamePvP");
                     Menu.cardLayout.show(Menu.panelCardLayout, "gamePvP");
                 }

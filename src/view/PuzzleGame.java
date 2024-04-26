@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -20,11 +20,11 @@ public class PuzzleGame extends JPanel {
     private JLabel title_bar_label;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private BufferedImage board_index;
-    private BufferedImage panel_320_292;
+    private Image board_index;
+    private Image panel_320_292;
     private Board board;
-    private BufferedImage normal;
-    private BufferedImage selected;
+    private Image normal;
+    private Image selected;
     private ButtonImage hint;
     private ButtonImage undo;
     private ButtonImage try_again;
@@ -35,8 +35,8 @@ public class PuzzleGame extends JPanel {
     private JLabel color_to_move;
     private JLabel correct;
     private JLabel failed;
-    public BufferedImage circle_check;
-    public BufferedImage circle_xmark;
+    public Image circle_check;
+    public Image circle_xmark;
 
     public PuzzleGame(String FEN, int lever) {
         this.FEN = FEN;

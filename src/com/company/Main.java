@@ -1,6 +1,6 @@
 package com.company;
 
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import model.JDBCConnection;
@@ -9,8 +9,8 @@ public class Main {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        } catch (Exception ex) {
-            System.err.println("Failed to initialize LaF");
+        } catch (UnsupportedLookAndFeelException e) {
+            throw new RuntimeException(e);
         }
         boolean ok = false;
         try {

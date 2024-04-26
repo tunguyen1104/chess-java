@@ -4,27 +4,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
 public class ButtonImage extends JLabel{
-    public BufferedImage normal1;
-    public BufferedImage selected1;
-    private BufferedImage image;
+    public Image normal1;
+    public Image selected1;
+    private Image image;
     private int width;
     private int height;
     private JLabel title;
-    public void setSelected(BufferedImage selected1) {
+    public void setSelected(Image selected1) {
         this.selected1 = selected1;
     }
-    public void setNormal(BufferedImage normal1) {
+    public void setNormal(Image normal1) {
         this.normal1 = normal1;
     }
-    public void setImage(BufferedImage image) {
+    public void setImage(Image image) {
         this.image = image;
     }
-    public ButtonImage(final BufferedImage normal, final BufferedImage selected, int width, int height, String name) {
+    public ButtonImage(final Image normal, final Image selected, int width, int height, String name) {
         this.width = width;
         this.height = height;
         this.normal1 = normal;

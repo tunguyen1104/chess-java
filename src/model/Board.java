@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class Board extends JPanel {
     public int enPassantTile = -1;
     public int promotion = -1;
     Sound sound;
-    private BufferedImage board_image;
+    private Image board_image;
     // paint old new piece
     private int old_col = -1;
     private int old_row = -1;
@@ -41,7 +41,6 @@ public class Board extends JPanel {
     private int castLing = -1;
     private ArrayList<String> dataJDBC = JDBCConnection.takeDataSetting();
     private ArrayList<String> dataPuzzle = JDBCConnection.takeDataPuzzle();
-    // dataJDBC =
     Timer timer;
     public boolean color_to_move;
     private PuzzleGame puzzleGame;
@@ -364,6 +363,10 @@ public class Board extends JPanel {
             col_in_place = 7 - col_in_place;
             row_in_place = 7 - row_in_place;
         }
+        if (colKingCheckMate != -1) {
+            colKingCheckMate = 7 - colKingCheckMate;
+            rowKingCheckMate = 7 - rowKingCheckMate;
+        }
         if (rotating) {
             game.getWhite_name().setBounds(1000, 140, 490, 120);
             game.getBlack_name().setBounds(1000, 590, 490, 120);
@@ -384,6 +387,7 @@ public class Board extends JPanel {
         if (move.piece.name.equals("Pawn")) {
             movePawn(move);
         } else {
+            enPassantTile = -1;
             if (move.piece.name.equals("King")) {
                 moveKing(move);
             }
@@ -392,6 +396,7 @@ public class Board extends JPanel {
             move.piece.xPos = move.getNewCol() * tileSize;
             move.piece.yPos = move.getNewRow() * tileSize;
             move.piece.isFirstMove = false;
+
             if (move.capture != null) {
                 sound.playMusic(3);
                 delete_piece(move.capture);
@@ -618,7 +623,6 @@ public class Board extends JPanel {
     public boolean isKingChecked(Move move) {
         Piece king = findKing(move.piece.isWhite);
         assert king != null;
-
         int kingCol = king.col;
         int kingRow = king.row;
         

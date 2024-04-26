@@ -1,18 +1,18 @@
 package model;
 
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 public class ReadImage {
-    public static BufferedImage loading;
-    public static BufferedImage title_bar;
-    public static BufferedImage back_normal;
-    public static BufferedImage home_normal;
-    public static BufferedImage back_selected;
-    public static BufferedImage home_selected;
+    public static Image loading;
+    public static Image title_bar;
+    public static Image back_normal;
+    public static Image home_normal;
+    public static Image back_selected;
+    public static Image home_selected;
 
     public ReadImage() {
         try {

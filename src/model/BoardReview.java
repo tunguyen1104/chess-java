@@ -2,26 +2,34 @@ package model;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import java.util.List;
+import java.util.Map;
+
 import model.pieces.*;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import controller.ListenerReview;
 import view.Review;
-
 public class BoardReview extends JPanel{
     private ArrayList data_link;
     private Sound sound;
-    private BufferedImage board_image;
+    private Image board_image;
     private Review review;
     private ListenerReview listenerReview;
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
+    List<String> move = new ArrayList<>();
+    Map<Character, Integer> columnMap = new HashMap<>();
+    public boolean rotating = false;
+    public int index = 0;
     public BoardReview(Review review) {
         this.review = review;
         listenerReview = new ListenerReview(review, this);
@@ -36,7 +44,63 @@ public class BoardReview extends JPanel{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        for (char column = 'a'; column <= 'h'; ++column) {
+            columnMap.put(column, column - 'a');
+        }
         addPiece();
+        handlePgn();
+    }
+    public void handlePgn() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("resources/saved_data/2024-4-22_15-6-30.pgn"));
+            String line;
+            int cnt = 0;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                ++cnt;
+                if(cnt == 5) break;
+            }
+            System.out.println("--------------------------");
+            while ((line = reader.readLine()) != null) {
+                String move1 = line.substring(4, 12).trim();
+                String move2 = line.substring(13).trim();
+                move.add(move1);move.add(move2);
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+    public void handle_first_button() {
+        if(index == 0) return;
+        index = 0;
+        pieceList.clear();
+        addPiece();
+        repaint();
+    }
+    public void handle_last_button() {
+        if(index == move.size() - 1) return;
+        index = move.size() - 1;
+    }
+    public void handle_next_button() {
+        if(index == move.size() - 1) return;
+        ++index;
+    }
+    public void handle_previous_button() {
+        if(index == 0) return;
+        --index;
+    }
+    public void handlev1(String x) {
+        int length = x.length();
+        if(length == 2) {
+            int col = columnMap.get(x.charAt(0));
+            int row = x.charAt(1) - '0';
+        } else if(length == 3) {
+
+        }
+    }
+    public void rotateBoard() {
+        rotating = !rotating;
     }
     public void addPiece() {
         pieceList.add(new Rook(0, 0, false));

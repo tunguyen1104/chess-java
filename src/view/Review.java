@@ -26,8 +26,8 @@ public class Review extends JPanel {
     private BufferedImage game_gui;
     private BufferedImage rotate_normal;
     private BufferedImage rotate_selected;
-    private BufferedImage board_index_black;
-    private BufferedImage board_index;
+    public BufferedImage board_index_black;
+    public BufferedImage board_index;
     private BufferedImage first_normal;
     private BufferedImage first_selected;
     private BufferedImage last_normal;

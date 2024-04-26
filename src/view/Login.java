@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,10 +21,10 @@ public class Login extends JFrame implements ActionListener {
     public static JPasswordField _password;
     private JButton login_button;
     private JButton switch_to_signup;
-    private BufferedImage icon_game;
-    private BufferedImage originalImage;
-    public static BufferedImage eye;
-    public static BufferedImage eye_hide;
+    private Image icon_game;
+    private Image originalImage;
+    public static Image eye;
+    public static Image eye_hide;
     private Boolean hide = true;
     private JLabel eye_label;
     public static CardLayout cardLayout = new CardLayout();

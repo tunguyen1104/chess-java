@@ -165,7 +165,7 @@ public class JDBCConnection {
                 preparedStatement = conn.prepareStatement(
                         "SELECT USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND, PUZZLE_FAILED, PUZZLE_SOLVED FROM CURRENTUSER");
                 rs = preparedStatement.executeQuery();
-                while (rs.next()) {
+                if (rs.next()) {
                     _username = rs.getString("USERNAME");
                     _password = rs.getString("PASSWORD");
                     _email = rs.getString("EMAIL");
@@ -319,8 +319,16 @@ public class JDBCConnection {
                     String puzzle_failed = rs.getString("puzzle_failed");
                     String puzzle_solved = rs.getString("puzzle_solved");
                     arr = new ArrayList<String>();
-                    arr.add(puzzle_failed);
-                    arr.add(puzzle_solved);
+                    if (puzzle_failed != null) {
+                        arr.add(puzzle_failed);
+                    } else {
+                        arr.add("");
+                    }
+                    if (puzzle_solved != null) {
+                        arr.add(puzzle_solved);
+                    } else {
+                        arr.add("");
+                    }
                 }
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());

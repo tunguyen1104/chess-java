@@ -105,7 +105,6 @@ public class Listener extends MouseAdapter {
                 String s = game.textArea.getText();
                 String plus = checkMate ? "+" : "";
                 board.selectedPiece = null;
-                board.repaint();
                 checkMateEndGame = board.checkMateEndGame(isTurn);
                 if(checkMateEndGame) plus = "#";
                 if (isTurn)
@@ -117,8 +116,7 @@ public class Listener extends MouseAdapter {
                 game.textArea.setText(s);
             } else {
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize;
-                board.selectedPiece.yPos = board.selectedPiece.row * board.tileSize;
-                
+                board.selectedPiece.yPos = board.selectedPiece.row * board.tileSize;   
             }
         }
         board.selectedPiece = null;
@@ -137,7 +135,6 @@ public class Listener extends MouseAdapter {
                 game.timeLabelBlack.stop();
                 game.noti_end_game("White", "Checkmate");
             }
-            System.out.println(game.textArea.getText());
         }
     }
 
