@@ -17,7 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import model.JDBCConnection;
 import model.ReadImage;
+import model.Sound;
 
 public class About extends JPanel {
     private JLabel title_bar_label;
@@ -25,8 +27,13 @@ public class About extends JPanel {
     private ButtonImage home_normal_button;
     private Image panel_about;
     private JTextArea about_game;
-
+    public static Sound sound;
     public About() {
+        if (JDBCConnection.takeDataSetting().get(2).equals("1")) {
+            sound = new Sound();
+            sound.playBackGround();
+        } else
+            sound = new Sound(1);
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         try {
@@ -76,7 +83,6 @@ public class About extends JPanel {
         about_game.setEditable(false);
         this.add(about_game);
     }
-
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;

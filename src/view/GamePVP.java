@@ -1,6 +1,7 @@
 package view;
 
 import model.Board;
+import model.JDBCConnection;
 import model.ReadImage;
 import model.Sound;
 
@@ -10,7 +11,6 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 import java.awt.event.*;
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,7 +40,7 @@ public class GamePVP extends JPanel {
         return timeLabelBlack;
     }
 
-    Sound sound = new Sound();
+    Sound sound;
     // time
     public TimeLabel timeLabelWhite;
     public TimeLabel timeLabelBlack;
@@ -51,6 +51,10 @@ public class GamePVP extends JPanel {
     private Board board = new Board(this);
 
     public GamePVP(int minute) {
+        if (JDBCConnection.takeDataSetting().get(2).equals("1"))
+            sound = new Sound();
+        else
+            sound = new Sound(1);
         // Load image
         try {
             board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));

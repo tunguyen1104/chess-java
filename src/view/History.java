@@ -4,13 +4,17 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import model.ReadImage;
+import view.Review;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Image;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Stack;
 
 public class History extends JPanel {
     private JLabel title_bar_label;
@@ -18,8 +22,21 @@ public class History extends JPanel {
     private ButtonImage home_normal_button;
     private Image history_normal;
     private Image history_selected;
-    private ButtonImage test;
-
+    private ArrayList<ButtonImage> listHistory = new ArrayList<>();
+    private ArrayList<JPanel> panel_page = new ArrayList<>();
+    String format = "%-18s %-18s %-24s %-9s";
+    private int index = 0;
+    private int index_page = 0;
+    private int max_index_page = 0;
+    private JLabel page;
+    private ButtonImage forward_left;
+    private ButtonImage forward_right;
+    private Image forward_normal_game;
+    private Image forward_normal_game_v2;
+    private Image forward_selected_game;
+    private Image forward_selected_game_v2;
+    private int index_panel_page = 0;
+    String path = "saved_data/";
     public History() {
         initPanel();
     }
@@ -28,6 +45,10 @@ public class History extends JPanel {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         try {
+            forward_normal_game = ImageIO.read(new File("resources/buttons/forward_normal.png"));
+            forward_normal_game_v2 = ImageIO.read(new File("resources/buttons/forward_normalv2.png"));
+            forward_selected_game = ImageIO.read(new File("resources/buttons/forward_selected.png"));
+            forward_selected_game_v2 = ImageIO.read(new File("resources/buttons/forward_selectedv2.png"));
             history_normal = ImageIO.read(new File("resources/buttons/history_normal.png"));
             history_selected = ImageIO.read(new File("resources/buttons/history_selected.png"));
         } catch (IOException e) {
@@ -58,19 +79,152 @@ public class History extends JPanel {
         });
         this.add(back_normal_button);
         this.add(home_normal_button);
-        test = new ButtonImage(history_normal, history_selected, 509, 72, "Mon Apr 22 15:06:30 2024   PvP   3 min   CheckMate   Black win");
-        test.setBounds(500, 80, 509, 72);
-        this.add(test);
-        test.addMouseListener(new MouseAdapter() {
+        handlePgn();
+        addButtonHistory();
+        // test.addMouseListener(new MouseAdapter() {
+        //     @Override
+        //     public void mouseClicked(MouseEvent e) {
+        //         super.mouseClicked(e);
+        //         Menu.panelCardLayout.add(new Review(),"review");
+        //         Menu.cardLayout.show(Menu.panelCardLayout,"review");
+        //     }
+        // });
+
+
+        forward_left = new ButtonImage(forward_normal_game, forward_selected_game, 32, 32, "");
+        forward_left.setBounds(702, 740, 32, 32);
+        forward_right = new ButtonImage(forward_normal_game_v2, forward_selected_game_v2, 32, 32, "");
+        forward_right.setBounds(790, 740, 32, 32);
+        forward_left.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                Menu.panelCardLayout.add(new Review(),"review");
-                Menu.cardLayout.show(Menu.panelCardLayout,"review");
+                if (index_page > 0) {
+                    --index_page;
+                } else if (index_page == 0) {
+                    return;
+                }
+                panel_page.get(index_page).setVisible(true);
+                for(int i = 0;i < max_index_page; ++i) {
+                    if(i != index_page) panel_page.get(i).setVisible(false);
+                }
+                page.setText(index_page + 1 + "/" + max_index_page);
             }
         });
+        forward_right.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (index_page < max_index_page - 1) {
+                    ++index_page;
+                } else if (index_page == max_index_page - 1) {
+                    return;
+                }
+                panel_page.get(index_page).setVisible(true);
+                for(int i = 0;i < max_index_page; ++i) {
+                    if(i != index_page) panel_page.get(i).setVisible(false);
+                }
+                page.setText(index_page + 1 + "/" + max_index_page);
+            }
+        });
+        this.add(forward_left);
+        this.add(forward_right);
+        page = new JLabel();
+        page.setForeground(Color.WHITE);
+        page.setFont(new Font("", Font.PLAIN, 20));
+        page.setText(1 + "/" + max_index_page);
+        page.setBounds(748, 740, 60, 30);
+        this.add(page);
     }
-
+    public void setupPanelPage() {
+        for(int i = 0;i < panel_page.size(); ++i) {
+            panel_page.get(i).setLayout(null);
+            panel_page.get(i).setBounds(460, 76, 588, 640);
+            panel_page.get(i).setBackground(getBackground());
+            this.add(panel_page.get(i));
+        }
+        for(int i = 1;i < panel_page.size(); ++i) {
+            panel_page.get(i).setVisible(false);
+        }
+    }
+    public void addButtonHistory() {
+        
+        int size_list_history = listHistory.size();
+        int index_list_history = 0;
+        while(size_list_history > 0) {
+            JPanel newPanel = new JPanel();
+            panel_page.add(index_panel_page, newPanel);
+            newPanel.add(listHistory.get(index_list_history));
+            ++index_list_history;
+            --size_list_history;
+            int size = (size_list_history > 6 ? 6 : size_list_history);
+            for(int i = 1;i <= size; ++i) {
+                newPanel.add(listHistory.get(index_list_history));
+                ++index_list_history;
+            }
+            size_list_history -= size;
+            if((index_list_history) % 7 == 0) ++index_panel_page;
+        }
+        setupPanelPage();
+        eventButtonHistory();
+    }
+    public void eventButtonHistory() {
+        File folder = new File(path);
+        if (folder.isDirectory()) {
+            File[] file = folder.listFiles();
+            int count = 0;
+            for (File nameFile : file) {
+                listHistory.get(count).addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        Menu.panelCardLayout.add(new Review(nameFile),"review");
+                        Menu.cardLayout.show(Menu.panelCardLayout,"review");
+                    }
+                });
+                ++count;
+            }
+        }
+    }
+    public void handlePgn() {
+        File folder = new File(path);
+        if (folder.isDirectory()) {
+            File[] file = folder.listFiles();
+            int X = 4, Y = 4;
+            int count = 0;
+            for (File nameFile : file) {
+                if (nameFile.isFile()) {
+                    if(count % 7 == 0) {
+                        X = 4; Y = 4;
+                    }
+                    try {
+                        BufferedReader reader = new BufferedReader(new FileReader(nameFile));
+                        String line;
+                        ArrayList<String> value = new ArrayList<>();
+                        int cnt = 0;
+                        while ((line = reader.readLine()) != null) {
+                            value.add(line);
+                            ++cnt;
+                            if(cnt == 5) break;
+                        }
+                        reader.close();
+                        String formatted = String.format(format, value.get(1),value.get(2), value.get(3),value.get(3).equals("Timeout") ? "   " + value.get(4) : value.get(4));
+                        listHistory.add(new ButtonImage(history_normal, history_selected, 580, 76, value.get(0), formatted));
+                        if (index >= 0 && index < listHistory.size()) {    
+                            listHistory.get(index).setBounds(X, Y, 580, 76);
+                        }
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                    Y += 90;
+                    ++index;
+                    ++count;
+                } 
+            }
+        } else {
+            System.out.println(folder + " not folder!");
+        }
+        max_index_page = (listHistory.size() + 6) / 7;
+    }
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;

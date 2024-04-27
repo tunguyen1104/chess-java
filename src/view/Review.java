@@ -44,7 +44,7 @@ public class Review extends JPanel {
     public JLabel timeLabelBlack;
     private ListenerReview listenerReview;
     private BoardReview boardReview;
-    public Review() {
+    public Review(File nameFile) {
         try {
             board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
             board_index_black = ImageIO.read(new File("resources/gui/board_index_black.png"));
@@ -66,7 +66,7 @@ public class Review extends JPanel {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(1536, 864));
         initPanel();
-        boardReview = new BoardReview(this);
+        boardReview = new BoardReview(this,nameFile);
         boardReview.setBounds(278, 114, 640, 640);
         this.add(boardReview);
         listenerReview = new ListenerReview(this,boardReview);

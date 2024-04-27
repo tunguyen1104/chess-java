@@ -2,6 +2,7 @@ package view;
 
 import model.JDBCConnection;
 import model.ReadImage;
+import model.Sound;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -401,6 +402,8 @@ public class Setting extends JPanel {
                 super.mouseClicked(e);
                 JDBCConnection.updateDataSetting(piece_url[index_piece], board_url[index_board],
                         (index_sound == 0) ? true : false);
+                About.sound.close();
+                Menu.panelCardLayout.add(new About(), "about");
                 JOptionPane.showMessageDialog(null, "Your settings have been saved", "Notification",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -426,6 +429,7 @@ public class Setting extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent me) {
+                About.sound.close();
                 // call database delete current user
                 JDBCConnection.logOut();
                 JDBCConnection.deleteDataCurrentUser();

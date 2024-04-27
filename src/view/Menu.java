@@ -3,11 +3,12 @@ package view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import model.JDBCConnection;
 import model.ReadImage;
+import model.Sound;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class Menu extends JPanel implements ActionListener {
     public static CardLayout cardLayout = new CardLayout();
     public static JPanel panelCardLayout = new JPanel();
     private ReadImage readImage = new ReadImage();
-
+    
     public Menu() {
         frame = new JFrame("CHESS");
         panelCardLayout.setLayout(cardLayout);
@@ -60,7 +61,6 @@ public class Menu extends JPanel implements ActionListener {
             }
         });
     }
-
     public void initPanel() {
         this.setPreferredSize(new Dimension(1536, 864));
         this.setBackground(new Color(41, 41, 41));
@@ -161,6 +161,7 @@ public class Menu extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(icon_title, 670, 28, 180, 180, this);
+        
     }
 
     @Override

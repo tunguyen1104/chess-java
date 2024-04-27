@@ -5,7 +5,7 @@ import java.io.File;
 
 public class Sound {
     Clip clip;
-    String nameFile[] = new String[8];
+    String nameFile[] = new String[9];
 
     public Sound() {
         nameFile[0] = "resources/sound/StartGame.wav";
@@ -16,6 +16,7 @@ public class Sound {
         nameFile[5] = "resources/sound/Promotion.wav";
         nameFile[6] = "resources/sound/OutOfBound.wav";
         nameFile[7] = "resources/sound/Check.wav";
+        nameFile[8] = "resources/sound/BackGround.wav";
     }
 
     public Sound(int x) {
@@ -45,15 +46,28 @@ public class Sound {
     }
 
     public void stop() {
-        this.clip.stop();
+        if(this.clip != null)
+            this.clip.stop();
     }
-
-    // public void loop() {
-    // this.clip.loop(clip.LOOP_CONTINUOUSLY);
-    // }
+    public void close() {
+        if (this.clip != null) {
+            this.clip.stop();
+            this.clip.close();
+            this.clip = null;
+        }
+    }
+    public void loop() {
+        this.clip.loop(clip.LOOP_CONTINUOUSLY);
+    }
 
     public void playMusic(int i) {
         setFile(i);
         play();
+    }
+    public void playBackGround() {
+        if(this.clip != null) return;
+        setFile(8);
+        play();
+        loop();
     }
 }

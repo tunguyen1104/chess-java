@@ -30,7 +30,7 @@ public class BoardReview extends JPanel{
     Map<Character, Integer> columnMap = new HashMap<>();
     public boolean rotating = false;
     public int index = 0;
-    public BoardReview(Review review) {
+    public BoardReview(Review review, File namFile) {
         this.review = review;
         listenerReview = new ListenerReview(review, this);
         data_link = JDBCConnection.takeDataSetting();
@@ -48,20 +48,19 @@ public class BoardReview extends JPanel{
             columnMap.put(column, column - 'a');
         }
         addPiece();
-        handlePgn();
+        handlePgn(namFile);
     }
-    public void handlePgn() {
+    public void handlePgn(File nameFile) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("resources/saved_data/2024-4-22_15-6-30.pgn"));
+            BufferedReader reader = new BufferedReader(new FileReader(nameFile));
             String line;
             int cnt = 0;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 ++cnt;
                 if(cnt == 5) break;
             }
-            System.out.println("--------------------------");
             while ((line = reader.readLine()) != null) {
+                System.out.println(line);
                 String move1 = line.substring(4, 12).trim();
                 String move2 = line.substring(13).trim();
                 move.add(move1);move.add(move2);
