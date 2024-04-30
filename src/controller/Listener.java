@@ -13,7 +13,8 @@ public class Listener extends MouseAdapter {
     private GamePVP game;
     private Board board;
     public Sound sound;
-    public boolean isTurn = true;// mặc định quân trắng đi trước
+    public StringBuilder pgn = new StringBuilder();
+    private boolean isTurn = true;// mặc định quân trắng đi trước
     public boolean isEnd = false;// end because King die
     public boolean check_delete = false;
     public boolean check_promotion = true;
@@ -25,7 +26,9 @@ public class Listener extends MouseAdapter {
     }
 
     private int count_step = 1;
-
+    public String getWinner() {
+        return this.isTurn ? "Black" : "White";
+    }
     public void change_check_delete(boolean x) {
         this.check_delete = x;
     }
@@ -106,13 +109,16 @@ public class Listener extends MouseAdapter {
                 String plus = checkMate ? "+" : "";
                 board.selectedPiece = null;
                 checkMateEndGame = board.checkMateEndGame(isTurn);
-                if(checkMateEndGame) plus = "#";
-                if (isTurn)
+                if (checkMateEndGame) plus = "#";
+                if (isTurn) {
                     s += board.step_end(step, move) + plus + "\n";
-                else {
+                    pgn.append(board.handle_step_ver2(move) + "\n");
+                } else {
                     s += String.format("%3s %8s %6s", count_step + ".", board.step_end(step, move) + plus, " ");
+                    pgn.append(String.format("%3s %8s %6s", count_step + ".", board.handle_step_ver2(move), " "));
                     ++count_step;
                 }
+
                 game.textArea.setText(s);
             } else {
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize;
@@ -122,13 +128,25 @@ public class Listener extends MouseAdapter {
         board.selectedPiece = null;
         board.repaint();
         if (checkMateEndGame) {
-            if(isTurn) {
+            if(isTurn && !isEnd) {
+                String text = board.convertDate() +
+                        "\nPvP\n" +
+                        game.minute +
+                        "CheckMate\n" +
+                        "Black win\n";
+                game.saveFile(new String(text + pgn));
                 isEnd = true;
                 sound.playMusic(1);
                 game.timeLabelWhite.stop();
                 game.timeLabelBlack.stop();
                 game.noti_end_game("Black", "Checkmate");
-            } else {
+            } else if(!isTurn && !isEnd){
+                String text = board.convertDate() +
+                        "\nPvP\n" +
+                        game.minute +
+                        "\nCheckMate\n" +
+                        "White win\n";
+                game.saveFile(new String(text + pgn));
                 isEnd = true;
                 sound.playMusic(1);
                 game.timeLabelWhite.stop();

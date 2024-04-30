@@ -36,10 +36,10 @@ public class Review extends JPanel {
     private BufferedImage next_selected;
     private BufferedImage previous_normal;
     private BufferedImage previous_selected;
-    private JTextArea textArea;
+    public JTextArea textArea;
     private JScrollPane scrollPaneTextArea;
-    protected JLabel white_name;
-    protected JLabel black_name;
+    public JLabel white_name;
+    public JLabel black_name;
     public JLabel timeLabelWhite;
     public JLabel timeLabelBlack;
     private ListenerReview listenerReview;
@@ -77,11 +77,8 @@ public class Review extends JPanel {
         last_normal_button.addMouseListener(listenerReview);
         next_normal_button.addMouseListener(listenerReview);
         previous_normal_button.addMouseListener(listenerReview);
-
-        
     }
     public void initPanel() {
-
         black_name = new JLabel("Black");
         black_name.setBounds(1000, 150, 490, 120);
         black_name.setForeground(Color.WHITE);

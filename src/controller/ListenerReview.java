@@ -19,16 +19,16 @@ public class ListenerReview extends MouseAdapter{
         super.mouseClicked(e);
         if(e.getSource().equals(review.getRotate())) {
             review.board_index = (board.rotating) ? null : review.board_index_black;
-            board.rotateBoard();
+            board.rotateBoard(true);
             review.repaint();
         } else if(e.getSource().equals(review.getFirst_normal_button())) {
-
+            board.handle_first_button();
         } else if(e.getSource().equals(review.getNext_normal_button())) {
-
+            board.handle_next_button();
         } else if(e.getSource().equals(review.getLast_normal_button())) {
-
+            board.handle_last_button();
         } else if(e.getSource().equals(review.getPrevious_normal_button())) {
-
+            board.handle_previous_button();
         } else if(e.getSource().equals(review.getBack_normal_button())) {
             Menu.cardLayout.show(Menu.panelCardLayout, "history");
         } else if(e.getSource().equals(review.getHome_normal_button())) {

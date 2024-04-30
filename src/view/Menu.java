@@ -3,6 +3,7 @@ package view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import controller.ListenerMenu;
 import model.JDBCConnection;
 import model.ReadImage;
 import model.Sound;
@@ -12,25 +13,30 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-public class Menu extends JPanel implements ActionListener {
+public class Menu extends JPanel{
     public static JFrame frame;
     private JLabel name_title;
     public Image icon_title;
     private Image icon_game;
-    private BeautifyButton newgame_menu;
-    private BeautifyButton history_menu;
-    private BeautifyButton puzzles_menu;
-    private BeautifyButton settings_menu;
-    private BeautifyButton about_menu;
-    private BeautifyButton exit_menu;
+    private Image menu_normal;
+    private Image menu_selected;
+    private ButtonImage newGame;
+    private ButtonImage history;
+    private ButtonImage puzzle;
+    private ButtonImage setting;
+    private ButtonImage about;
+    private ButtonImage exit;
+    
     public static CardLayout cardLayout = new CardLayout();
     public static JPanel panelCardLayout = new JPanel();
     private ReadImage readImage = new ReadImage();
-    
+    private ListenerMenu input = new ListenerMenu(this);
     public Menu() {
         frame = new JFrame("CHESS");
         panelCardLayout.setLayout(cardLayout);
         try {
+            menu_normal = ImageIO.read(new File("resources/buttons/menu_normal_225px.png"));
+            menu_selected = ImageIO.read(new File("resources/buttons/menu_selected_225px.png"));
             icon_title = ImageIO.read(new File("resources/gui/icon_title.png"));
             icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
         } catch (IOException e) {
@@ -40,7 +46,7 @@ public class Menu extends JPanel implements ActionListener {
         initPanel();
         panelCardLayout.add(this, "menu");
         panelCardLayout.add(new Setting(), "setting");
-        panelCardLayout.add(new ListPuzzle(), "listPuzzle");
+        panelCardLayout.add(new ListPuzzle(), "puzzle");
         panelCardLayout.add(new GameOptions(), "gameOptions");
         panelCardLayout.add(new History(), "history");
         panelCardLayout.add(new About(), "about");
@@ -70,90 +76,37 @@ public class Menu extends JPanel implements ActionListener {
         name_title.setForeground(Color.WHITE);
         name_title.setFocusable(false);
         name_title.setFont(new Font("", Font.BOLD, 50));
-        newgame_menu = new BeautifyButton("New Game");
-        newgame_menu.setBounds(574, 378, 180, 46);
-        newgame_menu.setForeground(Color.WHITE);
-        newgame_menu.setFocusable(false);
-        newgame_menu.setFont(newgame_menu.getFont().deriveFont(20.0f));
-        history_menu = new BeautifyButton("History");
-        history_menu.setBounds(794, 378, 180, 46);
-        history_menu.setForeground(Color.WHITE);
-        history_menu.setFocusable(false);
-        history_menu.setFont(history_menu.getFont().deriveFont(20.0f));
-        puzzles_menu = new BeautifyButton("Puzzles");
-        puzzles_menu.setBounds(574, 458, 180, 46);
-        puzzles_menu.setForeground(Color.WHITE);
-        puzzles_menu.setFocusable(false);
-        puzzles_menu.setFont(puzzles_menu.getFont().deriveFont(20.0f));
-        about_menu = new BeautifyButton("About");
-        about_menu.setBounds(794, 458, 180, 46);
-        about_menu.setForeground(Color.WHITE);
-        about_menu.setFocusable(false);
-        about_menu.setFont(about_menu.getFont().deriveFont(20.0f));
-        settings_menu = new BeautifyButton("Settings");
-        settings_menu.setBounds(574, 538, 180, 46);
-        settings_menu.setForeground(Color.WHITE);
-        settings_menu.setFocusable(false);
-        settings_menu.setFont(settings_menu.getFont().deriveFont(20.0f));
-        exit_menu = new BeautifyButton("Exit");
-        exit_menu.setBounds(794, 538, 180, 46);
-        exit_menu.setForeground(Color.WHITE);
-        exit_menu.setFocusable(false);
-        exit_menu.setFont(exit_menu.getFont().deriveFont(20.0f));
-        newgame_menu.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(panelCardLayout, "gameOptions");
-            }
-        });
-        history_menu.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(panelCardLayout, "history");
-            }
-        });
-        puzzles_menu.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(panelCardLayout, "listPuzzle");
-            }
-        });
-        settings_menu.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(panelCardLayout, "setting");
-            }
-        });
-        about_menu.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardLayout.show(panelCardLayout, "about");
-            }
-        });
-        exit_menu.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION)
-                    System.exit(0);
-                else
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
-        newgame_menu.setHorizontalAlignment(SwingConstants.CENTER); // Đặt căn giữa ngang
-        history_menu.setHorizontalAlignment(SwingConstants.CENTER);
-        puzzles_menu.setHorizontalAlignment(SwingConstants.CENTER);
-        settings_menu.setHorizontalAlignment(SwingConstants.CENTER);
-        about_menu.setHorizontalAlignment(SwingConstants.CENTER);
-        exit_menu.setHorizontalAlignment(SwingConstants.CENTER);
-        this.add(newgame_menu);
-        this.add(history_menu);
-        this.add(puzzles_menu);
-        this.add(settings_menu);
-        this.add(exit_menu);
-        this.add(about_menu);
+        newGame = new ButtonImage(menu_normal, menu_selected, 180, 59, "New Game",1);
+        newGame.setBounds(574, 368, 180, 59);
+        history = new ButtonImage(menu_normal, menu_selected, 180, 59, "History",1);
+        history.setBounds(794, 368, 180, 59);
+        puzzle = new ButtonImage(menu_normal, menu_selected, 180, 59, "Puzzle",1);
+        puzzle.setBounds(574, 448, 180, 59);
+        about = new ButtonImage(menu_normal, menu_selected, 180, 59, "About",1);
+        about.setBounds(794, 448, 180, 59);
+        setting = new ButtonImage(menu_normal, menu_selected, 180, 59, "Setting",1);
+        setting.setBounds(574, 528, 180, 59);
+        exit = new ButtonImage(menu_normal, menu_selected, 180, 59, "Exit",1);
+        exit.setBounds(794, 528, 180, 59);
+        newGame.setHorizontalAlignment(SwingConstants.CENTER); // Đặt căn giữa ngang
+        history.setHorizontalAlignment(SwingConstants.CENTER);
+        puzzle.setHorizontalAlignment(SwingConstants.CENTER);
+        setting.setHorizontalAlignment(SwingConstants.CENTER);
+        about.setHorizontalAlignment(SwingConstants.CENTER);
+        exit.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(newGame);
+        this.add(history);
+        this.add(puzzle);
+        this.add(setting);
+        this.add(exit);
+        this.add(about);
         this.add(name_title);
+        newGame.addMouseListener(input);
+        history.addMouseListener(input);
+        puzzle.addMouseListener(input);
+        about.addMouseListener(input);
+        setting.addMouseListener(input);
+        exit.addMouseListener(input);
     }
 
     @Override
@@ -163,9 +116,22 @@ public class Menu extends JPanel implements ActionListener {
         g2d.drawImage(icon_title, 670, 28, 180, 180, this);
         
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
+    public ButtonImage getAbout() {
+        return about;
+    }
+    public ButtonImage getExit() {
+        return exit;
+    }
+    public ButtonImage getHistory() {
+        return history;
+    }
+    public ButtonImage getPuzzle() {
+        return puzzle;
+    }
+    public ButtonImage getSetting() {
+        return setting;
+    }
+    public ButtonImage getNewGame() {
+        return newGame;
     }
 }

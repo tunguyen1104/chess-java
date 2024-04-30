@@ -12,7 +12,12 @@ import java.awt.*;
 
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class GamePVP extends JPanel {
     private Image game_gui;
@@ -44,9 +49,10 @@ public class GamePVP extends JPanel {
     // time
     public TimeLabel timeLabelWhite;
     public TimeLabel timeLabelBlack;
-    ButtonImage back_normal_button;
-    ButtonImage home_normal_button;
+    private ButtonImage back_normal_button;
+    private ButtonImage home_normal_button;
     public JTextArea textArea;
+    public int minute;
     public JScrollPane scrollPaneTextArea;
     private Board board = new Board(this);
 
@@ -65,6 +71,7 @@ public class GamePVP extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.minute = minute;
         this.setBackground(new Color(41, 41, 41));
         this.setPreferredSize(new Dimension(1536, 864));
         this.setLayout(null);
@@ -170,13 +177,24 @@ public class GamePVP extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if ("00:00".equals(timeLabelBlack.getText())) {
+                String text = board.convertDate() +
+                        "\nPvP\n" +
+                        minute +
+                        "\nTimeout\n" +
+                        "White win\n";
+                saveFile(new String(text + board.getPgn()));
                 sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
                 noti_end_game("White", "Time out");
-            }
-            if ("00:00".equals(timeLabelWhite.getText())) {
+            } else if ("00:00".equals(timeLabelWhite.getText())) {
+                String text = board.convertDate() +
+                        "\nPvP\n" +
+                        minute +
+                        "\nTimeout\n" +
+                        "Black win\n";
+                saveFile(new String(text + board.getPgn()));
                 sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
@@ -185,7 +203,6 @@ public class GamePVP extends JPanel {
             }
         }
     });
-
     public void noti_end_game(String name_win, String reason) {
         Object[] options = { "New Game", "Home", "Review" };
         int select = JOptionPane.showOptionDialog(null, name_win + " Win (" + reason + " )", "Notification",
@@ -201,6 +218,41 @@ public class GamePVP extends JPanel {
             case 2:
 
                 break;
+        }
+    }
+    private String getFileName() {
+        Date currentTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentTime);
+        return String.format("%d-%02d-%02d_%02d-%02d-%02d.sv",
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+    }
+    public void saveFile(String text) {
+        String fileName = getFileName();
+        File directory = new File("saved_data/");
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                System.out.println("Error creating directory");
+                return;
+            }
+        }
+        File file = new File(directory, fileName);
+        try {
+            if (file.createNewFile()) {
+                System.out.println("File created successfully!");
+            } else {
+                System.out.println("File already exists! Overwriting...");
+            }
+
+            try (FileOutputStream fos = new FileOutputStream(file);
+                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeObject(text);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            System.out.println("Error creating file");
         }
     }
 }

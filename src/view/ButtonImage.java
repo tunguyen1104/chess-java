@@ -54,6 +54,37 @@ public class ButtonImage extends JLabel{
             }
         });
     }
+    public ButtonImage(final Image normal, final Image selected, int width, int height, String name, int c) {
+        this.width = width;
+        this.height = height;
+        this.normal1 = normal;
+        this.selected1 = selected;
+        image = normal1;
+        title = new JLabel(name, JLabel.CENTER);
+        title.setBounds(0, 5, 180, 40);
+        title.setForeground(Color.WHITE);
+        this.add(title);
+        try {
+            title.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                    new File("resources/fonts/Inter-Regular.ttf")).deriveFont(Font.PLAIN, 20));
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent me) {
+                image = selected1;
+                repaint();
+            }
+            @Override
+            public void mouseExited(MouseEvent me) {
+                image = normal1;
+                repaint();
+            }
+        });
+    }
     public ButtonImage(final Image normal, final Image selected, int width, int height, String name, String history) {
         this.width = width;
         this.height = height;

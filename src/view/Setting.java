@@ -85,7 +85,7 @@ public class Setting extends JPanel {
     String board_url[] = {
             "resources/board/green.png", "resources/board/brown.png", "resources/board/tournament.png",
             "resources/board/blackwhite.png",
-            "resources/board/blue.png", "resources/board/metal.png", "resources/board/wood.png"
+            "resources/board/blue.png", "resources/board/metal.png", "resources/board/wood.png", "resources/board/orange.png"
     };
     String turn[] = { "On", "Off" };
     ArrayList<String> inforAccount = null;

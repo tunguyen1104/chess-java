@@ -11,9 +11,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class History extends JPanel {
@@ -81,15 +85,6 @@ public class History extends JPanel {
         this.add(home_normal_button);
         handlePgn();
         addButtonHistory();
-        // test.addMouseListener(new MouseAdapter() {
-        //     @Override
-        //     public void mouseClicked(MouseEvent e) {
-        //         super.mouseClicked(e);
-        //         Menu.panelCardLayout.add(new Review(),"review");
-        //         Menu.cardLayout.show(Menu.panelCardLayout,"review");
-        //     }
-        // });
-
 
         forward_left = new ButtonImage(forward_normal_game, forward_selected_game, 32, 32, "");
         forward_left.setBounds(702, 740, 32, 32);
@@ -196,24 +191,28 @@ public class History extends JPanel {
                     if(count % 7 == 0) {
                         X = 4; Y = 4;
                     }
-                    try {
-                        BufferedReader reader = new BufferedReader(new FileReader(nameFile));
-                        String line;
+                    try (FileInputStream fis = new FileInputStream(nameFile);
+                        ObjectInputStream ois = new ObjectInputStream(fis)) {
+                        String text = (String) ois.readObject();
                         ArrayList<String> value = new ArrayList<>();
                         int cnt = 0;
-                        while ((line = reader.readLine()) != null) {
-                            value.add(line);
-                            ++cnt;
-                            if(cnt == 5) break;
+                        try (Scanner scanner = new Scanner(text)) {
+                            scanner.useDelimiter("\n");
+                            while (scanner.hasNext()) {
+                                value.add(scanner.next());
+                                ++cnt;
+                                if(cnt == 5) break;
+                            }
                         }
-                        reader.close();
+                        fis.close();
+                        ois.close();
                         String formatted = String.format(format, value.get(1),value.get(2), value.get(3),value.get(3).equals("Timeout") ? "   " + value.get(4) : value.get(4));
                         listHistory.add(new ButtonImage(history_normal, history_selected, 580, 76, value.get(0), formatted));
                         if (index >= 0 && index < listHistory.size()) {    
                             listHistory.get(index).setBounds(X, Y, 580, 76);
                         }
-                    } catch (IOException e) {
-                        System.out.println(e);
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
                     Y += 90;
                     ++index;

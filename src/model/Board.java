@@ -9,11 +9,14 @@ import view.PuzzleGame;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Board extends JPanel {
     private GamePVP game;
@@ -179,7 +182,7 @@ public class Board extends JPanel {
                         try {
                             Thread.sleep(10);
                         } catch (InterruptedException e) {
-                            System.out.println();
+                            System.out.println("Error : InterruptedException");
                         }
                         animation();
                     }
@@ -512,6 +515,76 @@ public class Board extends JPanel {
         }
         return step;
     }
+    public StringBuilder getPgn() {
+        return input.pgn;
+    }
+    public String convertDate() {
+        String outputDate = null;
+        Date currentTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentTime);
+        String inputDate = String.format("%d-%02d-%02d_%02d-%02d-%02d",
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy", Locale.US);
+            Date date = inputFormat.parse(inputDate);
+            outputDate = outputFormat.format(date);
+        } catch (ParseException e) {
+            System.out.println("Error convertDate!");
+        }
+        return outputDate;
+    }
+    public String handle_step_ver2(Move move) {
+        //0536qQ_
+        String step = "";
+        if(castLing != -1) {
+            if(castLing == 1) {
+                step = "O-O___";
+            } else if(castLing == 2) {
+                step = "O-O-O_";
+            }
+        } else {
+            step += String.valueOf(move.getOldCol()) + String.valueOf(move.getOldRow()) + String.valueOf(move.getNewCol()) + String.valueOf(move.getNewRow());
+            if(input.check_delete) {
+                if (move.capture.name.equals("Knight")) {
+                    step += "N";
+                } else {
+                    step += move.capture.name.charAt(0);
+                }
+            } else {
+                step += "_";
+            }
+            if (input.check_promotion) {
+                switch (promotion) {
+                    case 0:
+                        step += "Q";
+                        break;
+                    case 1:
+                        step += "R";
+                        break;
+                    case 2:
+                        step += "B";
+                        break;
+                    case 3:
+                        step += "N";
+                        break;
+                }
+            } else {
+                step += "_";
+            }
+        }
+        boolean checkMate = checkMateEndGame(!move.piece.isWhite);
+        boolean check = paintKingCheckMate(!move.piece.isWhite);
+        if(checkMate) step += '#';
+        else {
+            if(check) step += '+';
+        }
+        if(!checkMate && !check) step += '_';
+        return step;
+    }
+
     public String step_end(String step, Move move) {
         if(castLing != -1) {
             if(castLing == 1) {
@@ -856,14 +929,9 @@ public class Board extends JPanel {
         pieceList.add(new Knight(6, 0, false));
         pieceList.add(new Rook(7, 0, false));
         
-        pieceList.add(new Pawn(0, 1, false));
-        pieceList.add(new Pawn(1, 1, false));
-        pieceList.add(new Pawn(2, 1, false));
-        pieceList.add(new Pawn(3, 1, false));
-        pieceList.add(new Pawn(4, 1, false));
-        pieceList.add(new Pawn(5, 1, false));
-        pieceList.add(new Pawn(6, 1, false));
-        pieceList.add(new Pawn(7, 1, false));
+        for(int i = 0;i <= 7; ++i) {
+            pieceList.add(new Pawn(i, 1, false));
+        }
 
         pieceList.add(new Rook(0, 7, true));
         pieceList.add(new Knight(1, 7, true));
@@ -874,14 +942,9 @@ public class Board extends JPanel {
         pieceList.add(new Knight(6, 7, true));
         pieceList.add(new Rook(7, 7, true));
         
-        pieceList.add(new Pawn(0, 6, true));
-        pieceList.add(new Pawn(1, 6, true));
-        pieceList.add(new Pawn(2, 6, true));
-        pieceList.add(new Pawn(3, 6, true));
-        pieceList.add(new Pawn(4, 6, true));
-        pieceList.add(new Pawn(5, 6, true));
-        pieceList.add(new Pawn(6, 6, true));
-        pieceList.add(new Pawn(7, 6, true));
+        for(int i = 0;i <= 7; ++i) {
+            pieceList.add(new Pawn(i, 6, true));
+        }
     }
 
     public void handleFen(String fen) {
