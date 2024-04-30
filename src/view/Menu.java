@@ -76,17 +76,17 @@ public class Menu extends JPanel{
         name_title.setForeground(Color.WHITE);
         name_title.setFocusable(false);
         name_title.setFont(new Font("", Font.BOLD, 50));
-        newGame = new ButtonImage(menu_normal, menu_selected, 180, 59, "New Game",1);
+        newGame = new ButtonImage(menu_normal, menu_selected, 180, 59, "New Game",5);
         newGame.setBounds(574, 368, 180, 59);
-        history = new ButtonImage(menu_normal, menu_selected, 180, 59, "History",1);
+        history = new ButtonImage(menu_normal, menu_selected, 180, 59, "History",5);
         history.setBounds(794, 368, 180, 59);
-        puzzle = new ButtonImage(menu_normal, menu_selected, 180, 59, "Puzzle",1);
+        puzzle = new ButtonImage(menu_normal, menu_selected, 180, 59, "Puzzle",5);
         puzzle.setBounds(574, 448, 180, 59);
-        about = new ButtonImage(menu_normal, menu_selected, 180, 59, "About",1);
+        about = new ButtonImage(menu_normal, menu_selected, 180, 59, "About",5);
         about.setBounds(794, 448, 180, 59);
-        setting = new ButtonImage(menu_normal, menu_selected, 180, 59, "Setting",1);
+        setting = new ButtonImage(menu_normal, menu_selected, 180, 59, "Setting",5);
         setting.setBounds(574, 528, 180, 59);
-        exit = new ButtonImage(menu_normal, menu_selected, 180, 59, "Exit",1);
+        exit = new ButtonImage(menu_normal, menu_selected, 180, 59, "Exit",5);
         exit.setBounds(794, 528, 180, 59);
         newGame.setHorizontalAlignment(SwingConstants.CENTER); // Đặt căn giữa ngang
         history.setHorizontalAlignment(SwingConstants.CENTER);

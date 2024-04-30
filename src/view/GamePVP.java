@@ -1,9 +1,7 @@
 package view;
 
 import model.Board;
-import model.JDBCConnection;
 import model.ReadImage;
-import model.Sound;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,11 +10,7 @@ import java.awt.*;
 
 import java.awt.event.*;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.Calendar;
-import java.util.Date;
 
 
 public class GamePVP extends JPanel {
@@ -28,7 +22,6 @@ public class GamePVP extends JPanel {
     protected JLabel white_name;
     protected JLabel black_name;
     private JLabel title_bar_label;
-
     public JLabel getWhite_name() {
         return white_name;
     }
@@ -45,7 +38,6 @@ public class GamePVP extends JPanel {
         return timeLabelBlack;
     }
 
-    Sound sound;
     // time
     public TimeLabel timeLabelWhite;
     public TimeLabel timeLabelBlack;
@@ -57,10 +49,6 @@ public class GamePVP extends JPanel {
     private Board board = new Board(this);
 
     public GamePVP(int minute) {
-        if (JDBCConnection.takeDataSetting().get(2).equals("1"))
-            sound = new Sound();
-        else
-            sound = new Sound(1);
         // Load image
         try {
             board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
@@ -107,6 +95,7 @@ public class GamePVP extends JPanel {
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(board.checkEndGame) return;
                 super.mouseClicked(e);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
@@ -117,6 +106,7 @@ public class GamePVP extends JPanel {
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(board.checkEndGame) return;
                 super.mouseClicked(e);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
@@ -155,6 +145,7 @@ public class GamePVP extends JPanel {
         rotate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(board.checkEndGame) return;
                 super.mouseClicked(e);
                 board_index = (board.rotating) ? null : board_index_black;
                 board.rotateBoard();
@@ -182,77 +173,27 @@ public class GamePVP extends JPanel {
                         minute +
                         "\nTimeout\n" +
                         "White win\n";
-                saveFile(new String(text + board.getPgn()));
-                sound.playMusic(1);
+                board.saveFile(new String(text + board.getPgn()));
+                board.sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
-                noti_end_game("White", "Time out");
+                board.setCheckEndGame(true);
+                board.addDialogEndGame("White", "timeout");
             } else if ("00:00".equals(timeLabelWhite.getText())) {
                 String text = board.convertDate() +
                         "\nPvP\n" +
                         minute +
                         "\nTimeout\n" +
                         "Black win\n";
-                saveFile(new String(text + board.getPgn()));
-                sound.playMusic(1);
+                board.saveFile(new String(text + board.getPgn()));
+                board.sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
-                noti_end_game("Black", "Time out");
+                board.setCheckEndGame(true);
+                board.addDialogEndGame("Black", "timeout");
             }
         }
     });
-    public void noti_end_game(String name_win, String reason) {
-        Object[] options = { "New Game", "Home", "Review" };
-        int select = JOptionPane.showOptionDialog(null, name_win + " Win (" + reason + " )", "Notification",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        switch (select) {
-            case 0:
-                Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
-                break;
-            case 1:
-                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
-                break;
-            case 2:
-
-                break;
-        }
-    }
-    private String getFileName() {
-        Date currentTime = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentTime);
-        return String.format("%d-%02d-%02d_%02d-%02d-%02d.sv",
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
-    }
-    public void saveFile(String text) {
-        String fileName = getFileName();
-        File directory = new File("saved_data/");
-        if (!directory.exists()) {
-            if (!directory.mkdirs()) {
-                System.out.println("Error creating directory");
-                return;
-            }
-        }
-        File file = new File(directory, fileName);
-        try {
-            if (file.createNewFile()) {
-                System.out.println("File created successfully!");
-            } else {
-                System.out.println("File already exists! Overwriting...");
-            }
-
-            try (FileOutputStream fos = new FileOutputStream(file);
-                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(text);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            System.out.println("Error creating file");
-        }
-    }
 }

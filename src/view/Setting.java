@@ -2,7 +2,6 @@ package view;
 
 import model.JDBCConnection;
 import model.ReadImage;
-import model.Sound;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

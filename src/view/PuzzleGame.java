@@ -97,7 +97,7 @@ public class PuzzleGame extends JPanel {
         hint_panel.setBounds(986, 266, 268, 250);
         hint_panel.setBackground(new Color(55, 55, 55));
         hint_panel.setLayout(null);
-        hint = new ButtonImage(normal, selected, 152, 50, "Hint");
+        hint = new ButtonImage(normal, selected, 152, 50, "Hint",0);
         hint.setBounds(60, 140, 152, 50);
         hint_panel.add(hint);
         color_to_move = new JLabel();
@@ -120,7 +120,7 @@ public class PuzzleGame extends JPanel {
         undo_panel.setBounds(986, 266, 268, 250);
         undo_panel.setBackground(new Color(55, 55, 55));
         undo_panel.setLayout(null);
-        undo = new ButtonImage(normal, selected, 152, 50, "Undo");
+        undo = new ButtonImage(normal, selected, 152, 50, "Undo",0);
         undo.setBounds(58, 120, 152, 50);
         undo_panel.add(undo);
         failed = new JLabel();
@@ -142,9 +142,9 @@ public class PuzzleGame extends JPanel {
         done_panel.setBounds(986, 266, 268, 250);
         done_panel.setBackground(new Color(55, 55, 55));
         done_panel.setLayout(null);
-        next_lever = new ButtonImage(normal, selected, 152, 50, "Next Lever");
+        next_lever = new ButtonImage(normal, selected, 152, 50, "Next Lever",0);
         next_lever.setBounds(60, 180, 152, 50);
-        try_again = new ButtonImage(normal, selected, 152, 50, "Try Again");
+        try_again = new ButtonImage(normal, selected, 152, 50, "Try Again",0);
         try_again.setBounds(60, 120, 152, 50);
         done_panel.add(next_lever);
         done_panel.add(try_again);

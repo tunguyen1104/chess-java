@@ -3,6 +3,7 @@ package model;
 import controller.Listener;
 import controller.ListenerPuzzle;
 import model.pieces.*;
+import view.DialogEndGame;
 import view.GamePVP;
 import view.PuzzleGame;
 
@@ -10,7 +11,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class Board extends JPanel {
     public ListenerPuzzle inputPuzzle;
     public int enPassantTile = -1;
     public int promotion = -1;
-    Sound sound;
+    public Sound sound;
     private Image board_image;
     // paint old new piece
     private int old_col = -1;
@@ -59,6 +62,13 @@ public class Board extends JPanel {
     private boolean hintBoolean = false;
     private boolean checkMateWhite = false;
     private boolean checkMateBlack = false;
+    public boolean checkEndGame = false;
+    public boolean isCheckEndGame() {
+        return checkEndGame;
+    }
+    public void setCheckEndGame(boolean checkEndGame) {
+        this.checkEndGame = checkEndGame;
+    }
     private int colKingCheckMate = -1;
     private int rowKingCheckMate = -1;
     public void setHintBoolean(boolean hintBoolean) {
@@ -78,7 +88,7 @@ public class Board extends JPanel {
     public void setCheckMateBlack(boolean checkMateBlack) {
         this.checkMateBlack = checkMateBlack;
     }
-    
+    //public JPanel dialogEndGame = new DialogEndGame("Black","checkmate");
     public Board(PuzzleGame puzzleGame, String FEN) {
         if (dataJDBC.get(2).equals("1"))
             sound = new Sound();
@@ -117,6 +127,7 @@ public class Board extends JPanel {
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
         addPiece();
+       // this.add(dialogEndGame);
     }
 
     public Piece getPiece(int col, int row) {
@@ -273,7 +284,45 @@ public class Board extends JPanel {
             JDBCConnection.updateDataPuzzle(update_failed, dataPuzzle.get(1));
         }
     }
-
+    public void addDialogEndGame(String name, String reason) {
+        this.add(new DialogEndGame(name, reason));
+        repaint();
+        validate(); 
+    }
+    private String getFileName() {
+        Date currentTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentTime);
+        return String.format("%d-%02d-%02d_%02d-%02d-%02d.sv",
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+    }
+    public void saveFile(String text) {
+        String fileName = getFileName();
+        File directory = new File("saved_data/");
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                System.out.println("Error creating directory");
+                return;
+            }
+        }
+        File file = new File(directory, fileName);
+        try {
+            if (file.createNewFile()) {
+                System.out.println("File created successfully!");
+            } else {
+                System.out.println("File already exists! Overwriting...");
+            }
+            try (FileOutputStream fos = new FileOutputStream(file);
+                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                oos.writeObject(text);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            System.out.println("Error creating file");
+        }
+    }
     private void animate(int x, int y, int x_new, int y_new) {
         paint_old_new(y, x, y_new, x_new);
         Piece piece = getPiece(y, x);
@@ -384,7 +433,6 @@ public class Board extends JPanel {
         sound.playMusic(4);
         repaint();
     }
-
     public void makeMove(Move move) {
         castLing = -1;
         if (move.piece.name.equals("Pawn")) {

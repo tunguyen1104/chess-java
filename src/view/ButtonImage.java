@@ -61,7 +61,8 @@ public class ButtonImage extends JLabel{
         this.selected1 = selected;
         image = normal1;
         title = new JLabel(name, JLabel.CENTER);
-        title.setBounds(0, 5, 180, 40);
+        if(c == 0) title.setBounds(-14, c, 180, 40);
+        else title.setBounds(0, c, 180, 40);
         title.setForeground(Color.WHITE);
         this.add(title);
         try {
