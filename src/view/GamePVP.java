@@ -94,9 +94,8 @@ public class GamePVP extends JPanel {
         home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if(board.checkEndGame) return;
-                super.mouseClicked(e);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
@@ -105,9 +104,8 @@ public class GamePVP extends JPanel {
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if(board.checkEndGame) return;
-                super.mouseClicked(e);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
@@ -144,9 +142,8 @@ public class GamePVP extends JPanel {
         rotate.setBounds(1200, 326, 50, 40);
         rotate.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if(board.checkEndGame) return;
-                super.mouseClicked(e);
                 board_index = (board.rotating) ? null : board_index_black;
                 board.rotateBoard();
                 repaint();
@@ -154,7 +151,15 @@ public class GamePVP extends JPanel {
         });
         this.add(rotate);
     }
-
+    public void start_stop_time_label(boolean isTurn) {
+        if (isTurn == true) {
+            timeLabelBlack.start();
+            timeLabelWhite.stop();
+        } else {
+            timeLabelWhite.start();
+            timeLabelBlack.stop();
+        }
+    }
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -178,7 +183,6 @@ public class GamePVP extends JPanel {
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
-                board.setCheckEndGame(true);
                 board.addDialogEndGame("White", "timeout");
             } else if ("00:00".equals(timeLabelWhite.getText())) {
                 String text = board.convertDate() +
@@ -191,7 +195,6 @@ public class GamePVP extends JPanel {
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
-                board.setCheckEndGame(true);
                 board.addDialogEndGame("Black", "timeout");
             }
         }

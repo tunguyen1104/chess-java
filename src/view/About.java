@@ -54,13 +54,13 @@ public class About extends JPanel {
         home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });

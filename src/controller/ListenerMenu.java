@@ -14,7 +14,7 @@ public class ListenerMenu extends MouseAdapter{
         this.menu = menu;
     }
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
         if(e.getSource().equals(menu.getNewGame())) {
             Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
         } else if(e.getSource().equals(menu.getHistory())) {

@@ -84,13 +84,7 @@ public class Listener extends MouseAdapter {
 
                 board.makeMove(move);
 
-                if (isTurn == true) {
-                    game.timeLabelBlack.start();
-                    game.timeLabelWhite.stop();
-                } else {
-                    game.timeLabelWhite.start();
-                    game.timeLabelBlack.stop();
-                }
+                game.start_stop_time_label(isTurn);
                 isTurn = !isTurn;
                 board.paint_old_new(move.getOldCol(), move.getOldRow(), move.getNewCol(), move.getNewRow());
                 board.paint_in_place(-1, -1);
@@ -127,7 +121,6 @@ public class Listener extends MouseAdapter {
                         "CheckMate\n" +
                         "Black win\n";
                 board.saveFile(new String(text + pgn));
-                board.setCheckEndGame(true);
                 sound.playMusic(1);
                 game.timeLabelWhite.stop();
                 game.timeLabelBlack.stop();
@@ -139,7 +132,6 @@ public class Listener extends MouseAdapter {
                         "\nCheckMate\n" +
                         "White win\n";
                 board.saveFile(new String(text + pgn));
-                board.setCheckEndGame(true);
                 sound.playMusic(1);
                 game.timeLabelWhite.stop();
                 game.timeLabelBlack.stop();

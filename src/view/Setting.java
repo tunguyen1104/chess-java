@@ -1,12 +1,12 @@
 package view;
 
+import controller.ListenerSetting;
 import model.JDBCConnection;
 import model.ReadImage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,8 +28,8 @@ public class Setting extends JPanel {
     private Image option_settingv1;
     private Image option_settingv2;
     private Image logout_image;
-    private JLabel option_setting_labelv1;
-    private JLabel option_setting_labelv2;
+    private JLabel option_game;
+    private JLabel option_account;
     private JLabel logout_label;
     private Image board_image_cut;
     private boolean check_color;// nếu dang hover vào label -> true
@@ -88,7 +88,7 @@ public class Setting extends JPanel {
     };
     String turn[] = { "On", "Off" };
     ArrayList<String> inforAccount = null;
-
+    private ListenerSetting input = new ListenerSetting(this);
     public Setting() {
         initPanel();
     }
@@ -148,26 +148,77 @@ public class Setting extends JPanel {
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
         back_normal_button.setBounds(465, 10, 44, 44);
         home_normal_button.setBounds(1000, 10, 44, 44);
-        back_normal_button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
-            }
-        });
-        home_normal_button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
-            }
-        });
         this.add(back_normal_button);
         this.add(home_normal_button);
+        back_normal_button.addMouseListener(input);
+        home_normal_button.addMouseListener(input);
         // ------------------------
         initGame();
         initAccount();
         initLogout();
     }
-
+    public void handle_forward_left_piece() {
+        --index_piece;
+        if (index_piece < 0)
+            index_piece = piece_url.length - 1;
+        try {
+            piece_image = ImageIO.read(new File(piece_url[index_piece]));
+            piece_panel.repaint();
+        } catch (IOException ex) {
+            System.out.println("Error url image!");
+        }
+    }
+    public void handle_forward_right_piece() {
+        ++index_piece;
+        if (index_piece > piece_url.length - 1)
+            index_piece = 0;
+        try {
+            piece_image = ImageIO.read(new File(piece_url[index_piece]));
+            piece_panel.repaint();
+        } catch (IOException ex) {
+            System.out.println("Error url image!");
+        }
+    }
+    public void handle_forward_left_board() {
+        --index_board;
+        if (index_board < 0)
+            index_board = board_url.length - 1;
+        try {
+            board_image = ImageIO.read(new File(board_url[index_board]));
+            int tilesize = board_image.getWidth() / 8;
+            board_image_cut = board_image.getSubimage(0, 0, tilesize * 6, tilesize * 3)
+                    .getScaledInstance(tilesize * 6, tilesize * 3, BufferedImage.SCALE_SMOOTH);
+            board_panel.repaint();
+        } catch (IOException ex) {
+            System.out.println("Error url image!");
+        }
+    }
+    public void handle_forward_right_board() {
+        ++index_board;
+        if (index_board > board_url.length - 1)
+            index_board = 0;
+        try {
+            board_image = ImageIO.read(new File(board_url[index_board]));
+            int tilesize = board_image.getWidth() / 8;
+            board_image_cut = board_image.getSubimage(0, 0, tilesize * 6, tilesize * 3)
+                    .getScaledInstance(tilesize * 6, tilesize * 3, BufferedImage.SCALE_SMOOTH);
+            board_panel.repaint();
+        } catch (IOException ex) {
+            System.out.println("Error url image!");
+        }
+    }
+    public void handle_forward_left_sound() {
+        --index_sound;
+        if (index_sound < 0)
+            index_sound = 1;
+        option_box_sound_label.setText(turn[index_sound]);
+    }
+    public void handle_forward_right_sound() {
+        ++index_sound;
+        if (index_sound > 1)
+            index_sound = 0;
+        option_box_sound_label.setText(turn[index_sound]);
+    }
     public void initGame() {
         game = new JPanel() {
             @Override
@@ -210,37 +261,6 @@ public class Setting extends JPanel {
                 break;
             }
         }
-        forward_left_piece.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                --index_piece;
-                if (index_piece < 0)
-                    index_piece = piece_url.length - 1;
-                try {
-                    piece_image = ImageIO.read(new File(piece_url[index_piece]));
-                    piece_panel.repaint();
-                } catch (IOException ex) {
-                    System.out.println("Error url image!");
-                }
-            }
-        });
-
-        forward_right_piece.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                ++index_piece;
-                if (index_piece > piece_url.length - 1)
-                    index_piece = 0;
-                try {
-                    piece_image = ImageIO.read(new File(piece_url[index_piece]));
-                    piece_panel.repaint();
-                } catch (IOException ex) {
-                    System.out.println("Error url image!");
-                }
-            }
-        });
         piece_panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -265,42 +285,6 @@ public class Setting extends JPanel {
         forward_right_board = new ButtonImage(forward_normal_board_v2, forward_selected_board_v2, 32, 32, "");
         forward_left_board.setBounds(240, 160, 32, 32);
         forward_right_board.setBounds(440, 160, 32, 32);
-        forward_left_board.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                --index_board;
-                if (index_board < 0)
-                    index_board = board_url.length - 1;
-                try {
-                    board_image = ImageIO.read(new File(board_url[index_board]));
-                    int tilesize = board_image.getWidth() / 8;
-                    board_image_cut = board_image.getSubimage(0, 0, tilesize * 6, tilesize * 3)
-                            .getScaledInstance(tilesize * 6, tilesize * 3, BufferedImage.SCALE_SMOOTH);
-                    board_panel.repaint();
-                } catch (IOException ex) {
-                    System.out.println("Error url image!");
-                }
-            }
-        });
-        forward_right_board.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                ++index_board;
-                if (index_board > board_url.length - 1)
-                    index_board = 0;
-                try {
-                    board_image = ImageIO.read(new File(board_url[index_board]));
-                    int tilesize = board_image.getWidth() / 8;
-                    board_image_cut = board_image.getSubimage(0, 0, tilesize * 6, tilesize * 3)
-                            .getScaledInstance(tilesize * 6, tilesize * 3, BufferedImage.SCALE_SMOOTH);
-                    board_panel.repaint();
-                } catch (IOException ex) {
-                    System.out.println("Error url image!");
-                }
-            }
-        });
         board_panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -324,26 +308,7 @@ public class Setting extends JPanel {
         forward_right_sound = new ButtonImage(forward_normal_sound_v2, forward_selected_sound_v2, 32, 32, "");
         forward_left_sound.setBounds(240, 280, 32, 32);
         forward_right_sound.setBounds(440, 280, 32, 32);
-        forward_left_sound.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                --index_sound;
-                if (index_sound < 0)
-                    index_sound = 1;
-                option_box_sound_label.setText(turn[index_sound]);
-            }
-        });
-        forward_right_sound.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                ++index_sound;
-                if (index_sound > 1)
-                    index_sound = 0;
-                option_box_sound_label.setText(turn[index_sound]);
-            }
-        });
+
         game.add(forward_left_sound);
         game.add(forward_right_sound);
         game.add(option_box_sound_label);
@@ -356,57 +321,52 @@ public class Setting extends JPanel {
         save.setBounds(300, 350, 120, 35);
         game.add(save);
         // option_setting
-        option_setting_labelv1 = new JLabel("Game");
-        option_setting_labelv1.setBounds(280, 200, 200, 40);
-        option_setting_labelv1.setFont(new Font("", Font.PLAIN, 20));
-        option_setting_labelv1.setForeground(Color.WHITE);
-        option_setting_labelv1.setHorizontalAlignment(SwingConstants.CENTER);
-        option_setting_labelv1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent me) {
-                option_setting_labelv1.setForeground(new Color(140, 181, 90));
-                check_color = true;
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me) {
-                option_setting_labelv1.setForeground(Color.WHITE);
-                check_color = false;
-            }
-
-            @Override
-            public void mousePressed(MouseEvent me) {
-                option_setting_labelv1.setForeground(new Color(47, 53, 62));
-                logout_image = option_setting_normal;
-                option_settingv2 = option_setting_normal;
-                option_settingv1 = option_setting_selected;
-                game.setVisible(true);
-                account.setVisible(false);
-                repaint();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent me) {
-                if (check_color) {
-                    option_setting_labelv1.setForeground(new Color(140, 181, 90));
-                } else {
-                    option_setting_labelv1.setForeground(Color.WHITE);
-                }
-            }
-        });
-        // setup button save
-        save.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                JDBCConnection.updateDataSetting(piece_url[index_piece], board_url[index_board],
-                        (index_sound == 0) ? true : false);
-                About.sound.close();
-                Menu.panelCardLayout.add(new About(), "about");
-                JOptionPane.showMessageDialog(null, "Your settings have been saved", "Notification",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
+        option_game = new JLabel("Game");
+        option_game.setBounds(280, 200, 200, 40);
+        option_game.setFont(new Font("", Font.PLAIN, 20));
+        option_game.setForeground(Color.WHITE);
+        option_game.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        forward_left_piece.addMouseListener(input);
+        forward_right_piece.addMouseListener(input);
+        forward_left_board.addMouseListener(input);
+        forward_right_board.addMouseListener(input);
+        forward_left_sound.addMouseListener(input);
+        forward_right_sound.addMouseListener(input);
+        save.addActionListener(input);
+        option_game.addMouseListener(input);
+    }
+    public void handle_option_game_mouse_pressed() {
+        option_game.setForeground(new Color(47, 53, 62));
+        logout_image = option_setting_normal;
+        option_settingv2 = option_setting_normal;
+        option_settingv1 = option_setting_selected;
+        game.setVisible(true);
+        account.setVisible(false);
+        repaint();
+    }
+    public void handle_option_game_mouse_entered() {
+        option_game.setForeground(new Color(140, 181, 90));
+        check_color = true;
+    }
+    public void handle_option_game_mouse_exited() {
+        option_game.setForeground(Color.WHITE);
+        check_color = false;
+    }
+    public void handle_option_game_mouse_released() {
+        if (check_color) {
+            option_game.setForeground(new Color(140, 181, 90));
+        } else {
+            option_game.setForeground(Color.WHITE);
+        }
+    }
+    public void handle_save() {
+        JDBCConnection.updateDataSetting(piece_url[index_piece], board_url[index_board],
+                (index_sound == 0) ? true : false);
+        About.sound.close();
+        Menu.panelCardLayout.add(new About(), "about");
+        JOptionPane.showMessageDialog(null, "Your settings have been saved", "Notification",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void initLogout() {
@@ -415,37 +375,31 @@ public class Setting extends JPanel {
         logout_label.setForeground(Color.WHITE);
         logout_label.setHorizontalAlignment(SwingConstants.CENTER);
         logout_label.setBounds(280, 300, 200, 40);
-        logout_label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent me) {
-                logout_label.setForeground(new Color(140, 181, 90));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me) {
-                logout_label.setForeground(Color.WHITE);
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent me) {
-                About.sound.close();
-                // call database delete current user
-                JDBCConnection.logOut();
-                JDBCConnection.deleteDataCurrentUser();
-                Menu.frame.dispose();
-                new Login();
-            }
-        });
         this.add(logout_label);
+        logout_label.addMouseListener(input);
+    }
+    public void handle_logout_label_entered() {
+        logout_label.setForeground(new Color(140, 181, 90));
+    }
+    public void handle_logout_label_exited() {
+        logout_label.setForeground(Color.WHITE);
+    }
+    public void handle_logout_label_pressed() {
+        About.sound.close();
+        // call database delete current user
+        JDBCConnection.logOut();
+        JDBCConnection.deleteDataCurrentUser();
+        Menu.frame.dispose();
+        new Login();
     }
 
     public void initAccount() {
         // account
-        option_setting_labelv2 = new JLabel("Account");
-        option_setting_labelv2.setBounds(280, 250, 200, 40);
-        option_setting_labelv2.setFont(new Font("", Font.PLAIN, 20));
-        option_setting_labelv2.setForeground(Color.WHITE);
-        option_setting_labelv2.setHorizontalAlignment(SwingConstants.CENTER);
+        option_account = new JLabel("Account");
+        option_account.setBounds(280, 250, 200, 40);
+        option_account.setFont(new Font("", Font.PLAIN, 20));
+        option_account.setForeground(Color.WHITE);
+        option_account.setHorizontalAlignment(SwingConstants.CENTER);
         account = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -500,77 +454,66 @@ public class Setting extends JPanel {
         change_password.setForeground(Color.WHITE);
         change_password.setFocusPainted(false);
         change_password.setBounds(50, 360, 180, 40);
-        change_password.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inforAccount = JDBCConnection.takeInforAccount();
-                char[] new_password_char = newPasswordBox.getPassword();
-                String new_password = new String(new_password_char).trim();
-                char[] new_retype_password_char = retypeNewPasswordBox.getPassword();
-                String new_retype_password = new String(new_retype_password_char).trim();
-                if (new_password.equals("")) {
-                    JOptionPane.showMessageDialog(null, "Please enter new Password", "Message",
-                            JOptionPane.WARNING_MESSAGE);
-                } else if (new_password.length() < 8) {
-                    JOptionPane.showMessageDialog(null, "Please enter new Password length < 8", "Message",
-                            JOptionPane.WARNING_MESSAGE);
-                } else if (new_password.equals(new_retype_password)) {
-                    if (!new_password.equals(inforAccount.get(1))) {
-                        JDBCConnection.updatePasswordCurrentUser(new_password);
-                        JDBCConnection.logOut();
-                        JOptionPane.showMessageDialog(null, "Change password success", "Message",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        newPasswordBox.setText("");
-                        retypeNewPasswordBox.setText("");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "The new password is not valid", "Message",
-                                JOptionPane.WARNING_MESSAGE);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "The retype new password is not valid", "Message",
-                            JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        });
         account.add(change_password);
-        option_setting_labelv2.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent me) {
-                option_setting_labelv2.setForeground(new Color(140, 181, 90));
-                check_color = true;
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me) {
-                option_setting_labelv2.setForeground(Color.WHITE);
-                check_color = false;
-            }
-
-            @Override
-            public void mousePressed(MouseEvent me) {
-                option_setting_labelv2.setForeground(new Color(47, 53, 62));
-                logout_image = option_setting_normal;
-                option_settingv1 = option_setting_normal;
-                option_settingv2 = option_setting_selected;
-                game.setVisible(false);
-                account.setVisible(true);
-                repaint();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent me) {
-                if (check_color) {
-                    option_setting_labelv2.setForeground(new Color(140, 181, 90));
-                } else {
-                    option_setting_labelv2.setForeground(Color.WHITE);
-                }
-            }
-        });
-        this.add(option_setting_labelv1);
-        this.add(option_setting_labelv2);
+        this.add(option_game);
+        this.add(option_account);
         this.add(account);
+        change_password.addActionListener(input);
+        option_account.addMouseListener(input);
     }
-
+    public void option_account_entered() {
+        option_account.setForeground(new Color(140, 181, 90));
+        check_color = true;
+    }
+    public void option_account_pressed() {
+        option_account.setForeground(new Color(47, 53, 62));
+        logout_image = option_setting_normal;
+        option_settingv1 = option_setting_normal;
+        option_settingv2 = option_setting_selected;
+        game.setVisible(false);
+        account.setVisible(true);
+        repaint();
+    }
+    public void option_account_exited() {
+        option_account.setForeground(Color.WHITE);
+        check_color = false;
+    }
+    public void option_account_released() {
+        if (check_color) {
+            option_account.setForeground(new Color(140, 181, 90));
+        } else {
+            option_account.setForeground(Color.WHITE);
+        }
+    }
+    public void handle_change_password() {
+        inforAccount = JDBCConnection.takeInforAccount();
+        char[] new_password_char = newPasswordBox.getPassword();
+        String new_password = new String(new_password_char).trim();
+        char[] new_retype_password_char = retypeNewPasswordBox.getPassword();
+        String new_retype_password = new String(new_retype_password_char).trim();
+        if (new_password.equals("")) {
+            JOptionPane.showMessageDialog(null, "Please enter new Password", "Message",
+                    JOptionPane.WARNING_MESSAGE);
+        } else if (new_password.length() < 8) {
+            JOptionPane.showMessageDialog(null, "Please enter new Password length < 8", "Message",
+                    JOptionPane.WARNING_MESSAGE);
+        } else if (new_password.equals(new_retype_password)) {
+            if (!new_password.equals(inforAccount.get(1))) {
+                JDBCConnection.updatePasswordCurrentUser(new_password);
+                JDBCConnection.logOut();
+                JOptionPane.showMessageDialog(null, "Change password success", "Message",
+                        JOptionPane.INFORMATION_MESSAGE);
+                newPasswordBox.setText("");
+                retypeNewPasswordBox.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "The new password is not valid", "Message",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "The retype new password is not valid", "Message",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -580,5 +523,57 @@ public class Setting extends JPanel {
         g2d.drawImage(logout_image, 280, 300, 200, 40, this);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
         g2d.drawImage(panel_options, 500, 174, 540, 420, this);
+    }
+    public ButtonImage getBack_normal_button() {
+        return back_normal_button;
+    }
+
+    public ButtonImage getHome_normal_button() {
+        return home_normal_button;
+    }
+
+    public ButtonImage getForward_left_piece() {
+        return forward_left_piece;
+    }
+
+    public ButtonImage getForward_right_piece() {
+        return forward_right_piece;
+    }
+
+    public ButtonImage getForward_left_board() {
+        return forward_left_board;
+    }
+
+    public ButtonImage getForward_right_board() {
+        return forward_right_board;
+    }
+
+    public ButtonImage getForward_left_sound() {
+        return forward_left_sound;
+    }
+
+    public ButtonImage getForward_right_sound() {
+        return forward_right_sound;
+    }
+
+
+    public JButton getSave() {
+        return save;
+    }
+
+    public JButton getChange_password() {
+        return change_password;
+    }
+
+    public JLabel getoption_game() {
+        return option_game;
+    }
+
+    public JLabel getoption_account() {
+        return option_account;
+    }
+
+    public JLabel getLogout_label() {
+        return logout_label;
     }
 }

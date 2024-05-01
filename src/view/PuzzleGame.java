@@ -76,16 +76,14 @@ public class PuzzleGame extends JPanel {
         home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 Menu.panelCardLayout.add(new ListPuzzle(), "listPuzzle");
                 Menu.cardLayout.show(Menu.panelCardLayout, "listPuzzle");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 Menu.panelCardLayout.add(new ListPuzzle(), "listPuzzle");
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
@@ -165,31 +163,28 @@ public class PuzzleGame extends JPanel {
         // listener
         hint.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 board.setHintBoolean(true);
                 board.repaint();
             }
         });
         undo.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 Menu.panelCardLayout.add(new PuzzleGame(FEN, lever), "puzzleGame");
                 Menu.cardLayout.show(Menu.panelCardLayout, "puzzleGame");
             }
         });
         try_again.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 Menu.panelCardLayout.add(new PuzzleGame(FEN, lever), "puzzleGame");
                 Menu.cardLayout.show(Menu.panelCardLayout, "puzzleGame");
             }
         });
         next_lever.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 if (lever < 100) {
                     nextLever(++lever);
                 }

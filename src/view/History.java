@@ -71,13 +71,13 @@ public class History extends JPanel {
         home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
@@ -92,8 +92,7 @@ public class History extends JPanel {
         forward_right.setBounds(790, 740, 32, 32);
         forward_left.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 if (index_page > 0) {
                     --index_page;
                 } else if (index_page == 0) {
@@ -108,8 +107,7 @@ public class History extends JPanel {
         });
         forward_right.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 if (index_page < max_index_page - 1) {
                     ++index_page;
                 } else if (index_page == max_index_page - 1) {
@@ -171,7 +169,7 @@ public class History extends JPanel {
             for (File nameFile : file) {
                 listHistory.get(count).addMouseListener(new MouseAdapter() {
                     @Override
-                    public void mouseClicked(MouseEvent e) {
+                    public void mousePressed(MouseEvent e) {
                         Menu.panelCardLayout.add(new Review(nameFile),"review");
                         Menu.cardLayout.show(Menu.panelCardLayout,"review");
                     }

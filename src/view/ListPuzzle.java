@@ -77,15 +77,13 @@ public class ListPuzzle extends JPanel {
         home_normal_button.setBounds(1000, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
@@ -98,8 +96,8 @@ public class ListPuzzle extends JPanel {
         forward_right.setBounds(788, 740, 32, 32);
         forward_left.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 if (index_page > 0) {
                     --index_page;
                 }
@@ -117,8 +115,7 @@ public class ListPuzzle extends JPanel {
         });
         forward_right.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 if (index_page < _page.length - 1) {
                     ++index_page;
                 }
@@ -244,15 +241,14 @@ public class ListPuzzle extends JPanel {
 
     public void initController(final String FEN, final int lever) {
         /*
-         * mouseClicked cần truy cập FEN nhưng lever không thể truy cập trực tiếp vì
+         * mousePressed cần truy cập FEN nhưng lever không thể truy cập trực tiếp vì
          * chúng là các biến cục bộ.
          * Khai báo FEN and lever as final cung cấp quyền truy cập an toàn và có kiểm
          * soát từ lớp bên trong ẩn danh.
          */
         puzzle[lever].addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
                 Menu.panelCardLayout.add(new PuzzleGame(FEN, lever), "puzzleGame");
                 Menu.cardLayout.show(Menu.panelCardLayout, "puzzleGame");
             }

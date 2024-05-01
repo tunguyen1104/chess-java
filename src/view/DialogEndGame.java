@@ -54,19 +54,19 @@ public class DialogEndGame extends JPanel{
         home.setBounds(240,320,152,50);
         newGame.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
             }
         });
         review.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
             }
         });
         home.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
@@ -77,7 +77,8 @@ public class DialogEndGame extends JPanel{
     }
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(image,120,150,400,256,this);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(image,120,150,400,256,this);
     }
     public JLabel getTitle() {
         return title;

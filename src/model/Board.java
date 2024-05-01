@@ -285,9 +285,10 @@ public class Board extends JPanel {
         }
     }
     public void addDialogEndGame(String name, String reason) {
+        checkEndGame = true;
         this.add(new DialogEndGame(name, reason));
         repaint();
-        validate(); 
+        validate();
     }
     private String getFileName() {
         Date currentTime = new Date();

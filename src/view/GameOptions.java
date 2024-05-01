@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 
+import controller.ListenerGameOptions;
 import model.ReadImage;
 
 import java.awt.*;
@@ -58,7 +59,7 @@ public class GameOptions extends JPanel {
     String lever_string[] = {
             "Easy", "Medium", "Hard"
     };
-
+    private ListenerGameOptions input = new ListenerGameOptions(this);
     public GameOptions() {
         try {
             option_box_game = ImageIO.read(new File("resources/gui/option_box.png"));
@@ -76,7 +77,100 @@ public class GameOptions extends JPanel {
         }
         initPanel();
     }
-
+    public void handle_forward_left_game() {
+        --index_game;
+        if (index_game < 0)
+            index_game = game_mode_string.length - 1;
+        if (index_game == 1) {
+            side.setVisible(false);
+            option_box_side_label.setVisible(false);
+            forward_left_side.setVisible(false);
+            forward_right_side.setVisible(false);
+            option_box_side = null;
+            lever.setVisible(false);
+            option_box_lever_label.setVisible(false);
+            forward_left_lever.setVisible(false);
+            forward_right_lever.setVisible(false);
+            option_box_lever = null;
+        } else {
+            side.setVisible(true);
+            option_box_side_label.setVisible(true);
+            forward_left_side.setVisible(true);
+            forward_right_side.setVisible(true);
+            option_box_side = option_box_game;
+            lever.setVisible(true);
+            option_box_lever_label.setVisible(true);
+            forward_left_lever.setVisible(true);
+            forward_right_lever.setVisible(true);
+            option_box_lever = option_box_game;
+        }
+        option_box_game_label.setText(game_mode_string[index_game]);
+    }
+    public void handle_forward_right_game() {
+        ++index_game;
+        if (index_game > game_mode_string.length - 1)
+            index_game = 0;
+        if (index_game == 1) {
+            side.setVisible(false);
+            option_box_side_label.setVisible(false);
+            forward_left_side.setVisible(false);
+            forward_right_side.setVisible(false);
+            option_box_side = null;
+            lever.setVisible(false);
+            option_box_lever_label.setVisible(false);
+            forward_left_lever.setVisible(false);
+            forward_right_lever.setVisible(false);
+            option_box_lever = null;
+        } else {
+            side.setVisible(true);
+            option_box_side_label.setVisible(true);
+            forward_left_side.setVisible(true);
+            forward_right_side.setVisible(true);
+            option_box_side = option_box_game;
+            lever.setVisible(true);
+            option_box_lever_label.setVisible(true);
+            forward_left_lever.setVisible(true);
+            forward_right_lever.setVisible(true);
+            option_box_lever = option_box_game;
+        }
+        option_box_game_label.setText(game_mode_string[index_game]);
+    }
+    public void handle_forward_left_time() {
+        --index_time;
+        if (index_time < 0)
+            index_time = time_string.length - 1;
+        option_box_time_label.setText(time_string[index_time]);
+    }
+    public void handle_forward_right_time() {
+        ++index_time;
+        if (index_time > time_string.length - 1)
+            index_time = 0;
+        option_box_time_label.setText(time_string[index_time]);
+    }
+    public void handle_go() {
+        int minute = 1;
+        switch (index_time) {
+            case 0:
+                minute = 1;
+                break;
+            case 1:
+                minute = 3;
+                break;
+            case 2:
+                minute = 10;
+                break;
+            case 3:
+                minute = 30;
+                break;
+        }
+        if (option_box_game_label.getText().equals("PvC")) {
+            Menu.panelCardLayout.add(new GamePVC(minute), "gamePvC");
+            Menu.cardLayout.show(Menu.panelCardLayout, "gamePvC");
+        } else {
+            Menu.panelCardLayout.add(new GamePVP(minute), "gamePvP");
+            Menu.cardLayout.show(Menu.panelCardLayout, "gamePvP");
+        }
+    }
     public void initPanel() {
         this.setPreferredSize(new Dimension(1536, 864));
         this.setBackground(new Color(41, 41, 41));
@@ -86,25 +180,11 @@ public class GameOptions extends JPanel {
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(new Font("",Font.BOLD,20));
         this.add(title_bar_label);
-        // ----------------------
         // setting back_normal, home_normal
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
         back_normal_button.setBounds(465, 10, 44, 44);
         home_normal_button.setBounds(1000, 10, 44, 44);
-        back_normal_button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
-            }
-        });
-        home_normal_button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
-            }
-        });
         this.add(back_normal_button);
         this.add(home_normal_button);
         // setting button
@@ -115,33 +195,6 @@ public class GameOptions extends JPanel {
         go.setForeground(Color.WHITE);
         go.setFocusPainted(false);
         this.add(go);
-        go.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int minute = 1;
-                switch (index_time) {
-                    case 0:
-                        minute = 1;
-                        break;
-                    case 1:
-                        minute = 3;
-                        break;
-                    case 2:
-                        minute = 10;
-                        break;
-                    case 3:
-                        minute = 30;
-                        break;
-                }
-                if (option_box_game_label.getText().equals("PvC")) {
-                    Menu.panelCardLayout.add(new GamePVC(minute), "gamePvC");
-                    Menu.cardLayout.show(Menu.panelCardLayout, "gamePvC");
-                } else {
-                    Menu.panelCardLayout.add(new GamePVP(minute), "gamePvP");
-                    Menu.cardLayout.show(Menu.panelCardLayout, "gamePvP");
-                }
-            }
-        });
         // setting JLabel
         game_mode = new JLabel("Game Mode");
         game_mode.setBounds(420, 200, 120, 50);
@@ -176,72 +229,6 @@ public class GameOptions extends JPanel {
         forward_right_game = new ButtonImage(forward_normal_v2, forward_selected_v2, 32, 32, "");
         forward_left_game.setBounds(580, 210, 32, 32);
         forward_right_game.setBounds(760, 210, 32, 32);
-        forward_left_game.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                --index_game;
-                if (index_game < 0)
-                    index_game = game_mode_string.length - 1;
-                if (index_game == 1) {
-                    side.setVisible(false);
-                    option_box_side_label.setVisible(false);
-                    forward_left_side.setVisible(false);
-                    forward_right_side.setVisible(false);
-                    option_box_side = null;
-                    lever.setVisible(false);
-                    option_box_lever_label.setVisible(false);
-                    forward_left_lever.setVisible(false);
-                    forward_right_lever.setVisible(false);
-                    option_box_lever = null;
-                } else {
-                    side.setVisible(true);
-                    option_box_side_label.setVisible(true);
-                    forward_left_side.setVisible(true);
-                    forward_right_side.setVisible(true);
-                    option_box_side = option_box_game;
-                    lever.setVisible(true);
-                    option_box_lever_label.setVisible(true);
-                    forward_left_lever.setVisible(true);
-                    forward_right_lever.setVisible(true);
-                    option_box_lever = option_box_game;
-                }
-                option_box_game_label.setText(game_mode_string[index_game]);
-            }
-        });
-        forward_right_game.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                ++index_game;
-                if (index_game > game_mode_string.length - 1)
-                    index_game = 0;
-                if (index_game == 1) {
-                    side.setVisible(false);
-                    option_box_side_label.setVisible(false);
-                    forward_left_side.setVisible(false);
-                    forward_right_side.setVisible(false);
-                    option_box_side = null;
-                    lever.setVisible(false);
-                    option_box_lever_label.setVisible(false);
-                    forward_left_lever.setVisible(false);
-                    forward_right_lever.setVisible(false);
-                    option_box_lever = null;
-                } else {
-                    side.setVisible(true);
-                    option_box_side_label.setVisible(true);
-                    forward_left_side.setVisible(true);
-                    forward_right_side.setVisible(true);
-                    option_box_side = option_box_game;
-                    lever.setVisible(true);
-                    option_box_lever_label.setVisible(true);
-                    forward_left_lever.setVisible(true);
-                    forward_right_lever.setVisible(true);
-                    option_box_lever = option_box_game;
-                }
-                option_box_game_label.setText(game_mode_string[index_game]);
-            }
-        });
         this.add(forward_left_game);
         this.add(forward_right_game);
         this.add(option_box_game_label);
@@ -256,30 +243,9 @@ public class GameOptions extends JPanel {
         forward_right_time = new ButtonImage(forward_normal_v2, forward_selected_v2, 32, 32, "");
         forward_left_time.setBounds(580, 290, 32, 32);
         forward_right_time.setBounds(760, 290, 32, 32);
-        forward_left_time.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                --index_time;
-                if (index_time < 0)
-                    index_time = time_string.length - 1;
-                option_box_time_label.setText(time_string[index_time]);
-            }
-        });
-        forward_right_time.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                ++index_time;
-                if (index_time > time_string.length - 1)
-                    index_time = 0;
-                option_box_time_label.setText(time_string[index_time]);
-            }
-        });
         this.add(forward_left_time);
         this.add(forward_right_time);
         this.add(option_box_time_label);
-
         // side
         option_box_side_label = new JLabel();
         option_box_side_label.setText(side_string[index_side]);
@@ -290,26 +256,6 @@ public class GameOptions extends JPanel {
         forward_right_side = new ButtonImage(forward_normal_v2, forward_selected_v2, 32, 32, "");
         forward_left_side.setBounds(580, 370, 32, 32);
         forward_right_side.setBounds(760, 370, 32, 32);
-        forward_left_side.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                --index_side;
-                if (index_side < 0)
-                    index_side = side_string.length - 1;
-                option_box_side_label.setText(side_string[index_side]);
-            }
-        });
-        forward_right_side.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                ++index_side;
-                if (index_side > side_string.length - 1)
-                    index_side = 0;
-                option_box_side_label.setText(side_string[index_side]);
-            }
-        });
         this.add(forward_left_side);
         this.add(forward_right_side);
         this.add(option_box_side_label);
@@ -323,31 +269,47 @@ public class GameOptions extends JPanel {
         forward_right_lever = new ButtonImage(forward_normal_v2, forward_selected_v2, 32, 32, "");
         forward_left_lever.setBounds(580, 450, 32, 32);
         forward_right_lever.setBounds(760, 450, 32, 32);
-        forward_left_lever.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                --index_lever;
-                if (index_lever < 0)
-                    index_lever = lever_string.length - 1;
-                option_box_lever_label.setText(lever_string[index_lever]);
-            }
-        });
-        forward_right_lever.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                ++index_lever;
-                if (index_lever > lever_string.length - 1)
-                    index_lever = 0;
-                option_box_lever_label.setText(lever_string[index_lever]);
-            }
-        });
         this.add(forward_left_lever);
         this.add(forward_right_lever);
         this.add(option_box_lever_label);
+
+        back_normal_button.addMouseListener(input);
+        home_normal_button.addMouseListener(input);
+        forward_left_game.addMouseListener(input);
+        forward_right_game.addMouseListener(input);
+        forward_left_time.addMouseListener(input);
+        forward_right_time.addMouseListener(input);
+        forward_left_side.addMouseListener(input);
+        forward_right_side.addMouseListener(input);
+        forward_left_lever.addMouseListener(input);
+        forward_right_lever.addMouseListener(input);
+        go.addActionListener(input);
+    }
+    public void handle_forward_left_side() {
+        --index_side;
+        if (index_side < 0)
+            index_side = side_string.length - 1;
+        option_box_side_label.setText(side_string[index_side]);
+    }
+    public void handle_forward_right_side() {
+        ++index_side;
+        if (index_side > side_string.length - 1)
+            index_side = 0;
+        option_box_side_label.setText(side_string[index_side]);
     }
 
+    public void handle_forward_left_lever() {
+        --index_lever;
+        if (index_lever < 0)
+            index_lever = lever_string.length - 1;
+        option_box_lever_label.setText(lever_string[index_lever]);
+    }
+    public void handle_forward_right_lever() {
+        ++index_lever;
+        if (index_lever > lever_string.length - 1)
+            index_lever = 0;
+        option_box_lever_label.setText(lever_string[index_lever]);
+    }
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -359,5 +321,45 @@ public class GameOptions extends JPanel {
         g2d.drawImage(option_box_time, 616, 290, 140, 32, this);
         g2d.drawImage(option_box_side, 616, 370, 140, 32, this);
         g2d.drawImage(option_box_lever, 616, 450, 140, 32, this);
+    }
+
+    public ButtonImage getBack_normal_button() {
+        return back_normal_button;
+    }
+
+    public ButtonImage getHome_normal_button() {
+        return home_normal_button;
+    }
+
+    public ButtonImage getForward_left_game() {
+        return forward_left_game;
+    }
+
+    public ButtonImage getForward_right_game() {
+        return forward_right_game;
+    }
+
+    public ButtonImage getForward_left_time() {
+        return forward_left_time;
+    }
+
+    public ButtonImage getForward_right_time() {
+        return forward_right_time;
+    }
+
+    public ButtonImage getForward_left_side() {
+        return forward_left_side;
+    }
+
+    public ButtonImage getForward_right_side() {
+        return forward_right_side;
+    }
+
+    public ButtonImage getForward_left_lever() {
+        return forward_left_lever;
+    }
+
+    public ButtonImage getForward_right_lever() {
+        return forward_right_lever;
     }
 }
