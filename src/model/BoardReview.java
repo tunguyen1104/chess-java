@@ -22,7 +22,7 @@ import view.Review;
 
 public class BoardReview extends JPanel{
     private Review review;
-    private ListenerReview listenerReview;
+    private ListenerReview input;
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
     private ArrayList<Piece> rotateList = new ArrayList<Piece>();
     List<String> move = new ArrayList<>();
@@ -41,22 +41,14 @@ public class BoardReview extends JPanel{
     private int row_checkmate = -1;
     public BoardReview(Review review, File path) {
         this.review = review;
-        listenerReview = new ListenerReview(review, this);
+        input = new ListenerReview(review, this);
         ReadImage.sound.playMusic(0);
         for (char column = 'a'; column <= 'h'; ++column) {
             columnMap.put(column, column - 'a');
         }
         addPiece();
-        long begin = java.util.Calendar.getInstance().getTimeInMillis();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                handlePgn(path);
-                saveSnapShot();
-                long end = java.util.Calendar.getInstance().getTimeInMillis();
-                System.out.println("Executed Time: " + (end - begin));
-            }
-        }); thread.start();
+        handlePgn(path);
+        saveSnapShot();
     }
     public void handlePgn(File path) {
         try (FileInputStream fis = new FileInputStream(path);

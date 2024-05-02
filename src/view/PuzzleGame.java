@@ -170,6 +170,9 @@ public class PuzzleGame extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (lever < 100) {
                     nextLever(++lever);
+                } else if(lever == 100) {
+                    Menu.panelCardLayout.add(new ListPuzzle(), "listPuzzle");
+                    Menu.cardLayout.show(Menu.panelCardLayout, "listPuzzle");
                 }
             }
         });

@@ -284,7 +284,7 @@ public class Setting extends JPanel {
         option_box_sound_label.setForeground(Color.WHITE);
         option_box_sound_label.setFont(new Font("", Font.PLAIN, 18));
         option_box_sound_label.setBounds(340, 280, 200, 32);
-        forward_left_sound = new ButtonImage(ReadImage.forward_normal, ReadImage.back_selected, 32, 32, "");
+        forward_left_sound = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
         forward_right_sound = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_left_sound.setBounds(240, 280, 32, 32);
         forward_right_sound.setBounds(440, 280, 32, 32);
