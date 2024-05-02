@@ -7,7 +7,6 @@ import view.DialogEndGame;
 import view.GamePVP;
 import view.PuzzleGame;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -35,8 +34,6 @@ public class Board extends JPanel {
     public ListenerPuzzle inputPuzzle;
     public int enPassantTile = -1;
     public int promotion = -1;
-    public Sound sound;
-    private Image board_image;
     // paint old new piece
     private int old_col = -1;
     private int old_row = -1;
@@ -45,7 +42,6 @@ public class Board extends JPanel {
     private int col_in_place = -1;
     private int row_in_place = -1;
     private int castLing = -1;
-    private ArrayList<String> dataJDBC = JDBCConnection.takeDataSetting();
     private ArrayList<String> dataPuzzle = JDBCConnection.takeDataPuzzle();
     Timer timer;
     public boolean color_to_move;
@@ -88,21 +84,11 @@ public class Board extends JPanel {
     public void setCheckMateBlack(boolean checkMateBlack) {
         this.checkMateBlack = checkMateBlack;
     }
-    //public JPanel dialogEndGame = new DialogEndGame("Black","checkmate");
     public Board(PuzzleGame puzzleGame, String FEN) {
-        if (dataJDBC.get(2).equals("1"))
-            sound = new Sound();
-        else
-            sound = new Sound(1);
         this.puzzleGame = puzzleGame;
         this.FEN = FEN;
-        sound.playMusic(0);
-        inputPuzzle = new ListenerPuzzle(this, sound);
-        try {
-            board_image = ImageIO.read(new File(dataJDBC.get(1)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ReadImage.sound.playMusic(0);
+        inputPuzzle = new ListenerPuzzle(this);
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(inputPuzzle);
         this.addMouseMotionListener(inputPuzzle);
@@ -111,23 +97,13 @@ public class Board extends JPanel {
     }
 
     public Board(GamePVP game) {
-        if (dataJDBC.get(2).equals("1"))
-            sound = new Sound();
-        else
-            sound = new Sound(1);
         this.game = game;
-        sound.playMusic(0);
-        input = new Listener(this, game, sound);
-        try {
-            board_image = ImageIO.read(new File(dataJDBC.get(1)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ReadImage.sound.playMusic(0);
+        input = new Listener(this, game);
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
         addPiece();
-       // this.add(dialogEndGame);
     }
 
     public Piece getPiece(int col, int row) {
@@ -167,13 +143,12 @@ public class Board extends JPanel {
     public void hint(Graphics2D g2d) {
         col_hint = piecePuzzle.get(index_piecePuzzle).charAt(0) - 'a';
         row_hint = 8 - (piecePuzzle.get(index_piecePuzzle).charAt(1) - '0');
-        g2d.setColor(new Color(102, 159, 128, 200));
+        g2d.setColor(new Color(205, 175, 0, 155));
         g2d.fillRect(col_hint * tileSize, row_hint * tileSize, tileSize, tileSize);
         hintBoolean = false;
         col_hint = -1;
         row_hint = -1;
     }
-
     public void solvePuzzle(Move move) {
         int currentCol = piecePuzzle.get(index_piecePuzzle).charAt(0) - 'a';
         int currentRow = 8 - (piecePuzzle.get(index_piecePuzzle).charAt(1) - '0');
@@ -183,7 +158,7 @@ public class Board extends JPanel {
                 && newRow == move.getNewRow()) {
             ++index_piecePuzzle;
             if (index_piecePuzzle < piecePuzzle.size()) {
-                sound.playMusic(7);
+                ReadImage.sound.playMusic(7);
                 done_failed_puzzle = 1;
                 col_puzzle = newCol;
                 row_puzzle = newRow;
@@ -201,7 +176,7 @@ public class Board extends JPanel {
                 thread.start();
             } else {
                 // done puzzle
-                sound.playMusic(1);
+                ReadImage.sound.playMusic(1);
                 col_puzzle = newCol;
                 row_puzzle = newRow;
                 puzzleGame.done_panel.setVisible(true);
@@ -255,7 +230,7 @@ public class Board extends JPanel {
             }
         } else {
             // failed
-            sound.playMusic(6);
+            ReadImage.sound.playMusic(6);
             col_puzzle = move.piece.col;
             row_puzzle = move.piece.row;
             puzzleGame.done_panel.setVisible(false);
@@ -330,9 +305,9 @@ public class Board extends JPanel {
         pieceList.remove(piece);
         if (getPiece(y_new, x_new) != null) {
             pieceList.remove(getPiece(y_new, x_new));
-            sound.playMusic(3);
+            ReadImage.sound.playMusic(3);
         } else {
-            sound.playMusic(2);
+            ReadImage.sound.playMusic(2);
         }
         if (piece.name.equals("King"))
             pieceList.add(new King(y_new, x_new, color_to_move));
@@ -377,9 +352,9 @@ public class Board extends JPanel {
         }
 
         if (done_failed_puzzle == 1) {
-            g2d.drawImage(puzzleGame.circle_check, _col, _row, 28, 28, puzzleGame);
+            g2d.drawImage(ReadImage.circle_check, _col, _row, 28, 28, puzzleGame);
         } else if (done_failed_puzzle == 2) {
-            g2d.drawImage(puzzleGame.circle_xmark, _col, _row, 28, 28, puzzleGame);
+            g2d.drawImage(ReadImage.circle_xmark, _col, _row, 28, 28, puzzleGame);
         }
     }
 
@@ -431,7 +406,7 @@ public class Board extends JPanel {
             game.getTimeLabelWhite().setBounds(1050, 490, 500, 200);
             game.getTimeLabelBlack().setBounds(1050, 160, 500, 200);
         }
-        sound.playMusic(4);
+        ReadImage.sound.playMusic(4);
         repaint();
     }
     public void makeMove(Move move) {
@@ -450,7 +425,7 @@ public class Board extends JPanel {
             move.piece.isFirstMove = false;
 
             if (move.capture != null) {
-                sound.playMusic(3);
+                ReadImage.sound.playMusic(3);
                 delete_piece(move.capture);
                 if (FEN.equals(""))
                     input.change_check_delete(true);
@@ -492,7 +467,7 @@ public class Board extends JPanel {
         move.piece.xPos = move.getNewCol() * tileSize;
         move.piece.yPos = move.getNewRow() * tileSize;
         if (move.capture != null) {
-            sound.playMusic(3);
+            ReadImage.sound.playMusic(3);
             delete_piece(move.capture);
             if (FEN.equals(""))
                 input.change_check_delete(true);
@@ -546,7 +521,7 @@ public class Board extends JPanel {
                     break;
             }
         }
-        sound.playMusic(5);
+        ReadImage.sound.playMusic(5);
         delete_piece(move.piece);
     }
     public String step_begin(Move move) {
@@ -696,6 +671,8 @@ public class Board extends JPanel {
             if(piece.isWhite == color) {
                 for (int r = 0; r < rows; ++r) {
                     for (int c = 0; c < cols; ++c) {
+                        if(piece.name.equals("King")) selectedPiece = piece;
+                        else selectedPiece = null;
                         if (isValidMove(new Move(this, piece, c, r))) {
                             return false;
                         }
@@ -748,7 +725,7 @@ public class Board extends JPanel {
         int kingCol = king.col;
         int kingRow = king.row;
         
-        if((selectedPiece != null && selectedPiece.name.equals("King") ) || move.piece.name.equals("King")) {
+        if(selectedPiece != null && selectedPiece.name.equals("King")) {
             kingCol = move.getNewCol();
             kingRow = move.getNewRow();
         }
@@ -980,6 +957,7 @@ public class Board extends JPanel {
         
         for(int i = 0;i <= 7; ++i) {
             pieceList.add(new Pawn(i, 1, false));
+            pieceList.add(new Pawn(i, 6, true));
         }
 
         pieceList.add(new Rook(0, 7, true));
@@ -990,10 +968,6 @@ public class Board extends JPanel {
         pieceList.add(new Bishop(5, 7, true));
         pieceList.add(new Knight(6, 7, true));
         pieceList.add(new Rook(7, 7, true));
-        
-        for(int i = 0;i <= 7; ++i) {
-            pieceList.add(new Pawn(i, 6, true));
-        }
     }
 
     public void handleFen(String fen) {
@@ -1071,7 +1045,7 @@ public class Board extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(board_image, 0, 0, tileSize * 8, tileSize * 8, this);
+        g2d.drawImage(ReadImage.board_image, 0, 0, tileSize * 8, tileSize * 8, this);
         if (col_in_place != -1) {
             g2d.setColor(new Color(224, 207, 56, 131));
             g2d.fillRect(col_in_place * tileSize, row_in_place * tileSize, tileSize, tileSize);

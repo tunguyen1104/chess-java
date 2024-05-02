@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import model.Board;
 import model.Sound;
 import model.Move;
+import model.ReadImage;
 import model.pieces.Piece;
 import view.DialogEndGame;
 import view.GamePVP;
@@ -13,16 +14,14 @@ import view.GamePVP;
 public class Listener extends MouseAdapter {
     private GamePVP game;
     private Board board;
-    public Sound sound;
     public StringBuilder pgn = new StringBuilder();
     private boolean isTurn = true;// mặc định quân trắng đi trước
     public boolean check_delete = false;
     public boolean check_promotion = true;
     private boolean checkMateEndGame;
-    public Listener(Board board, GamePVP game, Sound sound) {
+    public Listener(Board board, GamePVP game) {
         this.board = board;
         this.game = game;
-        this.sound = sound;
     }
 
     private int count_step = 1;
@@ -90,7 +89,7 @@ public class Listener extends MouseAdapter {
                 board.paint_in_place(-1, -1);
                 boolean checkMate = board.paintKingCheckMate(isTurn);
                 if (!this.check_delete && !this.check_promotion)
-                    sound.playMusic(2);
+                    ReadImage.sound.playMusic(2);
                 String s = game.textArea.getText();
                 String plus = checkMate ? "+" : "";
                 board.selectedPiece = null;
@@ -121,7 +120,7 @@ public class Listener extends MouseAdapter {
                         "CheckMate\n" +
                         "Black win\n";
                 board.saveFile(new String(text + pgn));
-                sound.playMusic(1);
+                ReadImage.sound.playMusic(1);
                 game.timeLabelWhite.stop();
                 game.timeLabelBlack.stop();
                 board.addDialogEndGame("Black", "checkmate");
@@ -132,7 +131,7 @@ public class Listener extends MouseAdapter {
                         "\nCheckMate\n" +
                         "White win\n";
                 board.saveFile(new String(text + pgn));
-                sound.playMusic(1);
+                ReadImage.sound.playMusic(1);
                 game.timeLabelWhite.stop();
                 game.timeLabelBlack.stop();
                 board.addDialogEndGame("White", "checkmate");

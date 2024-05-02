@@ -6,7 +6,6 @@ import controller.ListenerGameOptions;
 import model.ReadImage;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -14,7 +13,7 @@ import java.io.IOException;
 
 public class GameOptions extends JPanel {
     private JLabel title_bar_label;
-    private Image game_options_panel;
+    
     private Image chess_standard;
     private JButton go;
     private JLabel game_mode;
@@ -23,10 +22,6 @@ public class GameOptions extends JPanel {
     private JLabel side;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private Image forward_normal;
-    private Image forward_normal_v2;
-    private Image forward_selected;
-    private Image forward_selected_v2;
     private Image option_box_game;
     private Image option_box_time;
     private Image option_box_side;
@@ -62,16 +57,11 @@ public class GameOptions extends JPanel {
     private ListenerGameOptions input = new ListenerGameOptions(this);
     public GameOptions() {
         try {
-            option_box_game = ImageIO.read(new File("resources/gui/option_box.png"));
-            forward_normal = ImageIO.read(new File("resources/buttons/forward_normal.png"));
-            forward_normal_v2 = ImageIO.read(new File("resources/buttons/forward_normalv2.png"));
-            forward_selected = ImageIO.read(new File("resources/buttons/forward_selected.png"));
-            forward_selected_v2 = ImageIO.read(new File("resources/buttons/forward_selectedv2.png"));
+            option_box_game = ReadImage.option_box;
             option_box_time = option_box_game;
             option_box_side = option_box_game;
             option_box_lever = option_box_game;
             chess_standard = ImageIO.read(new File("resources/gui/chess_standard.png"));
-            game_options_panel = ImageIO.read(new File("resources/gui/game_options_panel.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -225,8 +215,8 @@ public class GameOptions extends JPanel {
         option_box_game_label.setForeground(Color.WHITE);
         option_box_game_label.setFont(new Font("", Font.PLAIN, 18));
         option_box_game_label.setBounds(665, 210, 100, 32);
-        forward_left_game = new ButtonImage(forward_normal, forward_selected, 32, 32, "");
-        forward_right_game = new ButtonImage(forward_normal_v2, forward_selected_v2, 32, 32, "");
+        forward_left_game = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
+        forward_right_game = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_left_game.setBounds(580, 210, 32, 32);
         forward_right_game.setBounds(760, 210, 32, 32);
         this.add(forward_left_game);
@@ -239,8 +229,8 @@ public class GameOptions extends JPanel {
         option_box_time_label.setForeground(Color.WHITE);
         option_box_time_label.setFont(new Font("", Font.PLAIN, 18));
         option_box_time_label.setBounds(660, 290, 100, 32);
-        forward_left_time = new ButtonImage(forward_normal, forward_selected, 32, 32, "");
-        forward_right_time = new ButtonImage(forward_normal_v2, forward_selected_v2, 32, 32, "");
+        forward_left_time = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
+        forward_right_time = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_left_time.setBounds(580, 290, 32, 32);
         forward_right_time.setBounds(760, 290, 32, 32);
         this.add(forward_left_time);
@@ -252,8 +242,8 @@ public class GameOptions extends JPanel {
         option_box_side_label.setForeground(Color.WHITE);
         option_box_side_label.setFont(new Font("", Font.PLAIN, 18));
         option_box_side_label.setBounds(660, 370, 100, 32);
-        forward_left_side = new ButtonImage(forward_normal, forward_selected, 32, 32, "");
-        forward_right_side = new ButtonImage(forward_normal_v2, forward_selected_v2, 32, 32, "");
+        forward_left_side = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
+        forward_right_side = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_left_side.setBounds(580, 370, 32, 32);
         forward_right_side.setBounds(760, 370, 32, 32);
         this.add(forward_left_side);
@@ -265,8 +255,8 @@ public class GameOptions extends JPanel {
         option_box_lever_label.setForeground(Color.WHITE);
         option_box_lever_label.setFont(new Font("", Font.PLAIN, 18));
         option_box_lever_label.setBounds(662, 450, 100, 32);
-        forward_left_lever = new ButtonImage(forward_normal, forward_selected, 32, 32, "");
-        forward_right_lever = new ButtonImage(forward_normal_v2, forward_selected_v2, 32, 32, "");
+        forward_left_lever = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
+        forward_right_lever = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_left_lever.setBounds(580, 450, 32, 32);
         forward_right_lever.setBounds(760, 450, 32, 32);
         this.add(forward_left_lever);
@@ -315,7 +305,7 @@ public class GameOptions extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(game_options_panel, 360, 160, 520, 420, this);
+        g2d.drawImage(ReadImage.game_options_panel, 360, 160, 520, 420, this);
         g2d.drawImage(chess_standard, 890, 160, 245, 323, this);
         g2d.drawImage(option_box_game, 616, 210, 140, 32, this);
         g2d.drawImage(option_box_time, 616, 290, 140, 32, this);

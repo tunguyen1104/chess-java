@@ -3,7 +3,6 @@ package view;
 import model.Board;
 import model.ReadImage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -14,14 +13,10 @@ import java.io.IOException;
 
 
 public class GamePVP extends JPanel {
-    private Image game_gui;
-    private Image rotate_normal;
-    private Image rotate_selected;
-    private Image board_index_black;
-    private Image board_index;
     protected JLabel white_name;
     protected JLabel black_name;
     private JLabel title_bar_label;
+    private Image board_index;
     public JLabel getWhite_name() {
         return white_name;
     }
@@ -49,16 +44,6 @@ public class GamePVP extends JPanel {
     private Board board = new Board(this);
 
     public GamePVP(int minute) {
-        // Load image
-        try {
-            board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
-            board_index_black = ImageIO.read(new File("resources/gui/board_index_black.png"));
-            rotate_normal = ImageIO.read(new File("resources/buttons/rotate_normal.png"));
-            rotate_selected = ImageIO.read(new File("resources/buttons/rotate_selected.png"));
-            game_gui = ImageIO.read(new File("resources/gui/game_gui.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         this.minute = minute;
         this.setBackground(new Color(41, 41, 41));
         this.setPreferredSize(new Dimension(1536, 864));
@@ -68,6 +53,7 @@ public class GamePVP extends JPanel {
         initPanel();
         board.setBounds(280, 100, 8 * board.tileSize, 8 * board.tileSize);
         this.add(board);
+        board_index = ReadImage.board_index;
         timeLabelWhite.start();
         timer.start();
     }
@@ -138,13 +124,13 @@ public class GamePVP extends JPanel {
         this.add(home_normal_button);
         this.add(title_bar_label);
 
-        ButtonImage rotate = new ButtonImage(rotate_normal, rotate_selected, 50, 40, "");
+        ButtonImage rotate = new ButtonImage(ReadImage.rotate_normal, ReadImage.rotate_selected, 50, 40, "");
         rotate.setBounds(1200, 326, 50, 40);
         rotate.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if(board.checkEndGame) return;
-                board_index = (board.rotating) ? null : board_index_black;
+                board_index = (board.rotating) ? null : ReadImage.board_index_black;
                 board.rotateBoard();
                 repaint();
             }
@@ -165,7 +151,7 @@ public class GamePVP extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(game_gui, 250, 80,1014,690, this);
+        g2d.drawImage(ReadImage.game_gui, 250, 80,1014,690, this);
         g2d.drawImage(board_index, 250, 80,690,690, this);
     }
 
@@ -179,7 +165,7 @@ public class GamePVP extends JPanel {
                         "\nTimeout\n" +
                         "White win\n";
                 board.saveFile(new String(text + board.getPgn()));
-                board.sound.playMusic(1);
+                ReadImage.sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
@@ -191,7 +177,7 @@ public class GamePVP extends JPanel {
                         "\nTimeout\n" +
                         "Black win\n";
                 board.saveFile(new String(text + board.getPgn()));
-                board.sound.playMusic(1);
+                ReadImage.sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();

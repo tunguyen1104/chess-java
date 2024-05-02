@@ -1,31 +1,23 @@
 package view;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import model.ReadImage;
-import view.Review;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class History extends JPanel {
     private JLabel title_bar_label;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private Image history_normal;
-    private Image history_selected;
     private ArrayList<ButtonImage> listHistory = new ArrayList<>();
     private ArrayList<JPanel> panel_page = new ArrayList<>();
     String format = "%-18s %-18s %-24s %-9s";
@@ -35,10 +27,7 @@ public class History extends JPanel {
     private JLabel page;
     private ButtonImage forward_left;
     private ButtonImage forward_right;
-    private Image forward_normal_game;
-    private Image forward_normal_game_v2;
-    private Image forward_selected_game;
-    private Image forward_selected_game_v2;
+    
     private int index_panel_page = 0;
     String path = "saved_data/";
     public History() {
@@ -48,17 +37,6 @@ public class History extends JPanel {
     public void initPanel() {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
-        try {
-            forward_normal_game = ImageIO.read(new File("resources/buttons/forward_normal.png"));
-            forward_normal_game_v2 = ImageIO.read(new File("resources/buttons/forward_normalv2.png"));
-            forward_selected_game = ImageIO.read(new File("resources/buttons/forward_selected.png"));
-            forward_selected_game_v2 = ImageIO.read(new File("resources/buttons/forward_selectedv2.png"));
-            history_normal = ImageIO.read(new File("resources/buttons/history_normal.png"));
-            history_selected = ImageIO.read(new File("resources/buttons/history_selected.png"));
-        } catch (IOException e) {
-            System.out.println("Error url image!");
-            throw new RuntimeException(e);
-        }
         this.setPreferredSize(new Dimension(1536, 864));
         title_bar_label = new JLabel("History");
         title_bar_label.setBounds(720, 0, 400, 60);
@@ -86,9 +64,9 @@ public class History extends JPanel {
         handlePgn();
         addButtonHistory();
 
-        forward_left = new ButtonImage(forward_normal_game, forward_selected_game, 32, 32, "");
+        forward_left = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
         forward_left.setBounds(702, 740, 32, 32);
-        forward_right = new ButtonImage(forward_normal_game_v2, forward_selected_game_v2, 32, 32, "");
+        forward_right = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_right.setBounds(790, 740, 32, 32);
         forward_left.addMouseListener(new MouseAdapter() {
             @Override
@@ -163,20 +141,20 @@ public class History extends JPanel {
     }
     public void eventButtonHistory() {
         File folder = new File(path);
-        if (folder.isDirectory()) {
-            File[] file = folder.listFiles();
-            int count = 0;
-            for (File nameFile : file) {
-                listHistory.get(count).addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        Menu.panelCardLayout.add(new Review(nameFile),"review");
-                        Menu.cardLayout.show(Menu.panelCardLayout,"review");
-                    }
-                });
-                ++count;
+            if (folder.isDirectory()) {
+                File[] file = folder.listFiles();
+                int count = 0;
+                for (File nameFile : file) {
+                    listHistory.get(count).addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+                            Menu.panelCardLayout.add(new Review(nameFile),"review");
+                            Menu.cardLayout.show(Menu.panelCardLayout,"review");
+                        }
+                    });
+                    ++count;
+                }
             }
-        }
     }
     public void handlePgn() {
         File folder = new File(path);
@@ -205,7 +183,7 @@ public class History extends JPanel {
                         fis.close();
                         ois.close();
                         String formatted = String.format(format, value.get(1),value.get(2), value.get(3),value.get(3).equals("Timeout") ? "   " + value.get(4) : value.get(4));
-                        listHistory.add(new ButtonImage(history_normal, history_selected, 580, 76, value.get(0), formatted));
+                        listHistory.add(new ButtonImage(ReadImage.history_normal, ReadImage.history_selected, 580, 76, value.get(0), formatted));
                         if (index >= 0 && index < listHistory.size()) {    
                             listHistory.get(index).setBounds(X, Y, 580, 76);
                         }

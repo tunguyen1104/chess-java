@@ -69,9 +69,7 @@ public class ListenerSetting extends MouseAdapter implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource().equals(setting.getSave())) {
-            setting.handle_save();
-        } else if(e.getSource().equals(setting.getChange_password())) {
+        if(e.getSource().equals(setting.getChange_password())) {
             setting.handle_change_password();
         }
     }

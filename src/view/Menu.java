@@ -4,9 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import controller.ListenerMenu;
-import model.JDBCConnection;
 import model.ReadImage;
-import model.Sound;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -29,20 +27,20 @@ public class Menu extends JPanel{
     
     public static CardLayout cardLayout = new CardLayout();
     public static JPanel panelCardLayout = new JPanel();
-    private ReadImage readImage = new ReadImage();
     private ListenerMenu input = new ListenerMenu(this);
     public Menu() {
         frame = new JFrame("CHESS");
         panelCardLayout.setLayout(cardLayout);
         try {
-            menu_normal = ImageIO.read(new File("resources/buttons/menu_normal_225px.png"));
-            menu_selected = ImageIO.read(new File("resources/buttons/menu_selected_225px.png"));
+            menu_normal = ImageIO.read(new File("resources/buttons/menu_normal_225.png"));
+            menu_selected = ImageIO.read(new File("resources/buttons/menu_selected_225.png"));
             icon_title = ImageIO.read(new File("resources/gui/icon_title.png"));
             icon_game = ImageIO.read(new File("resources/gui/icon_game.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         frame.setIconImage(icon_game);
+        new ReadImage();
         initPanel();
         panelCardLayout.add(this, "menu");
         panelCardLayout.add(new Setting(), "setting");
@@ -88,12 +86,6 @@ public class Menu extends JPanel{
         setting.setBounds(574, 528, 180, 59);
         exit = new ButtonImage(menu_normal, menu_selected, 180, 59, "Exit",5);
         exit.setBounds(794, 528, 180, 59);
-        newGame.setHorizontalAlignment(SwingConstants.CENTER); // Đặt căn giữa ngang
-        history.setHorizontalAlignment(SwingConstants.CENTER);
-        puzzle.setHorizontalAlignment(SwingConstants.CENTER);
-        setting.setHorizontalAlignment(SwingConstants.CENTER);
-        about.setHorizontalAlignment(SwingConstants.CENTER);
-        exit.setHorizontalAlignment(SwingConstants.CENTER);
         this.add(newGame);
         this.add(history);
         this.add(puzzle);

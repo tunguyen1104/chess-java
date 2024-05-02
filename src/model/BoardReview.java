@@ -3,9 +3,6 @@ package model;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,19 +15,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 import model.pieces.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import controller.ListenerReview;
-import view.ButtonImage;
 import view.Review;
 
-import static java.util.Calendar.getInstance;
-
 public class BoardReview extends JPanel{
-    private ArrayList data_link;
-    private Sound sound;
-    private Image board_image;
     private Review review;
     private ListenerReview listenerReview;
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
@@ -49,40 +39,29 @@ public class BoardReview extends JPanel{
     private int new_row = -1;
     private int col_checkmate = -1;
     private int row_checkmate = -1;
-    public BoardReview(Review review, File namFile) {
+    public BoardReview(Review review, File path) {
         this.review = review;
         listenerReview = new ListenerReview(review, this);
-        data_link = JDBCConnection.takeDataSetting();
-        if (data_link.get(2).equals("1"))
-            sound = new Sound();
-        else
-            sound = new Sound(1);
-        sound.playMusic(0);
-        try {
-            board_image = ImageIO.read(new File(data_link.get(1).toString()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ReadImage.sound.playMusic(0);
         for (char column = 'a'; column <= 'h'; ++column) {
             columnMap.put(column, column - 'a');
         }
         addPiece();
-        long begin = getInstance().getTimeInMillis();
+        long begin = java.util.Calendar.getInstance().getTimeInMillis();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                handlePgn(namFile);
+                handlePgn(path);
                 saveSnapShot();
-                long end = getInstance().getTimeInMillis();
+                long end = java.util.Calendar.getInstance().getTimeInMillis();
                 System.out.println("Executed Time: " + (end - begin));
             }
         }); thread.start();
     }
-    public void handlePgn(File nameFile) {
-        try (FileInputStream fis = new FileInputStream(nameFile);
+    public void handlePgn(File path) {
+        try (FileInputStream fis = new FileInputStream(path);
             ObjectInputStream ois = new ObjectInputStream(fis)) {
             String text = (String) ois.readObject();
-            ArrayList<String> value = new ArrayList<>();
             int cnt = 0;
             try (Scanner scanner = new Scanner(text)) {
                 scanner.useDelimiter("\n");
@@ -146,7 +125,8 @@ public class BoardReview extends JPanel{
             review.black_name.setBounds(1000, 600, 490, 120);
             review.white_name.setBounds(1000, 150, 490, 120);
         }
-        if(request) sound.playMusic(4);
+        review.board_index = (rotating) ? ReadImage.board_index_black : null;
+        if(request) ReadImage.sound.playMusic(4);
         repaint();
     }
     public void handle_first_button() {
@@ -184,7 +164,7 @@ public class BoardReview extends JPanel{
         pieceList.clear();
         pieceList.addAll(piece_list_default);
         if(rotating) rotateBoard(false);
-        sound.playMusic(2);
+        ReadImage.sound.playMusic(2);
         repaint();
     }
     public Piece getPiece(ArrayList<Piece> piecesBefore, int col, int row) {
@@ -254,7 +234,7 @@ public class BoardReview extends JPanel{
                 }
             }
         }
-        sound.playMusic(x.getSound());
+        ReadImage.sound.playMusic(x.getSound());
         if(rotating) rotateBoard(false);
         repaint();
     }
@@ -501,6 +481,7 @@ public class BoardReview extends JPanel{
         
         for(int i = 0;i <= 7; ++i) {
             pieceList.add(new Pawn(i, 1, false));
+            pieceList.add(new Pawn(i, 6, true));
         }
 
         pieceList.add(new Rook(0, 7, true));
@@ -511,17 +492,13 @@ public class BoardReview extends JPanel{
         pieceList.add(new Bishop(5, 7, true));
         pieceList.add(new Knight(6, 7, true));
         pieceList.add(new Rook(7, 7, true));
-        
-        for(int i = 0;i <= 7; ++i) {
-            pieceList.add(new Pawn(i, 6, true));
-        }
         piece_list_default.addAll(pieceList);
     }
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(board_image, 0,0,640,640, this);
+        g2d.drawImage(ReadImage.board_image, 0,0,640,640, this);
         if(col_checkmate != -1) {
             g2d.setColor(new Color(214,114,114,190));
             g2d.fillRect(col_checkmate * 80, row_checkmate * 80, 80, 80);

@@ -61,13 +61,18 @@ public class Sound {
     }
 
     public void playMusic(int i) {
+        if(nameFile[0] == null || i == 10) return;
         setFile(i);
         play();
     }
     public void playBackGround() {
-        if(this.clip != null) return;
-        setFile(8);
-        play();
-        loop();
+        if(this.clip == null) {
+            setFile(8);
+            play();
+            loop();
+        } else {
+            play();
+            loop();
+        }
     }
 }

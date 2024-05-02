@@ -44,32 +44,17 @@ public class Setting extends JPanel {
     private JPasswordField retypeNewPasswordBox;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private BufferedImage forward_normal_piece;
-    private BufferedImage forward_normal_piece_v2;
-    private BufferedImage forward_selected_piece;
-    private BufferedImage forward_selected_piece_v2;
     private int index_piece = 0;
     private ButtonImage forward_left_piece;
     private ButtonImage forward_right_piece;
-    private Image forward_normal_board;
-    private Image forward_normal_board_v2;
-    private Image forward_selected_board;
-    private Image forward_selected_board_v2;
     private int index_board = 0;
     private ButtonImage forward_left_board;
     private ButtonImage forward_right_board;
-    private Image forward_normal_sound;
-    private Image forward_normal_sound_v2;
-    private Image forward_selected_sound;
-    private Image forward_selected_sound_v2;
-    private Image option_box_sound;
     private int index_sound = 0;
     private JLabel option_box_sound_label;
     private ButtonImage forward_left_sound;
     private ButtonImage forward_right_sound;
-    private JButton save;
     private JButton change_password;
-    private Image panel_options;
     ArrayList<String> dataJDBC;
     String[] piece_url = {
             "resources/pieces/default.png",
@@ -102,35 +87,16 @@ public class Setting extends JPanel {
         this.setLayout(null);
         // Load image
         try {
-            panel_options = ImageIO.read(new File("resources/gui/game_options_panel.png"));
-            option_box_sound = ImageIO.read(new File("resources/gui/option_box.png"));
-            forward_normal_piece = ImageIO.read(new File("resources/buttons/forward_normal.png"));
-            forward_normal_piece_v2 = ImageIO.read(new File("resources/buttons/forward_normalv2.png"));
-            forward_selected_piece = ImageIO.read(new File("resources/buttons/forward_selected.png"));
-            forward_selected_piece_v2 = ImageIO.read(new File("resources/buttons/forward_selectedv2.png"));
-            forward_normal_board = forward_normal_piece;
-            forward_normal_board_v2 = forward_normal_piece_v2;
-            forward_selected_board = forward_selected_piece;
-            forward_selected_board_v2 = forward_selected_piece_v2;
-            forward_normal_sound = forward_normal_piece;
-            forward_normal_sound_v2 = forward_normal_piece_v2;
-            forward_selected_sound = forward_selected_piece;
-            forward_selected_sound_v2 = forward_selected_piece_v2;
             noavatar = ImageIO.read(new File("resources/gui/noavatar.png"));
-            option_setting_normal = ImageIO.read(new File("resources/buttons/history_normal.png"));
-            option_setting_selected = ImageIO.read(new File("resources/buttons/history_selected.png"));
+            option_setting_normal = ReadImage.history_normal;
+            option_setting_selected = ReadImage.history_selected;
             option_settingv2 = option_setting_normal;
             option_settingv1 = option_setting_selected;
             logout_image = option_setting_normal;
-            String urlBoard = dataJDBC.get(1);
-            if (dataJDBC != null)
-                board_image = ImageIO.read(new File(urlBoard));
-            else
-                board_image = ImageIO.read(new File("resources/board/metal.png"));
-            int tilesize = board_image.getWidth() / 8;
-            board_image_cut = board_image.getSubimage(0, 0, tilesize * 6, tilesize * 3).getScaledInstance(tilesize * 6,
-                    tilesize * 3, BufferedImage.SCALE_SMOOTH);
-            piece_image = ImageIO.read(new File(dataJDBC.get(0)));
+            board_image = (BufferedImage) ReadImage.board_image;
+            board_image_cut = board_image.getSubimage(0, 0, 100 * 6, 100 * 3).getScaledInstance(100 * 6,
+                    100 * 3, BufferedImage.SCALE_SMOOTH);
+            piece_image = ReadImage.piece;
         } catch (IOException e) {
             System.out.println("Error url image!");
             throw new RuntimeException(e);
@@ -167,6 +133,8 @@ public class Setting extends JPanel {
         } catch (IOException ex) {
             System.out.println("Error url image!");
         }
+        ReadImage.changePieceImage(piece_url[index_piece]);
+        JDBCConnection.updateBoard(piece_url[index_piece]);
     }
     public void handle_forward_right_piece() {
         ++index_piece;
@@ -178,6 +146,8 @@ public class Setting extends JPanel {
         } catch (IOException ex) {
             System.out.println("Error url image!");
         }
+        ReadImage.changePieceImage(piece_url[index_piece]);
+        JDBCConnection.updateBoard(piece_url[index_piece]);
     }
     public void handle_forward_left_board() {
         --index_board;
@@ -192,6 +162,8 @@ public class Setting extends JPanel {
         } catch (IOException ex) {
             System.out.println("Error url image!");
         }
+        ReadImage.changeBoardImage(board_url[index_board]);
+        JDBCConnection.updateBoard(board_url[index_board]);
     }
     public void handle_forward_right_board() {
         ++index_board;
@@ -206,18 +178,26 @@ public class Setting extends JPanel {
         } catch (IOException ex) {
             System.out.println("Error url image!");
         }
+        ReadImage.changeBoardImage(board_url[index_board]);
+        JDBCConnection.updateBoard(board_url[index_board]);
     }
     public void handle_forward_left_sound() {
         --index_sound;
         if (index_sound < 0)
             index_sound = 1;
         option_box_sound_label.setText(turn[index_sound]);
+        About.changeSoundBackGround(index_sound);
+        ReadImage.changeSound(index_sound);
+        JDBCConnection.updateSound((index_sound == 0) ? true : false);
     }
     public void handle_forward_right_sound() {
         ++index_sound;
         if (index_sound > 1)
             index_sound = 0;
         option_box_sound_label.setText(turn[index_sound]);
+        About.changeSoundBackGround(index_sound);
+        ReadImage.changeSound(index_sound);
+        JDBCConnection.updateSound((index_sound == 0) ? true : false);
     }
     public void initGame() {
         game = new JPanel() {
@@ -225,7 +205,7 @@ public class Setting extends JPanel {
             protected void paintComponent(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
                 super.paintComponent(g2d);
-                g2d.drawImage(option_box_sound, 276, 280, 160, 32, game);
+                g2d.drawImage(ReadImage.option_box, 276, 280, 160, 32, game);
             }
         };
         game.setBounds(508, 180, 526, 408);
@@ -251,8 +231,8 @@ public class Setting extends JPanel {
         sound_label.setFont(new Font("", Font.PLAIN, 20));
         game.add(sound_label);
         // setting type pieces
-        forward_left_piece = new ButtonImage(forward_normal_piece, forward_selected_piece, 32, 32, "");
-        forward_right_piece = new ButtonImage(forward_normal_piece_v2, forward_selected_piece_v2, 32, 32, "");
+        forward_left_piece = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
+        forward_right_piece = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_left_piece.setBounds(240, 40, 32, 32);
         forward_right_piece.setBounds(440, 40, 32, 32);
         for (int i = 0; i < piece_url.length; ++i) {
@@ -281,8 +261,8 @@ public class Setting extends JPanel {
                 break;
             }
         }
-        forward_left_board = new ButtonImage(forward_normal_board, forward_selected_board, 32, 32, "");
-        forward_right_board = new ButtonImage(forward_normal_board_v2, forward_selected_board_v2, 32, 32, "");
+        forward_left_board = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
+        forward_right_board = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_left_board.setBounds(240, 160, 32, 32);
         forward_right_board.setBounds(440, 160, 32, 32);
         board_panel = new JPanel() {
@@ -304,22 +284,14 @@ public class Setting extends JPanel {
         option_box_sound_label.setForeground(Color.WHITE);
         option_box_sound_label.setFont(new Font("", Font.PLAIN, 18));
         option_box_sound_label.setBounds(340, 280, 200, 32);
-        forward_left_sound = new ButtonImage(forward_normal_sound, forward_selected_sound, 32, 32, "");
-        forward_right_sound = new ButtonImage(forward_normal_sound_v2, forward_selected_sound_v2, 32, 32, "");
+        forward_left_sound = new ButtonImage(ReadImage.forward_normal, ReadImage.back_selected, 32, 32, "");
+        forward_right_sound = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_left_sound.setBounds(240, 280, 32, 32);
         forward_right_sound.setBounds(440, 280, 32, 32);
 
         game.add(forward_left_sound);
         game.add(forward_right_sound);
         game.add(option_box_sound_label);
-        //
-        save = new JButton("Save");
-        save.setFont(new Font("", Font.PLAIN, 18));
-        save.setBackground(new Color(38, 117, 191));
-        save.setForeground(Color.WHITE);
-        save.setFocusPainted(false);
-        save.setBounds(300, 350, 120, 35);
-        game.add(save);
         // option_setting
         option_game = new JLabel("Game");
         option_game.setBounds(280, 200, 200, 40);
@@ -333,7 +305,6 @@ public class Setting extends JPanel {
         forward_right_board.addMouseListener(input);
         forward_left_sound.addMouseListener(input);
         forward_right_sound.addMouseListener(input);
-        save.addActionListener(input);
         option_game.addMouseListener(input);
     }
     public void handle_option_game_mouse_pressed() {
@@ -360,14 +331,6 @@ public class Setting extends JPanel {
             option_game.setForeground(Color.WHITE);
         }
     }
-    public void handle_save() {
-        JDBCConnection.updateDataSetting(piece_url[index_piece], board_url[index_board],
-                (index_sound == 0) ? true : false);
-        About.sound.close();
-        Menu.panelCardLayout.add(new About(), "about");
-        JOptionPane.showMessageDialog(null, "Your settings have been saved", "Notification",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
 
     public void initLogout() {
         logout_label = new JLabel("Log out");
@@ -385,7 +348,7 @@ public class Setting extends JPanel {
         logout_label.setForeground(Color.WHITE);
     }
     public void handle_logout_label_pressed() {
-        About.sound.close();
+        ReadImage.sound.close();
         // call database delete current user
         JDBCConnection.logOut();
         JDBCConnection.deleteDataCurrentUser();
@@ -522,7 +485,7 @@ public class Setting extends JPanel {
         g2d.drawImage(option_settingv2, 280, 250, 200, 40, this);
         g2d.drawImage(logout_image, 280, 300, 200, 40, this);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(panel_options, 500, 174, 540, 420, this);
+        g2d.drawImage(ReadImage.game_options_panel, 500, 174, 540, 420, this);
     }
     public ButtonImage getBack_normal_button() {
         return back_normal_button;
@@ -555,12 +518,6 @@ public class Setting extends JPanel {
     public ButtonImage getForward_right_sound() {
         return forward_right_sound;
     }
-
-
-    public JButton getSave() {
-        return save;
-    }
-
     public JButton getChange_password() {
         return change_password;
     }

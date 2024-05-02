@@ -2,6 +2,9 @@ package view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import model.ReadImage;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,8 +12,6 @@ import java.io.File;
 import java.io.IOException;
 public class DialogEndGame extends JPanel{
     private Image image;
-    private Image menu_normal;
-    private Image menu_selected;
     public JLabel title;
     public JLabel titlev2;
     public DialogEndGame(String name, String reason) {
@@ -22,12 +23,6 @@ public class DialogEndGame extends JPanel{
         }
         this.setPreferredSize(new Dimension(640, 640));
         this.setVisible(true);
-        try {
-            menu_normal = ImageIO.read(new File("resources/buttons/menu_normal.png"));
-            menu_selected = ImageIO.read(new File("resources/buttons/menu_selected.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         title = new JLabel(name + " Win");
         title.setForeground(Color.WHITE);
         title.setBounds(220, 190, 240, 40);
@@ -44,13 +39,13 @@ public class DialogEndGame extends JPanel{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ButtonImage newGame = new ButtonImage(menu_normal, menu_selected, 152, 50, "New Game",0);
+        ButtonImage newGame = new ButtonImage(ReadImage.menu_normal, ReadImage.menu_selected, 152, 50, "New Game",0);
         newGame.setBounds(160,270,152,50);
         
-        ButtonImage review = new ButtonImage(menu_normal, menu_selected, 152, 50, "Review",0);
+        ButtonImage review = new ButtonImage(ReadImage.menu_normal, ReadImage.menu_selected, 152, 50, "Review",0);
         review.setBounds(320,270,152,50);
         
-        ButtonImage home = new ButtonImage(menu_normal, menu_selected, 152, 50, "Home",0);
+        ButtonImage home = new ButtonImage(ReadImage.menu_normal, ReadImage.menu_selected, 152, 50, "Home",0);
         home.setBounds(240,320,152,50);
         newGame.addMouseListener(new MouseAdapter() {
             @Override
@@ -61,7 +56,7 @@ public class DialogEndGame extends JPanel{
         review.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
+                handleReview();
             }
         });
         home.addMouseListener(new MouseAdapter() {
@@ -74,6 +69,27 @@ public class DialogEndGame extends JPanel{
         this.add(titlev2);
         this.add(newGame);this.add(review);
         this.add(home);
+    }
+    public void handleReview() {
+        File name = null;
+        File folder = new File("saved_data/");
+        if (folder.isDirectory()) {
+            File[] file = folder.listFiles();
+            for (File nameFile : file) {
+                if (nameFile.isFile()) {
+                    name  = nameFile;
+                } 
+            }
+        } else {
+            System.out.println(folder + " not folder!");
+        }
+        if(name == null) {
+            System.out.println("ERROR : Save file");
+        } else {
+            Menu.panelCardLayout.add(new History(),"history");
+            Menu.panelCardLayout.add(new Review(name),"review");
+            Menu.cardLayout.show(Menu.panelCardLayout,"review");
+        }
     }
     @Override
     public void paintComponent(Graphics g) {

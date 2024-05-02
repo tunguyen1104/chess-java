@@ -3,12 +3,10 @@ package view;
 import model.Board;
 import model.ReadImage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -20,11 +18,8 @@ public class PuzzleGame extends JPanel {
     private JLabel title_bar_label;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private Image board_index;
-    private Image panel_320_292;
+    
     private Board board;
-    private Image normal;
-    private Image selected;
     private ButtonImage hint;
     private ButtonImage undo;
     private ButtonImage try_again;
@@ -35,23 +30,11 @@ public class PuzzleGame extends JPanel {
     private JLabel color_to_move;
     private JLabel correct;
     private JLabel failed;
-    public Image circle_check;
-    public Image circle_xmark;
-
+    
     public PuzzleGame(String FEN, int lever) {
         this.FEN = FEN;
         this.lever = lever;
         board = new Board(this, FEN);
-        try {
-            normal = ImageIO.read(new File("resources/buttons/menu_normal.png"));
-            selected = ImageIO.read(new File("resources/buttons/menu_selected.png"));
-            panel_320_292 = ImageIO.read(new File("resources/gui/panel_320_292.png"));
-            board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
-            circle_xmark = ImageIO.read(new File("resources/gui/circle_xmark.png"));
-            circle_check = ImageIO.read(new File("resources/gui/circle_check.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         initPanel();
         hint_panel.setVisible(true);
         done_panel.setVisible(false);
@@ -95,7 +78,7 @@ public class PuzzleGame extends JPanel {
         hint_panel.setBounds(986, 266, 268, 250);
         hint_panel.setBackground(new Color(55, 55, 55));
         hint_panel.setLayout(null);
-        hint = new ButtonImage(normal, selected, 152, 50, "Hint",0);
+        hint = new ButtonImage(ReadImage.menu_normal, ReadImage.menu_selected, 152, 50, "Hint",0);
         hint.setBounds(60, 140, 152, 50);
         hint_panel.add(hint);
         color_to_move = new JLabel();
@@ -115,10 +98,10 @@ public class PuzzleGame extends JPanel {
         this.add(hint_panel);
         // setting menu try again
         undo_panel = new JPanel();
-        undo_panel.setBounds(986, 266, 268, 250);
+        undo_panel.setBounds(986, 272, 268, 250);
         undo_panel.setBackground(new Color(55, 55, 55));
         undo_panel.setLayout(null);
-        undo = new ButtonImage(normal, selected, 152, 50, "Undo",0);
+        undo = new ButtonImage(ReadImage.menu_normal, ReadImage.menu_selected, 152, 50, "Undo",0);
         undo.setBounds(58, 120, 152, 50);
         undo_panel.add(undo);
         failed = new JLabel();
@@ -140,9 +123,9 @@ public class PuzzleGame extends JPanel {
         done_panel.setBounds(986, 266, 268, 250);
         done_panel.setBackground(new Color(55, 55, 55));
         done_panel.setLayout(null);
-        next_lever = new ButtonImage(normal, selected, 152, 50, "Next Lever",0);
+        next_lever = new ButtonImage(ReadImage.menu_normal, ReadImage.menu_selected, 152, 50, "Next Lever",0);
         next_lever.setBounds(60, 180, 152, 50);
-        try_again = new ButtonImage(normal, selected, 152, 50, "Try Again",0);
+        try_again = new ButtonImage(ReadImage.menu_normal, ReadImage.menu_selected, 152, 50, "Try Again",0);
         try_again.setBounds(60, 120, 152, 50);
         done_panel.add(next_lever);
         done_panel.add(try_again);
@@ -222,7 +205,7 @@ public class PuzzleGame extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(board_index, 280, 80,690,690, this);
-        g2d.drawImage(panel_320_292, 980, 260, 280, 260, this);
+        g2d.drawImage(ReadImage.board_index, 280, 80,690,690, this);
+        g2d.drawImage(ReadImage.panel_320_292, 980, 260, 280, 260, this);
     }
 }

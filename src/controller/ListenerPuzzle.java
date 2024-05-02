@@ -10,12 +10,10 @@ import java.awt.event.MouseEvent;
 
 public class ListenerPuzzle extends MouseAdapter {
     private Board board;
-    public Sound sound;
     public Integer check_delete_or_promotion = -1;
 
-    public ListenerPuzzle(Board board, Sound sound) {
+    public ListenerPuzzle(Board board) {
         this.board = board;
-        this.sound = sound;
     }
 
     @Override

@@ -8,11 +8,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -25,23 +23,27 @@ public class About extends JPanel {
     private JLabel title_bar_label;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
-    private Image panel_about;
     private JTextArea about_game;
-    public static Sound sound;
+    public static Sound sound = new Sound();
+    public static boolean music = false;
+    public static void changeSoundBackGround(int index) {
+        if (index == 0 && music == false) {
+            music = true;
+            sound.playBackGround();
+        } else if(index == 1 && music == true){
+            music = false;
+            sound.stop();
+        }
+    }
     public About() {
         if (JDBCConnection.takeDataSetting().get(2).equals("1")) {
-            sound = new Sound();
+            music = true;
             sound.playBackGround();
-        } else
-            sound = new Sound(1);
+        } else {
+            music = false;
+        }
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
-        try {
-            panel_about = ImageIO.read(new File("resources/gui/game_options_panel.png"));
-        } catch (IOException e) {
-            System.out.println("Error url image!");
-            throw new RuntimeException(e);
-        }
         this.setPreferredSize(new Dimension(1536, 864));
         title_bar_label = new JLabel("About");
         title_bar_label.setBounds(720, 0, 400, 60);
@@ -88,6 +90,6 @@ public class About extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(panel_about, 500, 180, 509, 420, this);
+        g2d.drawImage(ReadImage.game_options_panel, 500, 180, 509, 420, this);
     }
 }

@@ -3,13 +3,10 @@ package view;
 import model.JDBCConnection;
 import model.ReadImage;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.Image;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,16 +16,6 @@ public class ListPuzzle extends JPanel {
     private JPanel panel_contains_puzzle_page_2;
     private JPanel panel_contains_puzzle_page_3;
     private JLabel title_bar_label;
-    private Image puzzle_normal;
-    private Image puzzle_selected;
-    private Image puzzle_failed_normal;
-    private Image puzzle_failed_selected;
-    private Image puzzle_solved_normal;
-    private Image puzzle_solved_selected;
-    private Image forward_normal_game;
-    private Image forward_normal_game_v2;
-    private Image forward_selected_game;
-    private Image forward_selected_game_v2;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
     private ButtonImage puzzle[] = new ButtonImage[106];
@@ -43,20 +30,6 @@ public class ListPuzzle extends JPanel {
     public ListPuzzle() {
         arr = new ArrayList<String>();
         arr = JDBCConnection.takeDataPuzzle();
-        try {
-            forward_normal_game = ImageIO.read(new File("resources/buttons/forward_normal.png"));
-            forward_normal_game_v2 = ImageIO.read(new File("resources/buttons/forward_normalv2.png"));
-            forward_selected_game = ImageIO.read(new File("resources/buttons/forward_selected.png"));
-            forward_selected_game_v2 = ImageIO.read(new File("resources/buttons/forward_selectedv2.png"));
-            puzzle_normal = ImageIO.read(new File("resources/buttons/puzzle_normal.png"));
-            puzzle_selected = ImageIO.read(new File("resources/buttons/puzzle_selected.png"));
-            puzzle_failed_normal = ImageIO.read(new File("resources/buttons/puzzle_failed_normal.png"));
-            puzzle_failed_selected = ImageIO.read(new File("resources/buttons/puzzle_failed_selected.png"));
-            puzzle_solved_normal = ImageIO.read(new File("resources/buttons/puzzle_solved_normal.png"));
-            puzzle_solved_selected = ImageIO.read(new File("resources/buttons/puzzle_solved_selected.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         initPanel();
     }
 
@@ -90,9 +63,9 @@ public class ListPuzzle extends JPanel {
         this.add(back_normal_button);
         this.add(home_normal_button);
         //
-        forward_left = new ButtonImage(forward_normal_game, forward_selected_game, 32, 32, "");
+        forward_left = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
         forward_left.setBounds(700, 740, 32, 32);
-        forward_right = new ButtonImage(forward_normal_game_v2, forward_selected_game_v2, 32, 32, "");
+        forward_right = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
         forward_right.setBounds(788, 740, 32, 32);
         forward_left.addMouseListener(new MouseAdapter() {
             @Override
@@ -178,9 +151,9 @@ public class ListPuzzle extends JPanel {
         for (int i = 0; i < 5; ++i) {
             X = 10;
             for (int j = 0; j < 7; ++j) {
-                puzzle[cnt] = new ButtonImage(puzzle_normal, puzzle_selected, 80, 80, String.valueOf(cnt));
-                puzzle[cnt].normal1 = puzzle_normal;
-                puzzle[cnt].selected1 = puzzle_selected;
+                puzzle[cnt] = new ButtonImage(ReadImage.puzzle_normal, ReadImage.puzzle_selected, 80, 80, String.valueOf(cnt));
+                puzzle[cnt].normal1 = ReadImage.puzzle_normal;
+                puzzle[cnt].selected1 = ReadImage.puzzle_selected;
                 puzzle[cnt].setBounds(X, Y, 80, 80);
                 panel_contains_puzzle_page_1.add(puzzle[cnt]);
                 X += 80 + 70;
@@ -202,9 +175,9 @@ public class ListPuzzle extends JPanel {
         for (int i = 0; i < 5; ++i) {
             X = 10;
             for (int j = 0; j < 7; ++j) {
-                puzzle[cnt] = new ButtonImage(puzzle_normal, puzzle_selected, 80, 80, String.valueOf(cnt));
-                puzzle[cnt].normal1 = puzzle_normal;
-                puzzle[cnt].selected1 = puzzle_selected;
+                puzzle[cnt] = new ButtonImage(ReadImage.puzzle_normal, ReadImage.puzzle_selected, 80, 80, String.valueOf(cnt));
+                puzzle[cnt].normal1 = ReadImage.puzzle_normal;
+                puzzle[cnt].selected1 = ReadImage.puzzle_selected;
                 puzzle[cnt].setBounds(X, Y, 80, 80);
                 panel_contains_puzzle_page_2.add(puzzle[cnt]);
                 X += 80 + 70;
@@ -225,9 +198,9 @@ public class ListPuzzle extends JPanel {
         for (int i = 0; i < 5; ++i) {
             X = 10;
             for (int j = 0; j < 7; ++j) {
-                puzzle[cnt] = new ButtonImage(puzzle_normal, puzzle_selected, 80, 80, String.valueOf(cnt));
-                puzzle[cnt].normal1 = puzzle_normal;
-                puzzle[cnt].selected1 = puzzle_selected;
+                puzzle[cnt] = new ButtonImage(ReadImage.puzzle_normal, ReadImage.puzzle_selected, 80, 80, String.valueOf(cnt));
+                puzzle[cnt].normal1 = ReadImage.puzzle_normal;
+                puzzle[cnt].selected1 = ReadImage.puzzle_selected;
                 puzzle[cnt].setBounds(X, Y, 80, 80);
                 panel_contains_puzzle_page_3.add(puzzle[cnt]);
                 X += 80 + 70;
@@ -262,9 +235,9 @@ public class ListPuzzle extends JPanel {
         else {
             String number[] = s.split(",");
             for (String x : number) {
-                puzzle[Integer.parseInt(x)].setNormal(puzzle_failed_normal);
-                puzzle[Integer.parseInt(x)].setSelected(puzzle_failed_selected);
-                puzzle[Integer.parseInt(x)].setImage(puzzle_failed_normal);
+                puzzle[Integer.parseInt(x)].setNormal(ReadImage.puzzle_failed_normal);
+                puzzle[Integer.parseInt(x)].setSelected(ReadImage.puzzle_failed_selected);
+                puzzle[Integer.parseInt(x)].setImage(ReadImage.puzzle_failed_normal);
             }
         }
     }
@@ -276,9 +249,9 @@ public class ListPuzzle extends JPanel {
         else {
             String number[] = s.split(",");
             for (String x : number) {
-                puzzle[Integer.parseInt(x)].setNormal(puzzle_solved_normal);
-                puzzle[Integer.parseInt(x)].setSelected(puzzle_solved_selected);
-                puzzle[Integer.parseInt(x)].setImage(puzzle_solved_normal);
+                puzzle[Integer.parseInt(x)].setNormal(ReadImage.puzzle_solved_normal);
+                puzzle[Integer.parseInt(x)].setSelected(ReadImage.puzzle_solved_selected);
+                puzzle[Integer.parseInt(x)].setImage(ReadImage.puzzle_solved_normal);
             }
         }
     }

@@ -1,14 +1,10 @@
 package model.pieces;
 
 import model.Board;
-import model.JDBCConnection;
+import model.ReadImage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class Piece {
     public int col, row;
@@ -18,15 +14,8 @@ public class Piece {
     public String name;
     Image sprite;
     public boolean isFirstMove = true;
-    protected BufferedImage sheet;
-    {
-        try {
-            sheet = ImageIO.read(new File(JDBCConnection.takeDataSetting().get(0)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    protected int sheetScale = sheet.getWidth() / 6;
+    protected BufferedImage sheet = ReadImage.piece;
+    protected int sheetScale = 100;
 
     public void paint(Graphics2D g2d) {
         g2d.drawImage(sprite, xPos, yPos, 80, 80, null);

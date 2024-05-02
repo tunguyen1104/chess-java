@@ -351,15 +351,61 @@ public class JDBCConnection {
         return arr;
     }
 
-    public static void updateDataSetting(String piece_url, String board_url, Boolean sound) {
+    public static void updatePiece(String piece_url) {
         Connection conn = JDBCConnection.getJDBCConnection();
         if (conn != null) {
             PreparedStatement statement = null;
             try {
-                statement = conn.prepareStatement("UPDATE CURRENTUSER SET PIECE = ?, BOARD_NAME = ?, SOUND = ?");
+                statement = conn.prepareStatement("UPDATE CURRENTUSER SET PIECE = ?");
                 statement.setString(1, piece_url);
-                statement.setString(2, board_url);
-                statement.setBoolean(3, sound);
+                statement.executeUpdate();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+            }
+        } else {
+            System.out.println("Connection to database failed!");
+        }
+    }
+    public static void updateBoard(String board_url) {
+        Connection conn = JDBCConnection.getJDBCConnection();
+        if (conn != null) {
+            PreparedStatement statement = null;
+            try {
+                statement = conn.prepareStatement("UPDATE CURRENTUSER SET BOARD_NAME = ?");
+                statement.setString(1, board_url);
+                statement.executeUpdate();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+            }
+        } else {
+            System.out.println("Connection to database failed!");
+        }
+    }
+    public static void updateSound(Boolean sound) {
+        Connection conn = JDBCConnection.getJDBCConnection();
+        if (conn != null) {
+            PreparedStatement statement = null;
+            try {
+                statement = conn.prepareStatement("UPDATE CURRENTUSER SET SOUND = ?");
+                statement.setBoolean(1, sound);
                 statement.executeUpdate();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
