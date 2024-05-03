@@ -34,7 +34,7 @@ public class Piece {
 
     public int lct_in_image_X,lct_in_image_Y;
     public String id;
-    private int count_moved;
+    public int count_moved;
     public int Positional_board[][]= {};
     public Piece()
     {
