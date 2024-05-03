@@ -8,10 +8,6 @@ import view.Menu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,31 +54,9 @@ public class Board extends JPanel {
     private boolean checkMateWhite = false;
     private boolean checkMateBlack = false;
     public boolean checkEndGame = false;
-    public boolean isCheckEndGame() {
-        return checkEndGame;
-    }
-    public void setCheckEndGame(boolean checkEndGame) {
-        this.checkEndGame = checkEndGame;
-    }
+    
     private int colKingCheckMate = -1;
     private int rowKingCheckMate = -1;
-    public void setHintBoolean(boolean hintBoolean) {
-        this.hintBoolean = hintBoolean;
-    }
-    public boolean isCheckMateWhite() {
-        return checkMateWhite;
-    }
-
-    public void setCheckMateWhite(boolean checkMateWhite) {
-        this.checkMateWhite = checkMateWhite;
-    }
-    public boolean isCheckMateBlack() {
-        return checkMateBlack;
-    }
-
-    public void setCheckMateBlack(boolean checkMateBlack) {
-        this.checkMateBlack = checkMateBlack;
-    }
     public Board(PuzzleGame puzzleGame, String FEN) {
         this.puzzleGame = puzzleGame;
         this.FEN = FEN;
@@ -273,6 +247,7 @@ public class Board extends JPanel {
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
     }
     public void saveFile(String text) {
+        Menu.panelCardLayout.add(new History(),"history");
         JDBCConnection.insertHistory(text);
     }
     private void animate(int x, int y, int x_new, int y_new) {
@@ -1051,5 +1026,28 @@ public class Board extends JPanel {
         if (done_failed_puzzle != -1) {
             notify_done_puzzle(g2d);
         }
+    }
+    public void setHintBoolean(boolean hintBoolean) {
+        this.hintBoolean = hintBoolean;
+    }
+    public boolean isCheckMateWhite() {
+        return checkMateWhite;
+    }
+
+    public void setCheckMateWhite(boolean checkMateWhite) {
+        this.checkMateWhite = checkMateWhite;
+    }
+    public boolean isCheckMateBlack() {
+        return checkMateBlack;
+    }
+
+    public void setCheckMateBlack(boolean checkMateBlack) {
+        this.checkMateBlack = checkMateBlack;
+    }
+    public boolean isCheckEndGame() {
+        return checkEndGame;
+    }
+    public void setCheckEndGame(boolean checkEndGame) {
+        this.checkEndGame = checkEndGame;
     }
 }

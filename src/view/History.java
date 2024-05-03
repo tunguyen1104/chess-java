@@ -8,10 +8,6 @@ import model.ReadImage;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -30,7 +26,6 @@ public class History extends JPanel {
     private ButtonImage forward_left;
     private ButtonImage forward_right;
     private int index_panel_page = 0;
-    String path = "saved_data/";
     public History() {
         initPanel();
     }

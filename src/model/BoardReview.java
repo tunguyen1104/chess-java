@@ -3,23 +3,15 @@ package model;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
-import model.pieces.*;
 import javax.swing.*;
 
+import model.pieces.*;
 import controller.ListenerReview;
-import view.History;
-import view.Menu;
 import view.Review;
 
 public class BoardReview extends JPanel{

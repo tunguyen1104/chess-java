@@ -32,25 +32,13 @@ public class JDBCConnection {
             PreparedStatement preparedStatement = null;
             ResultSet rs = null;
             try {
-                preparedStatement = conn.prepareStatement("SELECT * FROM account");
+                preparedStatement = conn.prepareStatement("SELECT USERNAME, PASSWORD FROM account");
                 rs = preparedStatement.executeQuery();
                 String _username;
                 String _password;
-                String _email;
-                String _piece;
-                String _board_name;
-                Boolean _sound;
-                String _puzzle_failed;
-                String _puzzle_solved;
                 while (rs.next()) {
                     _username = rs.getString(1);
                     _password = rs.getString(2);
-                    _email = rs.getString(3);
-                    _piece = rs.getString(4);
-                    _board_name = rs.getString(5);
-                    _sound = rs.getBoolean(6);
-                    _puzzle_failed = rs.getString(7);
-                    _puzzle_solved = rs.getString(8);
                     if (username.equals(_username) && password.equals(_password)) {
                         preparedStatement = conn.prepareStatement(
                                 "INSERT INTO CURRENTUSER(USERNAME) VALUES (?)");

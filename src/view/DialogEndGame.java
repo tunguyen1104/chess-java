@@ -64,7 +64,6 @@ public class DialogEndGame extends JPanel{
         this.add(home);
     }
     public void handleReview() {
-        Menu.panelCardLayout.add(new History(),"history");
         Menu.panelCardLayout.add(new Review(JDBCConnection.takeHistoryTheEnd()),"review");
         Menu.cardLayout.show(Menu.panelCardLayout,"review");
     }
