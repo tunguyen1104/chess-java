@@ -30,6 +30,7 @@ public class Menu extends JPanel{
     private ListenerMenu input = new ListenerMenu(this);
     public Menu() {
         frame = new JFrame("CHESS");
+        DialogPromotion ts=new DialogPromotion(frame,"",true);
         panelCardLayout.setLayout(cardLayout);
         try {
             menu_normal = ImageIO.read(new File("resources/buttons/menu_normal_225.png"));
@@ -45,7 +46,7 @@ public class Menu extends JPanel{
         panelCardLayout.add(this, "menu");
         panelCardLayout.add(new Setting(), "setting");
         panelCardLayout.add(new ListPuzzle(), "puzzle");
-        panelCardLayout.add(new GameOptions(), "gameOptions");
+        panelCardLayout.add(new GameOptions(ts), "gameOptions");
         panelCardLayout.add(new History(), "history");
         panelCardLayout.add(new About(), "about");
         frame.add(panelCardLayout);

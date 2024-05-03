@@ -54,8 +54,9 @@ public class GameOptions extends JPanel {
     String lever_string[] = {
             "Easy", "Medium", "Hard"
     };
+    DialogPromotion a;
     private ListenerGameOptions input = new ListenerGameOptions(this);
-    public GameOptions() {
+    public GameOptions(DialogPromotion a) {
         try {
             option_box_game = ReadImage.option_box;
             option_box_time = option_box_game;
@@ -66,6 +67,7 @@ public class GameOptions extends JPanel {
             e.printStackTrace();
         }
         initPanel();
+        this.a=a;
     }
     public void handle_forward_left_game() {
         --index_game;
@@ -154,7 +156,7 @@ public class GameOptions extends JPanel {
                 break;
         }
         if (option_box_game_label.getText().equals("PvC")) {
-            Menu.panelCardLayout.add(new GamePVC(minute), "gamePvC");
+            Menu.panelCardLayout.add(new GamePVC(minute,a), "gamePvC");
             Menu.cardLayout.show(Menu.panelCardLayout, "gamePvC");
         } else {
             Menu.panelCardLayout.add(new GamePVP(minute), "gamePvP");

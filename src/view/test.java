@@ -1,17 +1,14 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-public class test extends JLabel{
+public class Test extends JLabel{
 	Icon img_border_cell;
-	public test()
+	public Test()
 	{
 		setOpaque(true);
 		setBounds(60, 250, 300,300);

@@ -53,6 +53,7 @@ public class ReadImage {
     public static Image puzzle_solved_selected;
     public static Image option_box;
     public static Image game_options_panel;
+    public static Image panel_500_320;
     public static Sound sound;
     private ArrayList<String> data = new ArrayList<>();
     public ReadImage() {
@@ -92,7 +93,7 @@ public class ReadImage {
             history_selected = ImageIO.read(new File("resources/buttons/history_selected.png"));
             menu_normal = ImageIO.read(new File("resources/buttons/menu_normal.png"));
             menu_selected = ImageIO.read(new File("resources/buttons/menu_selected.png"));
-
+            panel_500_320 = ImageIO.read(new File("resources/gui/panel_500_320.png"));
             panel_320_292 = ImageIO.read(new File("resources/gui/panel_320_292.png"));
             circle_xmark = ImageIO.read(new File("resources/gui/circle_xmark.png"));
             circle_check = ImageIO.read(new File("resources/gui/circle_check.png"));

@@ -1,5 +1,7 @@
 package model.piecesv2;
+
 import model.BoardV2;
+
 public class Rook extends Piece {
 	private int row;
 	private int col;

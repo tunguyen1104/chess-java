@@ -1,6 +1,5 @@
 package view;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import model.ReadImage;
@@ -11,18 +10,11 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 public class DialogEndGame extends JPanel{
-    private Image image;
     public JLabel title;
     public JLabel titlev2;
     public DialogEndGame(String name, String reason) {
         this.setLayout(null);
-        try {
-            image = ImageIO.read(new File("resources/gui/panel_500_320.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         this.setPreferredSize(new Dimension(640, 640));
-        this.setVisible(true);
         title = new JLabel(name + " Win");
         title.setForeground(Color.WHITE);
         title.setBounds(220, 190, 240, 40);
@@ -32,7 +24,7 @@ public class DialogEndGame extends JPanel{
         try {
             title.setFont(Font.createFont(Font.TRUETYPE_FONT,
                     new File("resources/fonts/Inter-Regular.ttf")).deriveFont(Font.BOLD, 40));
-                    titlev2.setFont(Font.createFont(Font.TRUETYPE_FONT,
+            titlev2.setFont(Font.createFont(Font.TRUETYPE_FONT,
                     new File("resources/fonts/Inter-Regular.ttf")).deriveFont(Font.PLAIN, 16));
         } catch (FontFormatException e) {
             e.printStackTrace();
@@ -94,18 +86,6 @@ public class DialogEndGame extends JPanel{
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(image,120,150,400,256,this);
-    }
-    public JLabel getTitle() {
-        return title;
-    }
-    public void setTitle(JLabel title) {
-        this.title = title;
-    }
-    public JLabel getTitlev2() {
-        return titlev2;
-    }
-    public void setTitlev2(JLabel titlev2) {
-        this.titlev2 = titlev2;
+        g2d.drawImage(ReadImage.panel_500_320,120,150,400,256,this);
     }
 }

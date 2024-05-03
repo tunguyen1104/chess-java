@@ -8,6 +8,7 @@ public class Piece {
 	private String id;
 	private int lct_in_image_X,lct_in_image_Y;
 	private boolean isWhite;
+	private int count_moved;
 	public int Positional_board[][]= {};
 	public Piece()
 	{
@@ -59,12 +60,16 @@ public class Piece {
 	{
 		return 0;
 	}
-	public int rating_positional(int a)
+	public int rating_positional(int a, BoardV2 b)
 	{
 		return 0;
 	}
 	public int rating_attacked(BoardV2 a)
 	{
 		return 0;
+	}
+	public static void main(String[] args) {
+		String a="abcde";
+		System.out.println(a.substring(4)=="e");
 	}
 }

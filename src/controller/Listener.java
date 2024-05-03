@@ -4,11 +4,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import model.Board;
-import model.Sound;
 import model.Move;
 import model.ReadImage;
 import model.pieces.Piece;
-import view.DialogEndGame;
 import view.GamePVP;
 
 public class Listener extends MouseAdapter {

@@ -3,9 +3,6 @@ package controller;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import view.Menu;
 
 public class ListenerMenu extends MouseAdapter{
@@ -28,12 +25,7 @@ public class ListenerMenu extends MouseAdapter{
         } else if(e.getSource().equals(menu.getAbout())) {
             Menu.cardLayout.show(Menu.panelCardLayout, "about");
         } else if(e.getSource().equals(menu.getExit())) {
-            int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION)
-                    System.exit(0);
-                else
-                    Menu.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            System.exit(0);
         }
     }
 }

@@ -719,22 +719,6 @@ public class Board extends JPanel {
         }
         return true;
     }
-    public boolean isKingChecked(Move move) {
-        Piece king = findKing(move.piece.isWhite);
-        assert king != null;
-        int kingCol = king.col;
-        int kingRow = king.row;
-        
-        if(selectedPiece != null && selectedPiece.name.equals("King")) {
-            kingCol = move.getNewCol();
-            kingRow = move.getNewRow();
-        }
-        return hitByRook(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
-                hitByBishop(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
-                hitByKnight(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
-                hitByPawn(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
-                hitByKing(king.isWhite,kingCol,kingRow);
-    }
     public boolean checkMate(boolean color, int kingCol, int kingRow) {
         //Rook
         for(int i = kingCol - 1;i >= 0; --i) {//left
@@ -850,6 +834,22 @@ public class Board extends JPanel {
             return true;
         }
         return false;
+    }
+    public boolean isKingChecked(Move move) {
+        Piece king = findKing(move.piece.isWhite);
+        assert king != null;
+        int kingCol = king.col;
+        int kingRow = king.row;
+        
+        if(selectedPiece != null && selectedPiece.name.equals("King")) {
+            kingCol = move.getNewCol();
+            kingRow = move.getNewRow();
+        }
+        return hitByRook(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
+                hitByBishop(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
+                hitByKnight(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
+                hitByPawn(move.getNewCol(), move.getNewRow(), king.isWhite,kingCol,kingRow) ||
+                hitByKing(king.isWhite,kingCol,kingRow);
     }
     private final int[][] ROOK_MOVES = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
     private boolean hitByRook(int col, int row,boolean kingIsWhite, int kingCol, int kingRow) {

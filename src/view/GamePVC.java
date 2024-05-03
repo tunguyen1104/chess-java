@@ -49,7 +49,7 @@ public class GamePVC extends JPanel {
     public JTextArea textArea;
     public JScrollPane scrollPaneTextArea;
     private ViewBoard board;
-    public GamePVC(int minute) {
+    public GamePVC(int minute,DialogPromotion a) {
         this.setLayout(null);
         try {
             board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
@@ -61,19 +61,19 @@ public class GamePVC extends JPanel {
             e.printStackTrace();
         }
         initPanel(minute);
-        DialogPromotion dialog_promo=new DialogPromotion(this,"ok sir",true);
-        ThreadDialog thread_dialog_promo=new ThreadDialog(dialog_promo);
-        board = new ViewBoard();
-        board.setMy_dialog(thread_dialog_promo);
-        board.setBounds(280, 100, 8 * 80, 8 * 80);
-        MoveController m_ctrl=new MoveController(board,board.getP(),dialog_promo);
-        board.addMouseListener(m_ctrl);
-        board.addMouseMotionListener(m_ctrl);
-
-        SelectPromotion choosing = new SelectPromotion(dialog_promo,board);
+        DialogPromotion dialog_promo = a;
+        Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
+        ViewBoard panel = new ViewBoard();
+        panel.setMy_dialog(dialog_promo);
+        panel.setBounds(280, 100, 8 * 80, 8 * 80);
+        //panel.setOpaque(false);
+        MoveController m_ctrl=new MoveController(panel,panel.getP(),dialog_promo);
+        panel.addMouseListener(m_ctrl);
+        panel.addMouseMotionListener(m_ctrl);
+        SelectPromotion choosing = new SelectPromotion(dialog_promo,panel);
         dialog_promo.addMouseListener(choosing);
         dialog_promo.addMouseMotionListener(choosing);
-        this.add(board);
+        this.add(panel);
         //timeLabelWhite.start();
         //timer.start();
     }

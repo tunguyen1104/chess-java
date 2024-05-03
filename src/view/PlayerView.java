@@ -3,8 +3,10 @@ package view;
 public class PlayerView {
 	private int mouseX,mouseY,dragX,dragY,fromCol,fromRow;
 	private boolean isDrag,activeValid_move;
+	private boolean who_turn;
 	public PlayerView()
 	{
+		this.who_turn=true;
 		this.activeValid_move=false;
 		this.isDrag=false;
 		this.fromCol=-1;
@@ -13,6 +15,12 @@ public class PlayerView {
 		this.mouseY=-1;
 		this.dragX=-1;
 		this.dragY=-1;
+	}
+	public boolean isWho_turn() {
+		return who_turn;
+	}
+	public void setWho_turn(boolean who_turn) {
+		this.who_turn = who_turn;
 	}
 	public boolean isActiveValid_move() {
 		return activeValid_move;

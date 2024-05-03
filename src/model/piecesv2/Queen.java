@@ -1,5 +1,7 @@
 package model.piecesv2;
+
 import model.BoardV2;
+
 public class Queen extends Piece {
 	private int row;
 	private int col;

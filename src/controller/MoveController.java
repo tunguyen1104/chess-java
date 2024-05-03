@@ -7,6 +7,7 @@ import java.awt.event.MouseMotionListener;
 import model.Thread_MNX;
 import view.DialogPromotion;
 import view.PlayerView;
+import view.ThreadDialog;
 import view.ViewBoard;
 
 public class MoveController implements MouseListener,MouseMotionListener {
@@ -29,14 +30,7 @@ public class MoveController implements MouseListener,MouseMotionListener {
 		// TODO Auto-generated method stub
 		this.P.setMouseX(e.getPoint().x);
 		this.P.setMouseY(e.getPoint().y);	
-		if(this.P.getMouseY()/this.view.getSquare_size()==this.P.getFromRow()&&this.P.getMouseX()/this.view.getSquare_size()==this.P.getFromCol())
-		{
-			this.P.setFromRow(-1);
-			this.P.setFromCol(-1);
-			this.P.setActiveValid_move(false);
-			this.P.setDrag(true);
-		}
-		else if(this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()]!=null&&this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()].isWhite()==true)
+		if(this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()]!=null&&this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()].isWhite()==this.P.isWho_turn())
 		{
 			this.P.setFromCol(this.P.getMouseX()/this.view.getSquare_size());
 			this.P.setFromRow(this.P.getMouseY()/this.view.getSquare_size());
@@ -44,21 +38,34 @@ public class MoveController implements MouseListener,MouseMotionListener {
 			this.P.setDragX(this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()].getLct_in_image_X());
 			this.P.setDragY(this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()].getLct_in_image_Y());
 			this.P.setDrag(true);
-			this.P.setActiveValid_move(true);
-		}
-		if(this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()]==null)
-		{
-			this.P.setActiveValid_move(false);
 		}
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		this.P.setActiveValid_move(false);
 		this.P.setMouseX(e.getPoint().x);
 		this.P.setMouseY(e.getPoint().y);
 		this.D.setEndCol(e.getPoint().x/this.view.getSquare_size());
 		String enemy_piece_id="";
 		String released_move="";
+		if(this.view.getMy_board().board1[this.P.getFromRow()][this.P.getFromCol()].getId()=="a"&&this.P.getMouseY()/this.view.getSquare_size()==7)
+		{
+			if(this.P.getMouseX()/this.view.getSquare_size()==6)
+			{
+				if(this.view.getMy_board().board1[this.P.getFromRow()][this.P.getFromCol()].move(this.view.getMy_board()).contains("*7_ks"))
+				{
+					this.view.make_move_animated("*7_ks");
+				}
+			}
+			if(this.P.getMouseX()/this.view.getSquare_size()==2)
+			{
+				if(this.view.getMy_board().board1[this.P.getFromRow()][this.P.getFromCol()].move(this.view.getMy_board()).contains("*7_qs"))
+				{
+					this.view.make_move_animated("*7_qs");
+				}
+			}
+		}
 		if(this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()]!=null)
 		{
 			enemy_piece_id=this.view.getMy_board().board1[this.P.getMouseY()/this.view.getSquare_size()][this.P.getMouseX()/this.view.getSquare_size()].getId();
@@ -75,7 +82,8 @@ public class MoveController implements MouseListener,MouseMotionListener {
 				this.view.repaint();
 			}
 			else {
-				this.view.getMy_dialog().start();
+				ThreadDialog promotion = new ThreadDialog(this.view.getMy_dialog());
+				promotion.start();
 			}	
 		}
 		String expected_move=""+this.P.getFromRow()+this.P.getFromCol()+(this.P.getMouseY()/this.view.getSquare_size())+(this.P.getMouseX()/this.view.getSquare_size())+enemy_piece_id;
@@ -83,8 +91,21 @@ public class MoveController implements MouseListener,MouseMotionListener {
 		{
 			this.P.setActiveValid_move(false);
 			this.view.player_make_move(expected_move);
-			Thread_MNX enemy_move=new Thread_MNX(this.view);
-			enemy_move.start();
+			if(this.view.getOp().getOn_openings())
+			{
+				this.view.getOp().setMoved(expected_move);
+				this.view.getOp().posible_openings();
+				if(this.view.getOp().getOn_openings())
+				{
+					String AI_openings_move=this.view.getOp().Suggest_move();
+					this.view.getOp().setMoved(AI_openings_move);
+					this.view.make_move_animated(AI_openings_move);	
+				}
+			}
+			if(this.view.getOp().getOn_openings()==false) {
+				Thread_MNX enemy_move=new Thread_MNX(this.view);
+				enemy_move.start();
+			}
 		}
 		else {
 			this.view.repaint();
@@ -104,6 +125,7 @@ public class MoveController implements MouseListener,MouseMotionListener {
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
+			this.P.setActiveValid_move(true);
 			this.P.setMouseX(e.getPoint().x-40);
 			this.P.setMouseY(e.getPoint().y-40);
 			//this.P.setActiveValid_move(true);
@@ -114,5 +136,8 @@ public class MoveController implements MouseListener,MouseMotionListener {
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	public static void main(String[] args) {
+		System.out.println(Character.getNumericValue(' '));
 	}
 }

@@ -58,7 +58,7 @@ public class SelectPromotion implements MouseListener,MouseMotionListener{
 		this.board.getMy_board().make_move(promotion_move);
 		this.board.getP().setActiveValid_move(false);
 		this.board.repaint();
-		this.dialog.setVisible(false);
+		this.dialog.dispose();
 		Thread_MNX enemy_move=new Thread_MNX(this.board);
 		enemy_move.start();
 	}

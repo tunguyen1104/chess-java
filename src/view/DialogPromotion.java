@@ -1,6 +1,6 @@
 package view;
 
-import model.JDBCConnection;
+import model.ReadImage;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -9,11 +9,11 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -45,9 +45,9 @@ public class DialogPromotion extends JDialog {
 		this.enemy_piece = enemy_piece;
 	}
 
-	public DialogPromotion(JPanel parent, String title, Boolean modal)
+	public DialogPromotion(JFrame parent, String title, Boolean modal)
 	{
-		//super(parent,title,modal);
+		super(parent,title,modal);
 		this.setSize(460,200);
 		this.setLocationRelativeTo(parent);
 		this.setUndecorated(false);
@@ -55,13 +55,12 @@ public class DialogPromotion extends JDialog {
 		JLabel label = new JLabel("choose your piece you want promotion !");
 		label.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 22));
 		panel.add(label,BorderLayout.EAST);
-		ArrayList<String> arr = JDBCConnection.takeDataSetting();
-        try {
-            img = ImageIO.read(new File(arr.get(0)));
+		try {
+			img = ImageIO.read(new File("resources/pieces/default.png"));
 			red_border = ImageIO.read(new File("resources/img_src/Red_border2.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		getContentPane().add(panel);
 		movedX=-1;
 		movedY=-1;
@@ -72,7 +71,7 @@ public class DialogPromotion extends JDialog {
 		// TODO Auto-generated method stub
 		super.paint(g);
 		Graphics2D g2D=(Graphics2D) g;
-		g.drawImage(img, 70, 90, 390, 170,80,0,400,80 , this);
+		g.drawImage(img, 70, 90, 390, 170,100,0,500,100 , this);
 		if(movedX>70&&movedX<390&&movedY>90&&movedY<170)
 		{
 			g2D.drawImage(red_border, 70+80*((movedX-70)/80), 90, 80, 80, this);
