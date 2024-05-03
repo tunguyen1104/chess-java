@@ -3,9 +3,8 @@ package model;
 import controller.Listener;
 import controller.ListenerPuzzle;
 import model.pieces.*;
-import view.DialogEndGame;
-import view.GamePVP;
-import view.PuzzleGame;
+import view.*;
+import view.Menu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -269,35 +268,12 @@ public class Board extends JPanel {
         Date currentTime = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentTime);
-        return String.format("%d-%02d-%02d_%02d-%02d-%02d.sv",
+        return String.format("%d-%02d-%02d_%02d-%02d-%02d",
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
     }
     public void saveFile(String text) {
-        String fileName = getFileName();
-        File directory = new File("saved_data/");
-        if (!directory.exists()) {
-            if (!directory.mkdirs()) {
-                System.out.println("Error creating directory");
-                return;
-            }
-        }
-        File file = new File(directory, fileName);
-        try {
-            if (file.createNewFile()) {
-                System.out.println("File created successfully!");
-            } else {
-                System.out.println("File already exists! Overwriting...");
-            }
-            try (FileOutputStream fos = new FileOutputStream(file);
-                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(text);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            System.out.println("Error creating file");
-        }
+        JDBCConnection.insertHistory(text);
     }
     private void animate(int x, int y, int x_new, int y_new) {
         paint_old_new(y, x, y_new, x_new);
@@ -547,20 +523,17 @@ public class Board extends JPanel {
         Date currentTime = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentTime);
-        String inputDate = String.format("%d-%02d-%02d_%02d-%02d-%02d",
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
             SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy", Locale.US);
-            Date date = inputFormat.parse(inputDate);
+            Date date = inputFormat.parse(getFileName());
             outputDate = outputFormat.format(date);
         } catch (ParseException e) {
             System.out.println("Error convertDate!");
         }
         return outputDate;
     }
-    public String handle_step_ver2(Move move) {
+    public String handle_step_review(Move move) {
         //0536qQ_
         String step = "";
         if(castLing != -1) {

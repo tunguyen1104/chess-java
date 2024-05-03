@@ -53,15 +53,8 @@ public class JDBCConnection {
                     _puzzle_solved = rs.getString(8);
                     if (username.equals(_username) && password.equals(_password)) {
                         preparedStatement = conn.prepareStatement(
-                                "INSERT INTO CURRENTUSER(USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND, PUZZLE_FAILED, PUZZLE_SOLVED) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                                "INSERT INTO CURRENTUSER(USERNAME) VALUES (?)");
                         preparedStatement.setString(1, _username);
-                        preparedStatement.setString(2, _password);
-                        preparedStatement.setString(3, _email);
-                        preparedStatement.setString(4, _piece);
-                        preparedStatement.setString(5, _board_name);
-                        preparedStatement.setBoolean(6, _sound);
-                        preparedStatement.setString(7, _puzzle_failed);
-                        preparedStatement.setString(8, _puzzle_solved);
                         preparedStatement.executeUpdate();
                         return true;
                     }
@@ -116,6 +109,10 @@ public class JDBCConnection {
                 insertStatement.setString(7, "");
                 insertStatement.setString(8, "");
                 insertStatement.executeUpdate();
+                insertStatement = conn.prepareStatement(
+                        "INSERT INTO CURRENTUSER(USERNAME) VALUES (?)");
+                insertStatement.setString(1, username);
+                insertStatement.executeUpdate();
                 rs.close();
                 checkStatement.close();
                 insertStatement.close();
@@ -147,74 +144,13 @@ public class JDBCConnection {
             System.out.println("Connection to database failed!");
         }
     }
-
-    public static void logOut() {
-        Connection conn = JDBCConnection.getJDBCConnection();
-        if (conn != null) {
-            PreparedStatement preparedStatement = null;
-            ResultSet rs = null;
-            String _username = "";
-            String _password = "";
-            String _email = "";
-            String _piece = "";
-            String _board_name = "";
-            Boolean _sound = true;
-            String _puzzle_failed = "";
-            String _puzzle_solved = "";
-            try {
-                preparedStatement = conn.prepareStatement(
-                        "SELECT USERNAME, PASSWORD, EMAIL, PIECE, BOARD_NAME, SOUND, PUZZLE_FAILED, PUZZLE_SOLVED FROM CURRENTUSER");
-                rs = preparedStatement.executeQuery();
-                if (rs.next()) {
-                    _username = rs.getString("USERNAME");
-                    _password = rs.getString("PASSWORD");
-                    _email = rs.getString("EMAIL");
-                    _piece = rs.getString("PIECE");
-                    _board_name = rs.getString("BOARD_NAME");
-                    _sound = rs.getBoolean("SOUND");
-                    _puzzle_failed = rs.getString("PUZZLE_FAILED");
-                    _puzzle_solved = rs.getString("PUZZLE_SOLVED");
-                }
-                preparedStatement = conn.prepareStatement(
-                        "UPDATE ACCOUNT SET USERNAME = ?, PASSWORD = ?, EMAIL = ?, PIECE = ?, BOARD_NAME = ?, SOUND = ?, PUZZLE_FAILED = ?, PUZZLE_SOLVED = ? WHERE USERNAME = ?");
-                preparedStatement.setString(1, _username);
-                preparedStatement.setString(2, _password);
-                preparedStatement.setString(3, _email);
-                preparedStatement.setString(4, _piece);
-                preparedStatement.setString(5, _board_name);
-                preparedStatement.setBoolean(6, _sound);
-                preparedStatement.setString(7, _puzzle_failed);
-                preparedStatement.setString(8, _puzzle_solved);
-                preparedStatement.setString(9, _username);
-                preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            } finally {
-                try {
-                    if (rs != null) {
-                        rs.close();
-                    }
-                    if (preparedStatement != null) {
-                        preparedStatement.close();
-                    }
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            System.out.println("Connection to database failed!");
-        }
-    }
-
     public static boolean checkCurrentUser() {
         Connection conn = JDBCConnection.getJDBCConnection();
         if (conn != null) {
             try {
-                PreparedStatement statement = conn.prepareStatement("SELECT USERNAME FROM CURRENTUSER");
+                PreparedStatement statement = conn.prepareStatement("SELECT * FROM CURRENTUSER");
                 ResultSet rs = statement.executeQuery();
                 if (rs.next()) {
-                    rs.getString("username");
                     rs.close();
                     statement.close();
                     return true;
@@ -235,7 +171,7 @@ public class JDBCConnection {
             PreparedStatement statement = null;
             ResultSet rs = null;
             try {
-                statement = conn.prepareStatement("SELECT USERNAME, PASSWORD, EMAIL FROM CURRENTUSER");
+                statement = conn.prepareStatement("SELECT ACCOUNT.USERNAME, PASSWORD, EMAIL FROM ACCOUNT INNER JOIN CURRENTUSER ON ACCOUNT.USERNAME = CURRENTUSER.USERNAME");
                 rs = statement.executeQuery();
                 if (rs.next()) {
                     String username = rs.getString("username");
@@ -274,7 +210,7 @@ public class JDBCConnection {
             PreparedStatement statement = null;
             ResultSet rs = null;
             try {
-                statement = conn.prepareStatement("SELECT PIECE, BOARD_NAME, SOUND FROM CURRENTUSER");
+                statement = conn.prepareStatement("SELECT PIECE, BOARD_NAME, SOUND FROM ACCOUNT INNER JOIN CURRENTUSER ON ACCOUNT.USERNAME = CURRENTUSER.USERNAME");
                 rs = statement.executeQuery();
                 if (rs.next()) {
                     String piece_url = rs.getString("piece");
@@ -313,7 +249,7 @@ public class JDBCConnection {
             PreparedStatement statement = null;
             ResultSet rs = null;
             try {
-                statement = conn.prepareStatement("SELECT PUZZLE_FAILED, PUZZLE_SOLVED FROM CURRENTUSER");
+                statement = conn.prepareStatement("SELECT PUZZLE_FAILED, PUZZLE_SOLVED FROM ACCOUNT INNER JOIN CURRENTUSER ON ACCOUNT.USERNAME = CURRENTUSER.USERNAME");
                 rs = statement.executeQuery();
                 if (rs.next()) {
                     String puzzle_failed = rs.getString("puzzle_failed");
@@ -350,13 +286,99 @@ public class JDBCConnection {
         }
         return arr;
     }
-
+    public static ArrayList<String> takeDataHistory() {
+        ArrayList<String> arr = new ArrayList<String>();
+        Connection conn = JDBCConnection.getJDBCConnection();
+        if (conn != null) {
+            PreparedStatement statement = null;
+            ResultSet rs = null;
+            try {
+                statement = conn.prepareStatement("SELECT HISTORY FROM HISTORY INNER JOIN CURRENTUSER ON HISTORY.USERNAME = CURRENTUSER.USERNAME ORDER BY id DESC");
+                rs = statement.executeQuery();
+                while (rs.next()) {
+                    arr.add(rs.getString("history"));
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+            }
+        } else {
+            System.out.println("Connection to database failed!");
+        }
+        return arr;
+    }
+    public static String takeHistoryTheEnd() {
+        Connection conn = JDBCConnection.getJDBCConnection();
+        if (conn != null) {
+            PreparedStatement statement = null;
+            ResultSet rs = null;
+            try {
+                statement = conn.prepareStatement("SELECT HISTORY FROM HISTORY INNER JOIN CURRENTUSER ON HISTORY.USERNAME = CURRENTUSER.USERNAME ORDER BY id DESC");
+                rs = statement.executeQuery();
+                if (rs.next()) {
+                    return rs.getString("history");
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+            }
+        } else {
+            System.out.println("Connection to database failed!");
+        }
+        return "";
+    }
+    public static void insertHistory(String data) {
+        Connection conn = JDBCConnection.getJDBCConnection();
+        if (conn != null) {
+            PreparedStatement statement = null;
+            try {
+                statement = conn.prepareStatement("INSERT INTO HISTORY (username, history) VALUES ((SELECT username FROM CURRENTUSER), ?)");
+                statement.setString(1, data);
+                statement.executeUpdate();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.err.println(ex);
+                }
+            }
+        } else {
+            System.out.println("Connection to database failed!");
+        }
+    }
     public static void updatePiece(String piece_url) {
         Connection conn = JDBCConnection.getJDBCConnection();
         if (conn != null) {
             PreparedStatement statement = null;
             try {
-                statement = conn.prepareStatement("UPDATE CURRENTUSER SET PIECE = ?");
+                statement = conn.prepareStatement("UPDATE ACCOUNT SET PIECE = ? WHERE USERNAME = (SELECT USERNAME FROM CURRENTUSER)");
                 statement.setString(1, piece_url);
                 statement.executeUpdate();
             } catch (SQLException ex) {
@@ -380,7 +402,7 @@ public class JDBCConnection {
         if (conn != null) {
             PreparedStatement statement = null;
             try {
-                statement = conn.prepareStatement("UPDATE CURRENTUSER SET BOARD_NAME = ?");
+                statement = conn.prepareStatement("UPDATE ACCOUNT SET BOARD_NAME = ? WHERE USERNAME = (SELECT USERNAME FROM CURRENTUSER)");
                 statement.setString(1, board_url);
                 statement.executeUpdate();
             } catch (SQLException ex) {
@@ -404,7 +426,7 @@ public class JDBCConnection {
         if (conn != null) {
             PreparedStatement statement = null;
             try {
-                statement = conn.prepareStatement("UPDATE CURRENTUSER SET SOUND = ?");
+                statement = conn.prepareStatement("UPDATE ACCOUNT SET SOUND = ? WHERE USERNAME = (SELECT USERNAME FROM CURRENTUSER)");
                 statement.setBoolean(1, sound);
                 statement.executeUpdate();
             } catch (SQLException ex) {
@@ -429,7 +451,7 @@ public class JDBCConnection {
         if (conn != null) {
             PreparedStatement statement = null;
             try {
-                statement = conn.prepareStatement("UPDATE CURRENTUSER SET PUZZLE_FAILED = ?, PUZZLE_SOLVED = ?");
+                statement = conn.prepareStatement("UPDATE ACCOUNT SET PUZZLE_FAILED = ?, PUZZLE_SOLVED = ? WHERE USERNAME = (SELECT USERNAME FROM CURRENTUSER)");
                 statement.setString(1, puzzle_failed);
                 statement.setString(2, puzzle_solved);
                 statement.executeUpdate();
@@ -450,12 +472,12 @@ public class JDBCConnection {
         }
     }
 
-     public static void updatePasswordCurrentUser(String new_password) {
+     public static void updatePassword(String new_password) {
          Connection conn = JDBCConnection.getJDBCConnection();
          if (conn != null) {
              PreparedStatement statement = null;
              try {
-                 statement = conn.prepareStatement("UPDATE CURRENTUSER SET password = ?");
+                 statement = conn.prepareStatement("UPDATE ACCOUNT SET PASSWORD = ? WHERE USERNAME = (SELECT USERNAME FROM CURRENTUSER)");
                  statement.setString(1, new_password);
                  statement.executeUpdate();
              } catch (SQLException ex) {

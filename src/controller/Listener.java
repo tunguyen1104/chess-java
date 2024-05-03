@@ -95,10 +95,10 @@ public class Listener extends MouseAdapter {
                 if (checkMateEndGame) plus = "#";
                 if (isTurn) {
                     s += board.step_end(step, move) + plus + "\n";
-                    pgn.append(board.handle_step_ver2(move) + "\n");
+                    pgn.append(board.handle_step_review(move) + "\n");
                 } else {
                     s += String.format("%3s %8s %6s", count_step + ".", board.step_end(step, move) + plus, " ");
-                    pgn.append(String.format("%3s %8s %6s", count_step + ".", board.handle_step_ver2(move), " "));
+                    pgn.append(board.handle_step_review(move));
                     ++count_step;
                 }
 

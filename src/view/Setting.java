@@ -134,7 +134,7 @@ public class Setting extends JPanel {
             System.out.println("Error url image!");
         }
         ReadImage.changePieceImage(piece_url[index_piece]);
-        JDBCConnection.updateBoard(piece_url[index_piece]);
+        JDBCConnection.updatePiece(piece_url[index_piece]);
     }
     public void handle_forward_right_piece() {
         ++index_piece;
@@ -147,7 +147,7 @@ public class Setting extends JPanel {
             System.out.println("Error url image!");
         }
         ReadImage.changePieceImage(piece_url[index_piece]);
-        JDBCConnection.updateBoard(piece_url[index_piece]);
+        JDBCConnection.updatePiece(piece_url[index_piece]);
     }
     public void handle_forward_left_board() {
         --index_board;
@@ -350,7 +350,6 @@ public class Setting extends JPanel {
     public void handle_logout_label_pressed() {
         ReadImage.sound.close();
         // call database delete current user
-        JDBCConnection.logOut();
         JDBCConnection.deleteDataCurrentUser();
         Menu.frame.dispose();
         new Login();
@@ -462,8 +461,7 @@ public class Setting extends JPanel {
                     JOptionPane.WARNING_MESSAGE);
         } else if (new_password.equals(new_retype_password)) {
             if (!new_password.equals(inforAccount.get(1))) {
-                JDBCConnection.updatePasswordCurrentUser(new_password);
-                JDBCConnection.logOut();
+                JDBCConnection.updatePassword(new_password);
                 JOptionPane.showMessageDialog(null, "Change password success", "Message",
                         JOptionPane.INFORMATION_MESSAGE);
                 newPasswordBox.setText("");

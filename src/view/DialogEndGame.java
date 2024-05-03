@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 
+import model.JDBCConnection;
 import model.ReadImage;
 
 import java.awt.*;
@@ -63,25 +64,9 @@ public class DialogEndGame extends JPanel{
         this.add(home);
     }
     public void handleReview() {
-        File name = null;
-        File folder = new File("saved_data/");
-        if (folder.isDirectory()) {
-            File[] file = folder.listFiles();
-            for (File nameFile : file) {
-                if (nameFile.isFile()) {
-                    name  = nameFile;
-                } 
-            }
-        } else {
-            System.out.println(folder + " not folder!");
-        }
-        if(name == null) {
-            System.out.println("ERROR : Save file");
-        } else {
-            Menu.panelCardLayout.add(new History(),"history");
-            Menu.panelCardLayout.add(new Review(name),"review");
-            Menu.cardLayout.show(Menu.panelCardLayout,"review");
-        }
+        Menu.panelCardLayout.add(new History(),"history");
+        Menu.panelCardLayout.add(new Review(JDBCConnection.takeHistoryTheEnd()),"review");
+        Menu.cardLayout.show(Menu.panelCardLayout,"review");
     }
     @Override
     public void paintComponent(Graphics g) {

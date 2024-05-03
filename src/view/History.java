@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 
+import model.JDBCConnection;
 import model.ReadImage;
 
 import java.awt.*;
@@ -20,6 +21,7 @@ public class History extends JPanel {
     private ButtonImage home_normal_button;
     private ArrayList<ButtonImage> listHistory = new ArrayList<>();
     private ArrayList<JPanel> panel_page = new ArrayList<>();
+    private ArrayList<String> history;
     String format = "%-18s %-18s %-24s %-9s";
     private int index = 0;
     private int index_page = 0;
@@ -27,7 +29,6 @@ public class History extends JPanel {
     private JLabel page;
     private ButtonImage forward_left;
     private ButtonImage forward_right;
-    
     private int index_panel_page = 0;
     String path = "saved_data/";
     public History() {
@@ -140,63 +141,44 @@ public class History extends JPanel {
         eventButtonHistory();
     }
     public void eventButtonHistory() {
-        File folder = new File(path);
-            if (folder.isDirectory()) {
-                File[] file = folder.listFiles();
-                int count = 0;
-                for (File nameFile : file) {
-                    listHistory.get(count).addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mousePressed(MouseEvent e) {
-                            Menu.panelCardLayout.add(new Review(nameFile),"review");
-                            Menu.cardLayout.show(Menu.panelCardLayout,"review");
-                        }
-                    });
-                    ++count;
+        int count = 0;
+        for (String pgn: history) {
+            listHistory.get(count).addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    Menu.panelCardLayout.add(new Review(pgn),"review");
+                    Menu.cardLayout.show(Menu.panelCardLayout,"review");
                 }
-            }
+            });
+            ++count;
+        }
     }
     public void handlePgn() {
-        File folder = new File(path);
-        if (folder.isDirectory()) {
-            File[] file = folder.listFiles();
-            int X = 4, Y = 4;
-            int count = 0;
-            for (File nameFile : file) {
-                if (nameFile.isFile()) {
-                    if(count % 7 == 0) {
-                        X = 4; Y = 4;
-                    }
-                    try (FileInputStream fis = new FileInputStream(nameFile);
-                        ObjectInputStream ois = new ObjectInputStream(fis)) {
-                        String text = (String) ois.readObject();
-                        ArrayList<String> value = new ArrayList<>();
-                        int cnt = 0;
-                        try (Scanner scanner = new Scanner(text)) {
-                            scanner.useDelimiter("\n");
-                            while (scanner.hasNext()) {
-                                value.add(scanner.next());
-                                ++cnt;
-                                if(cnt == 5) break;
-                            }
-                        }
-                        fis.close();
-                        ois.close();
-                        String formatted = String.format(format, value.get(1),value.get(2), value.get(3),value.get(3).equals("Timeout") ? "   " + value.get(4) : value.get(4));
-                        listHistory.add(new ButtonImage(ReadImage.history_normal, ReadImage.history_selected, 580, 76, value.get(0), formatted));
-                        if (index >= 0 && index < listHistory.size()) {    
-                            listHistory.get(index).setBounds(X, Y, 580, 76);
-                        }
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    Y += 90;
-                    ++index;
-                    ++count;
-                } 
+        history = JDBCConnection.takeDataHistory();
+        int X = 4, Y = 4;
+        int count = 0;
+        for (String data : history) {
+            if(count % 7 == 0) {
+                X = 4; Y = 4;
             }
-        } else {
-            System.out.println(folder + " not folder!");
+            ArrayList<String> value = new ArrayList<>();
+            int cnt = 0;
+            try (Scanner scanner = new Scanner(data)) {
+                scanner.useDelimiter("\n");
+                while (scanner.hasNext()) {
+                    value.add(scanner.next());
+                    ++cnt;
+                    if(cnt == 5) break;
+                }
+            }
+            String formatted = String.format(format, value.get(1),value.get(2), value.get(3),value.get(3).equals("Timeout") ? "   " + value.get(4) : value.get(4));
+            listHistory.add(new ButtonImage(ReadImage.history_normal, ReadImage.history_selected, 580, 76, value.get(0), formatted));
+            if (index >= 0 && index < listHistory.size()) {
+                listHistory.get(index).setBounds(X, Y, 580, 76);
+            }
+            Y += 90;
+            ++index;
+            ++count;
         }
         max_index_page = (listHistory.size() + 6) / 7;
     }

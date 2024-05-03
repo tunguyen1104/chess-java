@@ -18,6 +18,8 @@ import model.pieces.*;
 import javax.swing.*;
 
 import controller.ListenerReview;
+import view.History;
+import view.Menu;
 import view.Review;
 
 public class BoardReview extends JPanel{
@@ -39,7 +41,7 @@ public class BoardReview extends JPanel{
     private int new_row = -1;
     private int col_checkmate = -1;
     private int row_checkmate = -1;
-    public BoardReview(Review review, File path) {
+    public BoardReview(Review review, String pgn) {
         this.review = review;
         input = new ListenerReview(review, this);
         ReadImage.sound.playMusic(0);
@@ -47,35 +49,25 @@ public class BoardReview extends JPanel{
             columnMap.put(column, column - 'a');
         }
         addPiece();
-        handlePgn(path);
+        handlePgn(pgn);
         saveSnapShot();
     }
-    public void handlePgn(File path) {
-        try (FileInputStream fis = new FileInputStream(path);
-            ObjectInputStream ois = new ObjectInputStream(fis)) {
-            String text = (String) ois.readObject();
-            int cnt = 0;
-            try (Scanner scanner = new Scanner(text)) {
-                scanner.useDelimiter("\n");
-                while (scanner.hasNext()) {
-                    scanner.next();
-                    ++cnt;
-                    if(cnt == 5) break;
-                }
-                while (scanner.hasNext()) {
-                    String line = scanner.next();
-                    if (line.length() >= 13) {
-                        String move1 = line.substring(4, 12).trim();
-                        String move2 = line.substring(13).trim();
-                        move.add(move1);
-                        if (move2.contains("_")) move.add(move2);
-                    }
-                }
+    public void handlePgn(String pgn) {
+        int cnt = 0;
+        try (Scanner scanner = new Scanner(pgn)) {
+            scanner.useDelimiter("\n");
+            while (scanner.hasNext()) {
+                scanner.next();
+                ++cnt;
+                if(cnt == 5) break;
             }
-            fis.close();
-            ois.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            while (scanner.hasNext()) {
+                String line = scanner.next();
+                String move1 = line.substring(0, 7).trim();
+                String move2 = line.substring(7).trim();
+                move.add(move1);
+                if (move2.contains("_")) move.add(move2);
+            }
         }
     }
     public void rotateBoard(boolean request) {
@@ -111,11 +103,11 @@ public class BoardReview extends JPanel{
             row_checkmate = 7 - row_checkmate;
         }
         if(!rotating) {
-            review.white_name.setBounds(1000, 600, 490, 120);
-            review.black_name.setBounds(1000, 150, 490, 120);
+            review.white_name.setBounds(1000, 590, 490, 120);
+            review.black_name.setBounds(1000, 140, 490, 120);
         } else {
-            review.black_name.setBounds(1000, 600, 490, 120);
-            review.white_name.setBounds(1000, 150, 490, 120);
+            review.black_name.setBounds(1000, 590, 490, 120);
+            review.white_name.setBounds(1000, 140, 490, 120);
         }
         review.board_index = (rotating) ? ReadImage.board_index_black : null;
         if(request) ReadImage.sound.playMusic(4);
