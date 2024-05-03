@@ -16,10 +16,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class GamePVC extends JPanel {
-    private Image game_gui;
-    private Image rotate_normal;
-    private Image rotate_selected;
-    private Image board_index_black;
     private Image board_index;
     protected JLabel white_name;
     protected JLabel black_name;
@@ -51,22 +47,13 @@ public class GamePVC extends JPanel {
     private ViewBoard board;
     public GamePVC(int minute,DialogPromotion a) {
         this.setLayout(null);
-        try {
-            board_index = ImageIO.read(new File("resources/gui/board_index_white.png"));
-            board_index_black = ImageIO.read(new File("resources/gui/board_index_black.png"));
-            rotate_normal = ImageIO.read(new File("resources/buttons/rotate_normal.png"));
-            rotate_selected = ImageIO.read(new File("resources/buttons/rotate_selected.png"));
-            game_gui = ImageIO.read(new File("resources/gui/game_gui.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        board_index = ReadImage.board_index;
         initPanel(minute);
         DialogPromotion dialog_promo = a;
         Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
         ViewBoard panel = new ViewBoard();
         panel.setMy_dialog(dialog_promo);
         panel.setBounds(280, 100, 8 * 80, 8 * 80);
-        //panel.setOpaque(false);
         MoveController m_ctrl=new MoveController(panel,panel.getP(),dialog_promo);
         panel.addMouseListener(m_ctrl);
         panel.addMouseMotionListener(m_ctrl);
@@ -148,7 +135,7 @@ public class GamePVC extends JPanel {
         this.add(home_normal_button);
         this.add(title_bar_label);
 
-        ButtonImage rotate = new ButtonImage(rotate_normal, rotate_selected, 50, 40, "");
+        ButtonImage rotate = new ButtonImage(ReadImage.rotate_normal, ReadImage.rotate_selected, 50, 40, "");
         rotate.setBounds(1200, 326, 50, 40);
         rotate.addMouseListener(new MouseAdapter() {
             @Override
@@ -165,7 +152,7 @@ public class GamePVC extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(game_gui, 250, 80,1014,690, this);
+        g2d.drawImage(ReadImage.game_gui, 250, 80,1014,690, this);
         g2d.drawImage(board_index, 250, 80,690,690, this);
     }
 
@@ -177,33 +164,13 @@ public class GamePVC extends JPanel {
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
-                noti_end_game("White", "Time out");
             }
             if ("00:00".equals(timeLabelWhite.getText())) {
                 sound.playMusic(1);
                 timeLabelWhite.stop();
                 timeLabelBlack.stop();
                 timer.stop();
-                noti_end_game("Black", "Time out");
             }
         }
     });
-
-    public void noti_end_game(String name_win, String reason) {
-        Object[] options = { "New Game", "Home", "Review" };
-        int select = JOptionPane.showOptionDialog(null, name_win + " Win (" + reason + " )", "Notification",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        switch (select) {
-            case 0:
-                Menu.cardLayout.show(Menu.panelCardLayout, "gameOptions");
-                break;
-            case 1:
-                Menu.cardLayout.show(Menu.panelCardLayout, "menu");
-                break;
-            case 2:
-
-                break;
-        }
-    }
 }

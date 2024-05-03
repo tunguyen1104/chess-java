@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 
 public class ReadImage {
     public static BufferedImage piece;
-    public static Image loading;
     public static Image title_bar;
     public static Image back_normal;
     public static Image home_normal;

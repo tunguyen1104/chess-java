@@ -1,5 +1,6 @@
 package view;
 
+import model.JDBCConnection;
 import model.ReadImage;
 
 import java.awt.BorderLayout;
@@ -56,7 +57,7 @@ public class DialogPromotion extends JDialog {
 		label.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 22));
 		panel.add(label,BorderLayout.EAST);
 		try {
-			img = ImageIO.read(new File("resources/pieces/default.png"));
+			img = ImageIO.read(new File(JDBCConnection.takeDataSetting().get(0)));
 			red_border = ImageIO.read(new File("resources/img_src/Red_border2.png"));
 		} catch (IOException e) {
 			throw new RuntimeException(e);

@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -9,24 +8,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import model.BoardV2;
-import model.JDBCConnection;
-import model.Openings;
-import model.Thread_MNX;
-import model.piecesv2.Piece;
+import model.*;
+import model.pieces.Piece;
 
 public class ViewBoard extends JPanel implements ActionListener  {
 	private PlayerView P;
 	final int width=640;
 	final int height=640;
 	BoardV2 my_board;
-	private Image board_image;
 	Image img_chessboard,img_tick,img_border_cell,img_border_red,img_ischeck,img_promotion,img_castling;
 	private int square_size=80;
 	private boolean AI_turn;
@@ -48,10 +42,8 @@ public class ViewBoard extends JPanel implements ActionListener  {
 		this.op.read_file();
 		this.setBounds(100, 100, width, height);
 		this.setLocation(100,100);
-		ArrayList<String> arr = JDBCConnection.takeDataSetting();
 		try {
-			img_chessboard = ImageIO.read(new File(arr.get(0)));
-			board_image = ImageIO.read(new File(arr.get(1)));
+			img_chessboard = ReadImage.piece;
 			img_tick = ImageIO.read(new File("resources/img_src/Tick2.png"));
 			img_border_cell = ImageIO.read(new File("resources/img_src/Green_square.png"));
 			img_ischeck = ImageIO.read(new File("resources/img_src/Red_border2.png"));
@@ -95,7 +87,7 @@ public class ViewBoard extends JPanel implements ActionListener  {
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2D = (Graphics2D) g;
-		g2D.drawImage(board_image, 0, 0, 80 * 8, 80 * 8, this);
+		g2D.drawImage(ReadImage.board_image, 0, 0, 80 * 8, 80 * 8, this);
 		for(int i=0;i<8;i++)
 		{
 			for(int j=0;j<8;j++)

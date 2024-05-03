@@ -2,7 +2,7 @@ package model;
 
 import java.util.Scanner;
 
-import model.piecesv2.*;
+import model.pieces.*;
 public class BoardV2 {
 	static public Piece[][] board1;
 	private int king_location_w ;
