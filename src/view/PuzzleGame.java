@@ -42,7 +42,7 @@ public class PuzzleGame extends JPanel {
     }
 
     public void initPanel() {
-        this.setPreferredSize(new Dimension(1536, 864));
+        this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         board.setBounds(308, 100, board.tileSize * 8, board.tileSize * 8);

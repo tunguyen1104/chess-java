@@ -44,7 +44,7 @@ public class About extends JPanel {
         }
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
-        this.setPreferredSize(new Dimension(1536, 864));
+        this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         title_bar_label = new JLabel("About");
         title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);

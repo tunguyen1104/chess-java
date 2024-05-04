@@ -46,7 +46,7 @@ public class GamePVP extends JPanel {
     public GamePVP(int minute) {
         this.minute = minute;
         this.setBackground(new Color(41, 41, 41));
-        this.setPreferredSize(new Dimension(1536, 864));
+        this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         this.setLayout(null);
         timeLabelWhite = new TimeLabel(minute, 1050, 490);
         timeLabelBlack = new TimeLabel(minute, 1050, 160);

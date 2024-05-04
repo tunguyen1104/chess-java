@@ -8,8 +8,10 @@ import model.ReadImage;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class History extends JPanel {
     private JLabel title_bar_label;
@@ -33,7 +35,7 @@ public class History extends JPanel {
     public void initPanel() {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
-        this.setPreferredSize(new Dimension(1536, 864));
+        this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         title_bar_label = new JLabel("History");
         title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
@@ -156,13 +158,15 @@ public class History extends JPanel {
             }
             ArrayList<String> value = new ArrayList<>();
             int cnt = 0;
-            try (Scanner scanner = new Scanner(data)) {
-                scanner.useDelimiter("\n");
-                while (scanner.hasNext()) {
-                    value.add(scanner.next());
+            try (BufferedReader reader = new BufferedReader(new StringReader(data))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    value.add(line.trim());
                     ++cnt;
                     if(cnt == 5) break;
                 }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
             String formatted = String.format(format, value.get(1),value.get(2), value.get(3),value.get(3).equals("Timeout") ? "   " + value.get(4) : value.get(4));
             listHistory.add(new ButtonImage(ReadImage.history_normal, ReadImage.history_selected, 580, 76, value.get(0), formatted));

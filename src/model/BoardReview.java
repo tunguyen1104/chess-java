@@ -3,11 +3,13 @@ package model;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import javax.swing.*;
 
 import model.pieces.*;
@@ -45,21 +47,18 @@ public class BoardReview extends JPanel{
         saveSnapShot();
     }
     public void handlePgn(String pgn) {
-        int cnt = 0;
-        try (Scanner scanner = new Scanner(pgn)) {
-            scanner.useDelimiter("\n");
-            while (scanner.hasNext()) {
-                scanner.next();
-                ++cnt;
-                if(cnt == 5) break;
-            }
-            while (scanner.hasNext()) {
-                String line = scanner.next();
-                String move1 = line.substring(0, 7).trim();
-                String move2 = line.substring(7).trim();
-                move.add(move1);
+        try (BufferedReader reader = new BufferedReader(new StringReader(pgn))) {
+            String line;
+            int cnt = 0;
+            while ((line = reader.readLine()) != null) {
+                cnt++;
+                if (cnt <= 5) continue;
+                String move2 = line.trim().substring(7);
+                move.add(line.trim().substring(0, 7));
                 if (move2.contains("_")) move.add(move2);
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
     public void rotateBoard(boolean request) {
@@ -396,10 +395,10 @@ public class BoardReview extends JPanel{
             return 4;
         } else if(x.charAt(6) == '#') {
             return 1;
-        } else if(x.charAt(4) != '_'){
-            return 3;
         } else if(x.charAt(5) != '_') {
             return 5;
+        } else if(x.charAt(4) != '_'){
+            return 3;
         }
         return 2;
     }

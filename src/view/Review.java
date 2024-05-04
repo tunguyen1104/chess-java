@@ -32,7 +32,7 @@ public class Review extends JPanel {
     public Review(String pgn) {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
-        this.setPreferredSize(new Dimension(1536, 864));
+        this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         initPanel();
         boardReview = new BoardReview(this,pgn);
         boardReview.setBounds(278, 104, 640, 640);
@@ -122,7 +122,6 @@ public class Review extends JPanel {
         this.add(back_normal_button);
         this.add(home_normal_button);
     }
-
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;

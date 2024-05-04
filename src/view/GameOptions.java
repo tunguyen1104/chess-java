@@ -6,7 +6,7 @@ import controller.ListenerGameOptions;
 import model.ReadImage;
 
 import java.awt.*;
-import java.awt.Image;
+
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
@@ -66,8 +66,8 @@ public class GameOptions extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.a = a;
         initPanel();
-        this.a=a;
     }
     public void handle_forward_left_game() {
         --index_game;
@@ -164,7 +164,7 @@ public class GameOptions extends JPanel {
         }
     }
     public void initPanel() {
-        this.setPreferredSize(new Dimension(1536, 864));
+        this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         title_bar_label = new JLabel("Game Options");

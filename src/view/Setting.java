@@ -101,7 +101,7 @@ public class Setting extends JPanel {
             System.out.println("Error url image!");
             throw new RuntimeException(e);
         }
-        this.setPreferredSize(new Dimension(1536, 864));
+        this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         // ===========Title Bar============
         title_bar_label = new JLabel("Settings");
         title_bar_label.setBounds(720, 0, 400, 60);
@@ -349,6 +349,7 @@ public class Setting extends JPanel {
     }
     public void handle_logout_label_pressed() {
         ReadImage.sound.close();
+        About.sound.close();
         // call database delete current user
         JDBCConnection.deleteDataCurrentUser();
         Menu.frame.dispose();

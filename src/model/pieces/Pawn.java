@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 
 public class Pawn extends Piece {
     public Pawn(int col, int row, boolean isWhite) {
-        super();
         this.col = col;
         this.row = row;
         this.xPos = col * 80;

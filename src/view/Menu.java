@@ -7,7 +7,6 @@ import controller.ListenerMenu;
 import model.ReadImage;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -24,7 +23,8 @@ public class Menu extends JPanel{
     private ButtonImage setting;
     private ButtonImage about;
     private ButtonImage exit;
-    
+    public static final int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+    public static final int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
     public static CardLayout cardLayout = new CardLayout();
     public static JPanel panelCardLayout = new JPanel();
     private ListenerMenu input = new ListenerMenu(this);
@@ -52,29 +52,19 @@ public class Menu extends JPanel{
         frame.add(panelCardLayout);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(-6, 0);
+        frame.setLocation(-7, 0);
         frame.setVisible(true);
         frame.setResizable(false);
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                int option = JOptionPane.showConfirmDialog(null, "You want exit?", "Notification",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (option == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                } else
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
     }
     public void initPanel() {
-        this.setPreferredSize(new Dimension(1536, 864));
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         name_title = new JLabel("CHESS GAME");
-        name_title.setBounds(600, 240, 400, 46);
         name_title.setForeground(Color.WHITE);
         name_title.setFocusable(false);
         name_title.setFont(new Font("", Font.BOLD, 50));
+        name_title.setBounds(screenWidth / 2 - name_title.getPreferredSize().width / 2, 240, 400, 46);
         newGame = new ButtonImage(menu_normal, menu_selected, 180, 59, "New Game",5);
         newGame.setBounds(574, 368, 180, 59);
         history = new ButtonImage(menu_normal, menu_selected, 180, 59, "History",5);

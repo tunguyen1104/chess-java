@@ -17,11 +17,11 @@ public class Listener extends MouseAdapter {
     private boolean checkDelete = false;
     private boolean checkPromotion = true;
     private boolean checkMateEndGame = false;
+    private int count_step = 1;
     public Listener(Board board, GamePVP game) {
         this.board = board;
         this.game = game;
     }
-    private int count_step = 1;
     @Override
     public void mousePressed(MouseEvent e) {
         if (board.checkEndGame)

@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 public class Bishop extends Piece {
 
     public Bishop(int col, int row, boolean isWhite) {
-        super();
         this.col = col;
         this.row = row;
         this.xPos = col * 80;

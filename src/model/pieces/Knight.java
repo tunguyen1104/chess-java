@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 public class Knight extends Piece {
 
     public Knight(int col, int row, boolean isWhite) {
-        super();
         this.col = col;
         this.row = row;
         this.xPos = col * 80;
