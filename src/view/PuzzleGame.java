@@ -13,8 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class PuzzleGame extends JPanel {
-    public String FEN;
-    public int lever;
+    private String FEN;
+    private int lever;
     private JLabel title_bar_label;
     private ButtonImage back_normal_button;
     private ButtonImage home_normal_button;
@@ -24,9 +24,9 @@ public class PuzzleGame extends JPanel {
     private ButtonImage undo;
     private ButtonImage try_again;
     private ButtonImage next_lever;
-    public JPanel hint_panel;
-    public JPanel undo_panel;
-    public JPanel done_panel;
+    private JPanel hint_panel;
+    private JPanel undo_panel;
+    private JPanel done_panel;
     private JLabel color_to_move;
     private JLabel correct;
     private JLabel failed;
@@ -210,5 +210,20 @@ public class PuzzleGame extends JPanel {
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
         g2d.drawImage(ReadImage.board_index, 280, 80,690,690, this);
         g2d.drawImage(ReadImage.panel_320_292, 980, 260, 280, 260, this);
+    }
+    public JPanel getHint_panel() {
+        return hint_panel;
+    }
+    public JPanel getUndo_panel() {
+        return undo_panel;
+    }
+    public JPanel getDone_panel() {
+        return done_panel;
+    }
+    public String getFEN() {
+        return FEN;
+    }
+    public int getLever() {
+        return lever;
     }
 }

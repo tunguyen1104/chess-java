@@ -2,7 +2,6 @@ package controller;
 
 import model.Board;
 import model.Move;
-import model.Sound;
 import model.pieces.Piece;
 
 import java.awt.event.MouseAdapter;
@@ -10,8 +9,6 @@ import java.awt.event.MouseEvent;
 
 public class ListenerPuzzle extends MouseAdapter {
     private Board board;
-    public Integer check_delete_or_promotion = -1;
-
     public ListenerPuzzle(Board board) {
         this.board = board;
     }
@@ -59,7 +56,6 @@ public class ListenerPuzzle extends MouseAdapter {
         if (board.selectedPiece != null) {
             Move move = new Move(board, board.selectedPiece, col, row);
             if (board.isValidMove(move)) {
-                this.check_delete_or_promotion = -1;
                 board.makeMove(move);
                 if (board.index_piecePuzzle < board.piecePuzzle.size()) {
                     board.solvePuzzle(move);

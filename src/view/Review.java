@@ -20,15 +20,15 @@ public class Review extends JPanel {
     private ButtonImage last_normal_button;
     private ButtonImage next_normal_button;
     private ButtonImage previous_normal_button;
-    public JTextArea textArea;
+    private JTextArea textArea;
     private JScrollPane scrollPaneTextArea;
-    public JLabel white_name;
-    public JLabel black_name;
-    public JLabel timeLabelWhite;
-    public JLabel timeLabelBlack;
+    private JLabel white_name;
+    private JLabel black_name;
+    private JLabel timeLabelWhite;
+    private JLabel timeLabelBlack;
     private ListenerReview listenerReview;
     private BoardReview boardReview;
-    public Image board_index;
+    private Image board_index;
     public Review(String pgn) {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
@@ -151,5 +151,21 @@ public class Review extends JPanel {
     }
     public ButtonImage getHome_normal_button() {
         return home_normal_button;
+    }
+
+    public JTextArea getTextArea() {
+        return textArea;
+    }
+
+    public JLabel getWhite_name() {
+        return white_name;
+    }
+
+    public JLabel getBlack_name() {
+        return black_name;
+    }
+
+    public void setBoard_index(Image board_index) {
+        this.board_index = board_index;
     }
 }

@@ -19,12 +19,12 @@ public class BoardReview extends JPanel{
     private ListenerReview input;
     private ArrayList<Piece> pieceList = new ArrayList<Piece>();
     private ArrayList<Piece> rotateList = new ArrayList<Piece>();
-    List<String> move = new ArrayList<>();
-    Map<Character, Integer> columnMap = new HashMap<>();
-    public boolean rotating = false;
-    public int index = -1;
-    public String column = "abcdefgh";
-    public String column_rotate = "hgfedcba";
+    private List<String> move = new ArrayList<>();
+    private Map<Character, Integer> columnMap = new HashMap<>();
+    private boolean rotating = false;
+    private int index = -1;
+    private String column = "abcdefgh";
+    private String column_rotate = "hgfedcba";
     private ArrayList<SnapShot> mSnapShots = new ArrayList<>();
     private ArrayList<Piece> piece_list_default = new ArrayList<>();
     private int old_col = -1;
@@ -95,13 +95,13 @@ public class BoardReview extends JPanel{
             row_checkmate = 7 - row_checkmate;
         }
         if(!rotating) {
-            review.white_name.setBounds(1000, 590, 490, 120);
-            review.black_name.setBounds(1000, 140, 490, 120);
+            review.getWhite_name().setBounds(1000, 590, 490, 120);
+            review.getBlack_name().setBounds(1000, 140, 490, 120);
         } else {
-            review.black_name.setBounds(1000, 590, 490, 120);
-            review.white_name.setBounds(1000, 140, 490, 120);
+            review.getBlack_name().setBounds(1000, 590, 490, 120);
+            review.getWhite_name().setBounds(1000, 140, 490, 120);
         }
-        review.board_index = (rotating) ? ReadImage.board_index_black : null;
+        review.setBoard_index((rotating) ? ReadImage.board_index_black : null);
         if(request) ReadImage.sound.playMusic(4);
         repaint();
     }
@@ -136,7 +136,7 @@ public class BoardReview extends JPanel{
         new_row = -1;
         col_checkmate = -1;
         row_checkmate = -1;
-        review.textArea.setText("");
+        review.getTextArea().setText("");
         pieceList.clear();
         pieceList.addAll(piece_list_default);
         if(rotating) rotateBoard(false);
@@ -167,7 +167,7 @@ public class BoardReview extends JPanel{
         SnapShot x = getSnapShot(index);
         pieceList.clear();
         pieceList.addAll(x.getPieces());
-        review.textArea.setText(x.getPgn());
+        review.getTextArea().setText(x.getPgn());
         if(x.getSound() != 4) {
             old_col = Character.getNumericValue(x.getMove().charAt(0));
             old_row = Character.getNumericValue(x.getMove().charAt(1));

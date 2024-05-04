@@ -12,28 +12,16 @@ import view.GamePVP;
 public class Listener extends MouseAdapter {
     private GamePVP game;
     private Board board;
-    public StringBuilder pgn = new StringBuilder();
+    private StringBuilder pgn = new StringBuilder();
     private boolean isTurn = true;// mặc định quân trắng đi trước
-    public boolean check_delete = false;
-    public boolean check_promotion = true;
-    private boolean checkMateEndGame;
+    private boolean checkDelete = false;
+    private boolean checkPromotion = true;
+    private boolean checkMateEndGame = false;
     public Listener(Board board, GamePVP game) {
         this.board = board;
         this.game = game;
     }
-
     private int count_step = 1;
-    public String getWinner() {
-        return this.isTurn ? "Black" : "White";
-    }
-    public void change_check_delete(boolean x) {
-        this.check_delete = x;
-    }
-
-    public void change_check_promotion(boolean x) {
-        this.check_promotion = x;
-    }
-
     @Override
     public void mousePressed(MouseEvent e) {
         if (board.checkEndGame)
@@ -76,8 +64,8 @@ public class Listener extends MouseAdapter {
             Move move = new Move(board, board.selectedPiece, col, row);
             if (board.isValidMove(move)) {
                 String step = board.step_begin(move);
-                this.check_delete = false;
-                this.check_promotion = false;
+                this.checkDelete = false;
+                this.checkPromotion = false;
 
                 board.makeMove(move);
 
@@ -86,7 +74,7 @@ public class Listener extends MouseAdapter {
                 board.paint_old_new(move.getOldCol(), move.getOldRow(), move.getNewCol(), move.getNewRow());
                 board.paint_in_place(-1, -1);
                 boolean checkMate = board.paintKingCheckMate(isTurn);
-                if (!this.check_delete && !this.check_promotion)
+                if (!this.checkDelete && !this.checkPromotion)
                     ReadImage.sound.playMusic(2);
                 String s = game.textArea.getText();
                 String plus = checkMate ? "+" : "";
@@ -136,5 +124,21 @@ public class Listener extends MouseAdapter {
             }
         }
     }
+    public boolean isCheckDelete() {
+        return checkDelete;
+    }
 
+    public void setCheckDelete(boolean checkDelete) {
+        this.checkDelete = checkDelete;
+    }
+    public boolean isCheckPromotion() {
+        return checkPromotion;
+    }
+
+    public void setCheckPromotion(boolean checkPromotion) {
+        this.checkPromotion = checkPromotion;
+    }
+    public StringBuilder getPgn() {
+        return pgn;
+    }
 }

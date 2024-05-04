@@ -152,14 +152,14 @@ public class Board extends JPanel {
                 ReadImage.sound.playMusic(1);
                 col_puzzle = newCol;
                 row_puzzle = newRow;
-                puzzleGame.done_panel.setVisible(true);
-                puzzleGame.hint_panel.setVisible(false);
-                puzzleGame.undo_panel.setVisible(false);
+                puzzleGame.getDone_panel().setVisible(true);
+                puzzleGame.getHint_panel().setVisible(false);
+                puzzleGame.getUndo_panel().setVisible(false);
                 done_failed_puzzle = 1;
                 /// handle JDBC
                 String update_failed = "";
                 int index_failed_puzzle = -1;
-                String lever_string = String.valueOf(puzzleGame.lever);
+                String lever_string = String.valueOf(puzzleGame.getLever());
 
                 if (!dataPuzzle.get(0).isEmpty()) {
                     String[] numbers = dataPuzzle.get(0).split(",");
@@ -206,14 +206,14 @@ public class Board extends JPanel {
             ReadImage.sound.playMusic(6);
             col_puzzle = move.piece.col;
             row_puzzle = move.piece.row;
-            puzzleGame.done_panel.setVisible(false);
-            puzzleGame.hint_panel.setVisible(false);
-            puzzleGame.undo_panel.setVisible(true);
+            puzzleGame.getDone_panel().setVisible(false);
+            puzzleGame.getHint_panel().setVisible(false);
+            puzzleGame.getUndo_panel().setVisible(true);
             done_failed_puzzle = 2;
             if (!dataPuzzle.get(1).isEmpty()) {
                 String number[] = dataPuzzle.get(1).split(",");// nếu solved có rồi thì thôi
                 for (int i = 0; i < number.length; ++i) {
-                    if (Integer.parseInt(number[i]) == puzzleGame.lever) {
+                    if (Integer.parseInt(number[i]) == puzzleGame.getLever()) {
                         return;
                     }
                 }
@@ -222,13 +222,13 @@ public class Board extends JPanel {
             if (!update_failed.isEmpty()) {
                 String number[] = update_failed.split(",");
                 for (int i = 0; i < number.length; ++i) {
-                    if (Integer.parseInt(number[i]) == puzzleGame.lever) {// nếu faile có rồi thì thôi
+                    if (Integer.parseInt(number[i]) == puzzleGame.getLever()) {// nếu faile có rồi thì thôi
                         return;
                     }
                 }
-                update_failed += ',' + String.valueOf(puzzleGame.lever);
+                update_failed += ',' + String.valueOf(puzzleGame.getLever());
             } else
-                update_failed += String.valueOf(puzzleGame.lever);
+                update_failed += String.valueOf(puzzleGame.getLever());
             JDBCConnection.updateDataPuzzle(update_failed, dataPuzzle.get(1));
         }
     }
@@ -379,7 +379,7 @@ public class Board extends JPanel {
                 ReadImage.sound.playMusic(3);
                 delete_piece(move.capture);
                 if (FEN.equals(""))
-                    input.change_check_delete(true);
+                    input.setCheckDelete(true);
             }
         }
     }
@@ -421,7 +421,7 @@ public class Board extends JPanel {
             ReadImage.sound.playMusic(3);
             delete_piece(move.capture);
             if (FEN.equals(""))
-                input.change_check_delete(true);
+                input.setCheckDelete(true);
         }
         this.repaint();
         move.piece.isFirstMove = false;
@@ -434,7 +434,7 @@ public class Board extends JPanel {
         if (move.getNewRow() == colorIndex) {
             promotePawn(move);
             if (FEN.equals(""))
-                input.change_check_promotion(true);
+                input.setCheckPromotion(true);
         }
     }
     public void paint_old_new(int col1, int row1, int col2, int row2) {
@@ -491,7 +491,7 @@ public class Board extends JPanel {
         return step;
     }
     public StringBuilder getPgn() {
-        return input.pgn;
+        return input.getPgn();
     }
     public String convertDate() {
         String outputDate = null;
@@ -519,7 +519,7 @@ public class Board extends JPanel {
             }
         } else {
             step += String.valueOf(move.getOldCol()) + String.valueOf(move.getOldRow()) + String.valueOf(move.getNewCol()) + String.valueOf(move.getNewRow());
-            if(input.check_delete) {
+            if(input.isCheckDelete()) {
                 if (move.capture.name.equals("Knight")) {
                     step += "N";
                 } else {
@@ -528,7 +528,7 @@ public class Board extends JPanel {
             } else {
                 step += "_";
             }
-            if (input.check_promotion) {
+            if (input.isCheckPromotion()) {
                 switch (promotion) {
                     case 0:
                         step += "Q";
@@ -566,7 +566,7 @@ public class Board extends JPanel {
             }
             return step;
         }
-        if (input.check_delete) {
+        if (input.isCheckDelete()) {
             step += 'x';
         } else {
             if (Character.isLowerCase(step.charAt(0))) {
@@ -580,7 +580,7 @@ public class Board extends JPanel {
             step += column_rotate.charAt(move.getNewCol());
             step += String.valueOf(move.getNewRow() + 1);
         }
-        if (input.check_promotion) {
+        if (input.isCheckPromotion()) {
             switch (promotion) {
                 case 0:
                     step += "=Q";

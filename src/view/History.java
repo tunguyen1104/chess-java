@@ -19,13 +19,11 @@ public class History extends JPanel {
     private ArrayList<JPanel> panel_page = new ArrayList<>();
     private ArrayList<String> history;
     String format = "%-18s %-18s %-24s %-9s";
-    private int index = 0;
     private int index_page = 0;
     private int max_index_page = 0;
     private JLabel page;
     private ButtonImage forward_left;
     private ButtonImage forward_right;
-    private int index_panel_page = 0;
     public History() {
         initPanel();
         handlePgn();
@@ -99,7 +97,6 @@ public class History extends JPanel {
         page = new JLabel();
         page.setForeground(Color.WHITE);
         page.setFont(new Font("", Font.PLAIN, 20));
-        page.setText(1 + "/" + max_index_page);
         page.setBounds(748, 740, 60, 30);
         this.add(page);
     }
@@ -115,7 +112,7 @@ public class History extends JPanel {
         }
     }
     public void addButtonHistory() {
-        
+        int index_panel_page = 0;
         int size_list_history = listHistory.size();
         int index_list_history = 0;
         while(size_list_history > 0) {
@@ -152,6 +149,7 @@ public class History extends JPanel {
         history = JDBCConnection.takeDataHistory();
         int X = 4, Y = 4;
         int count = 0;
+        int index = 0;
         for (String data : history) {
             if(count % 7 == 0) {
                 X = 4; Y = 4;
@@ -168,14 +166,13 @@ public class History extends JPanel {
             }
             String formatted = String.format(format, value.get(1),value.get(2), value.get(3),value.get(3).equals("Timeout") ? "   " + value.get(4) : value.get(4));
             listHistory.add(new ButtonImage(ReadImage.history_normal, ReadImage.history_selected, 580, 76, value.get(0), formatted));
-            if (index >= 0 && index < listHistory.size()) {
-                listHistory.get(index).setBounds(X, Y, 580, 76);
-            }
+            listHistory.get(index).setBounds(X, Y, 580, 76);
             Y += 90;
-            ++index;
             ++count;
+            ++index;
         }
-        max_index_page = (listHistory.size() + 6) / 7;
+        max_index_page = (history.size() + 6) / 7;
+        page.setText(1 + "/" + max_index_page);
     }
     @Override
     protected void paintComponent(Graphics g) {
