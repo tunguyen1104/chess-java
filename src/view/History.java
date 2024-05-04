@@ -28,6 +28,8 @@ public class History extends JPanel {
     private int index_panel_page = 0;
     public History() {
         initPanel();
+        handlePgn();
+        addButtonHistory();
     }
 
     public void initPanel() {
@@ -57,8 +59,6 @@ public class History extends JPanel {
         });
         this.add(back_normal_button);
         this.add(home_normal_button);
-        handlePgn();
-        addButtonHistory();
 
         forward_left = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
         forward_left.setBounds(702, 740, 32, 32);

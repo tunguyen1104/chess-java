@@ -60,14 +60,14 @@ public class PuzzleGame extends JPanel {
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                Menu.panelCardLayout.add(new ListPuzzle(), "listPuzzle");
-                Menu.cardLayout.show(Menu.panelCardLayout, "listPuzzle");
+                Menu.panelCardLayout.add(new ListPuzzle(), "puzzle");
+                Menu.cardLayout.show(Menu.panelCardLayout, "puzzle");
             }
         });
         home_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                Menu.panelCardLayout.add(new ListPuzzle(), "listPuzzle");
+                Menu.panelCardLayout.add(new ListPuzzle(), "puzzle");
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
@@ -171,8 +171,8 @@ public class PuzzleGame extends JPanel {
                 if (lever < 100) {
                     nextLever(++lever);
                 } else if(lever == 100) {
-                    Menu.panelCardLayout.add(new ListPuzzle(), "listPuzzle");
-                    Menu.cardLayout.show(Menu.panelCardLayout, "listPuzzle");
+                    Menu.panelCardLayout.add(new ListPuzzle(), "puzzle");
+                    Menu.cardLayout.show(Menu.panelCardLayout, "puzzle");
                 }
             }
         });

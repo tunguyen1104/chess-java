@@ -5,7 +5,6 @@ import controller.SelectPromotion;
 import model.ReadImage;
 import model.Sound;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;

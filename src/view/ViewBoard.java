@@ -43,7 +43,7 @@ public class ViewBoard extends JPanel implements ActionListener  {
 		this.setBounds(100, 100, width, height);
 		this.setLocation(100,100);
 		try {
-			img_chessboard = ReadImage.piece;
+			img_chessboard = (Image)ReadImage.piece;
 			img_tick = ImageIO.read(new File("resources/img_src/Tick2.png"));
 			img_border_cell = ImageIO.read(new File("resources/img_src/Green_square.png"));
 			img_ischeck = ImageIO.read(new File("resources/img_src/Red_border2.png"));

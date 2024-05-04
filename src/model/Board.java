@@ -247,8 +247,8 @@ public class Board extends JPanel {
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
     }
     public void saveFile(String text) {
-        Menu.panelCardLayout.add(new History(),"history");
         JDBCConnection.insertHistory(text);
+        Menu.panelCardLayout.add(new History(),"history");
     }
     private void animate(int x, int y, int x_new, int y_new) {
         paint_old_new(y, x, y_new, x_new);
