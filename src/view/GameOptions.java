@@ -168,15 +168,15 @@ public class GameOptions extends JPanel {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         title_bar_label = new JLabel("Game Options");
-        title_bar_label.setBounds(700, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(new Font("",Font.BOLD,20));
+        title_bar_label.setBounds((Menu.screenWidth - 120) / 2, 18, title_bar_label.getPreferredSize().width, title_bar_label.getPreferredSize().height);
         this.add(title_bar_label);
         // setting back_normal, home_normal
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
-        back_normal_button.setBounds(465, 10, 44, 44);
-        home_normal_button.setBounds(1000, 10, 44, 44);
+        back_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 - 65, 10, 44, 44);
+        home_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 + 450 + 20, 10, 44, 44);
         this.add(back_normal_button);
         this.add(home_normal_button);
         // setting button
@@ -306,7 +306,7 @@ public class GameOptions extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
+        g2d.drawImage(ReadImage.title_bar, ( Menu.screenWidth - 450 ) / 2, 10, 450, 44, this);
         g2d.drawImage(ReadImage.game_options_panel, 360, 160, 520, 420, this);
         g2d.drawImage(chess_standard, 890, 160, 245, 323, this);
         g2d.drawImage(option_box_game, 616, 210, 140, 32, this);

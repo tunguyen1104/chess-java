@@ -57,32 +57,32 @@ public class Menu extends JPanel{
         frame.setResizable(false);
     }
     public void initPanel() {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         name_title = new JLabel("CHESS GAME");
         name_title.setForeground(Color.WHITE);
         name_title.setFocusable(false);
         name_title.setFont(new Font("", Font.BOLD, 50));
-        name_title.setBounds(screenWidth / 2 - name_title.getPreferredSize().width / 2, 240, 400, 46);
-        newGame = new ButtonImage(menu_normal, menu_selected, 180, 59, "New Game",5);
-        newGame.setBounds(574, 368, 180, 59);
-        history = new ButtonImage(menu_normal, menu_selected, 180, 59, "History",5);
-        history.setBounds(794, 368, 180, 59);
-        puzzle = new ButtonImage(menu_normal, menu_selected, 180, 59, "Puzzle",5);
-        puzzle.setBounds(574, 448, 180, 59);
-        about = new ButtonImage(menu_normal, menu_selected, 180, 59, "About",5);
-        about.setBounds(794, 448, 180, 59);
-        setting = new ButtonImage(menu_normal, menu_selected, 180, 59, "Setting",5);
-        setting.setBounds(574, 528, 180, 59);
-        exit = new ButtonImage(menu_normal, menu_selected, 180, 59, "Exit",5);
-        exit.setBounds(794, 528, 180, 59);
-        this.add(newGame);
-        this.add(history);
-        this.add(puzzle);
-        this.add(setting);
-        this.add(exit);
-        this.add(about);
+        name_title.setBounds((screenWidth - name_title.getPreferredSize().width) / 2 - 3, screenHeight / 4 + 46, 340, 46);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(41, 41, 41));
+        buttonPanel.setLayout(new GridLayout(3, 2, 20, 20));
+        buttonPanel.setBounds((screenWidth - 380) / 2, screenHeight / 2 - 70, 380, 217);
+        newGame = new ButtonImage(menu_normal, menu_selected, 180, 59, "New Game", 5);
+        history = new ButtonImage(menu_normal, menu_selected, 180, 59, "History", 5);
+        puzzle = new ButtonImage(menu_normal, menu_selected, 180, 59, "Puzzle", 5);
+        about = new ButtonImage(menu_normal, menu_selected, 180, 59, "About", 5);
+        setting = new ButtonImage(menu_normal, menu_selected, 180, 59, "Setting", 5);
+        exit = new ButtonImage(menu_normal, menu_selected, 180, 59, "Exit", 5);
+
+        buttonPanel.add(newGame);
+        buttonPanel.add(history);
+        buttonPanel.add(puzzle);
+        buttonPanel.add(about);
+        buttonPanel.add(setting);
+        buttonPanel.add(exit);
+
+        this.add(buttonPanel);
         this.add(name_title);
         newGame.addMouseListener(input);
         history.addMouseListener(input);
@@ -96,7 +96,7 @@ public class Menu extends JPanel{
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(icon_title, 670, 28, 180, 180, this);
+        g2d.drawImage(icon_title, (screenWidth - 180) / 2, screenHeight / 4 - 180, 180, 180, this);
         
     }
     public ButtonImage getAbout() {

@@ -37,14 +37,14 @@ public class History extends JPanel {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         title_bar_label = new JLabel("History");
-        title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(new Font("",Font.BOLD,20));
+        title_bar_label.setBounds(( Menu.screenWidth - 60 ) / 2, 18, title_bar_label.getPreferredSize().width, title_bar_label.getPreferredSize().height);
         this.add(title_bar_label);
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
-        back_normal_button.setBounds(465, 10, 44, 44);
-        home_normal_button.setBounds(1000, 10, 44, 44);
+        back_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 - 65, 10, 44, 44);
+        home_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 + 450 + 20, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -61,9 +61,9 @@ public class History extends JPanel {
         this.add(home_normal_button);
 
         forward_left = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
-        forward_left.setBounds(702, 740, 32, 32);
+        forward_left.setBounds(Menu.screenWidth / 2 - 32 * 2 + 4, Menu.screenHeight - 124, 32, 32);
         forward_right = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
-        forward_right.setBounds(790, 740, 32, 32);
+        forward_right.setBounds(Menu.screenWidth / 2 + 34, Menu.screenHeight - 124, 32, 32);
         forward_left.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -99,13 +99,13 @@ public class History extends JPanel {
         page = new JLabel();
         page.setForeground(Color.WHITE);
         page.setFont(new Font("", Font.PLAIN, 20));
-        page.setBounds(748, 740, 60, 30);
+        page.setBounds(Menu.screenWidth / 2 - 12, Menu.screenHeight - 118, 34, 20);
         this.add(page);
     }
     public void setupPanelPage() {
         for(int i = 0;i < panel_page.size(); ++i) {
             panel_page.get(i).setLayout(null);
-            panel_page.get(i).setBounds(460, 76, 588, 640);
+            panel_page.get(i).setBounds(( Menu.screenWidth - 450 ) / 2 - 68, Menu.screenHeight / 11, 588, 640);
             panel_page.get(i).setBackground(getBackground());
             this.add(panel_page.get(i));
         }
@@ -182,6 +182,6 @@ public class History extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
+        g2d.drawImage(ReadImage.title_bar, ( Menu.screenWidth - 450 ) / 2, 10, 450, 44, this);
     }
 }

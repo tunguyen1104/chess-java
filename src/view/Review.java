@@ -35,7 +35,7 @@ public class Review extends JPanel {
         this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         initPanel();
         boardReview = new BoardReview(this,pgn);
-        boardReview.setBounds(278, 104, 640, 640);
+        boardReview.setBounds(Menu.screenWidth / 6 + 30, Menu.screenHeight / 10 + 24, 640,640);
         this.add(boardReview);
         listenerReview = new ListenerReview(this,boardReview);
         rotate.addMouseListener(listenerReview);
@@ -49,17 +49,17 @@ public class Review extends JPanel {
     }
     public void initPanel() {
         black_name = new JLabel("Black");
-        black_name.setBounds(1000, 140, 490, 120);
+        black_name.setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 58, 200, 120);
         black_name.setForeground(Color.WHITE);
         black_name.setFont(black_name.getFont().deriveFont(20.0f));
         white_name = new JLabel("White");
-        white_name.setBounds(1000, 590, 490, 120);
+        white_name.setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 508, 200, 120);
         white_name.setForeground(Color.WHITE);
         white_name.setFont(white_name.getFont().deriveFont(20.0f));
         timeLabelWhite = new JLabel("--:--");
-        timeLabelWhite.setBounds(1050, 565, 200, 40);
+        timeLabelWhite.setBounds(Menu.screenWidth / 6 + 800, Menu.screenHeight / 10 + 486, 200, 40);
         timeLabelBlack = new JLabel("--:--");
-        timeLabelBlack.setBounds(1050, 240, 200, 40);
+        timeLabelBlack.setBounds(Menu.screenWidth / 6 + 800, Menu.screenHeight / 10 + 160, 200, 40);
         try {
             timeLabelWhite.setFont(Font.createFont(Font.TRUETYPE_FONT,
                     new File("resources/fonts/JetBrainsMono-Bold.ttf")).deriveFont(Font.BOLD, 40));
@@ -88,37 +88,38 @@ public class Review extends JPanel {
             e.printStackTrace();
         }
         scrollPaneTextArea = new JScrollPane(textArea);
-        scrollPaneTextArea.setBounds(962, 380, 298, 148);
+        scrollPaneTextArea.setBounds(Menu.screenWidth / 6 + 720, Menu.screenHeight / 10 + 300, 270, 148);
         Border border = BorderFactory.createLineBorder(new Color(55, 55, 55));
         scrollPaneTextArea.setBorder(border);
         scrollPaneTextArea.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         this.add(scrollPaneTextArea);
 
-        rotate = new ButtonImage(ReadImage.rotate_normal, ReadImage.rotate_selected, 50, 40, "");
-        rotate.setBounds(1200, 326, 50, 40);
+        rotate = new ButtonImage(ReadImage.rotate_normal, ReadImage.rotate_selected, 48, 38, "");
+        rotate.setBounds(Menu.screenWidth / 6 + 950, Menu.screenHeight / 10 + 246, 48, 38);
         this.add(rotate);
         first_normal_button = new ButtonImage(ReadImage.first_normal, ReadImage.first_selected, 40, 40, "");
-        first_normal_button.setBounds(980, 326, 40, 40);
+        int x = Menu.screenWidth / 6 + 730;
+        first_normal_button.setBounds(x, Menu.screenHeight / 3 + 42, 40, 40);
         this.add(first_normal_button);
         next_normal_button = new ButtonImage(ReadImage.next_normal, ReadImage.next_selected, 40, 40, "");
-        next_normal_button.setBounds(1060, 326, 40, 40);
+        next_normal_button.setBounds(x + 80, Menu.screenHeight / 3 + 42, 40, 40);
         this.add(next_normal_button);
         previous_normal_button = new ButtonImage(ReadImage.previous_normal, ReadImage.previous_selected, 40, 40, "");
-        previous_normal_button.setBounds(1020, 326, 40, 40);
+        previous_normal_button.setBounds(x + 40, Menu.screenHeight / 3 + 42, 40, 40);
         this.add(previous_normal_button);
         last_normal_button = new ButtonImage(ReadImage.last_normal, ReadImage.last_selected, 40, 40, "");
-        last_normal_button.setBounds(1100, 326, 40, 40);
+        last_normal_button.setBounds(x + 120, Menu.screenHeight / 3 + 42, 40, 40);
         this.add(last_normal_button);
         //
         title_bar_label = new JLabel("Review");
-        title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(new Font("",Font.BOLD,20));
+        title_bar_label.setBounds(( Menu.screenWidth - 60 ) / 2, 18, title_bar_label.getPreferredSize().width + 4, title_bar_label.getPreferredSize().height);
         this.add(title_bar_label);
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
-        back_normal_button.setBounds(465, 10, 44, 44);
-        home_normal_button.setBounds(1000, 10, 44, 44);
+        back_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 - 65, 10, 44, 44);
+        home_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 + 450 + 20, 10, 44, 44);
         this.add(back_normal_button);
         this.add(home_normal_button);
     }
@@ -126,9 +127,9 @@ public class Review extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(ReadImage.game_gui, 250, 80,1014,690, this);
-        g2d.drawImage(board_index, 250, 80,690,690, this);
+        g2d.drawImage(ReadImage.title_bar, ( Menu.screenWidth - 450 ) / 2, 10, 450, 44, this);
+        g2d.drawImage(ReadImage.game_gui, Menu.screenWidth / 6, Menu.screenHeight / 10,1014,690, this);
+        g2d.drawImage(board_index, Menu.screenWidth / 6, Menu.screenHeight / 10,690,690, this);
     }
     public ButtonImage getRotate() {
         return rotate;

@@ -104,16 +104,16 @@ public class Setting extends JPanel {
         this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         // ===========Title Bar============
         title_bar_label = new JLabel("Settings");
-        title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(new Font("",Font.BOLD,20));
+        title_bar_label.setBounds(( Menu.screenWidth - 60 ) / 2, 18, title_bar_label.getPreferredSize().width, title_bar_label.getPreferredSize().height);
         this.add(title_bar_label);
         // ----------------------
         // setting back_normal, home_normal
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
-        back_normal_button.setBounds(465, 10, 44, 44);
-        home_normal_button.setBounds(1000, 10, 44, 44);
+        back_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 - 65, 10, 44, 44);
+        home_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 + 450 + 20, 10, 44, 44);
         this.add(back_normal_button);
         this.add(home_normal_button);
         back_normal_button.addMouseListener(input);
@@ -208,8 +208,8 @@ public class Setting extends JPanel {
                 g2d.drawImage(ReadImage.option_box, 276, 280, 160, 32, game);
             }
         };
-        game.setBounds(508, 180, 526, 408);
-        game.setBackground(new Color(55, 55, 55));
+        game.setBounds(( Menu.screenWidth - 509 ) / 2 + 10, Menu.screenHeight / 5 + 10, 524, 400);
+        game.setBackground(new Color(55,55,55));
         game.setLayout(null);
         this.add(game);
         // label piece set
@@ -294,7 +294,7 @@ public class Setting extends JPanel {
         game.add(option_box_sound_label);
         // option_setting
         option_game = new JLabel("Game");
-        option_game.setBounds(280, 200, 200, 40);
+        option_game.setBounds(Menu.screenWidth / 6 + 24, Menu.screenHeight / 4 - 16, 200, 40);
         option_game.setFont(new Font("", Font.PLAIN, 20));
         option_game.setForeground(Color.WHITE);
         option_game.setHorizontalAlignment(SwingConstants.CENTER);
@@ -337,7 +337,7 @@ public class Setting extends JPanel {
         logout_label.setFont(new Font("", Font.PLAIN, 20));
         logout_label.setForeground(Color.WHITE);
         logout_label.setHorizontalAlignment(SwingConstants.CENTER);
-        logout_label.setBounds(280, 300, 200, 40);
+        logout_label.setBounds(Menu.screenWidth / 6 + 24, Menu.screenHeight / 4 - 16 + 100, 200, 40);
         this.add(logout_label);
         logout_label.addMouseListener(input);
     }
@@ -359,7 +359,7 @@ public class Setting extends JPanel {
     public void initAccount() {
         // account
         option_account = new JLabel("Account");
-        option_account.setBounds(280, 250, 200, 40);
+        option_account.setBounds(Menu.screenWidth / 6 + 24, Menu.screenHeight / 4 - 16 + 50, 200, 40);
         option_account.setFont(new Font("", Font.PLAIN, 20));
         option_account.setForeground(Color.WHITE);
         option_account.setHorizontalAlignment(SwingConstants.CENTER);
@@ -371,7 +371,7 @@ public class Setting extends JPanel {
                 g2d.drawImage(noavatar, 50, 20, 80, 80, account);
             }
         };
-        account.setBounds(508, 180, 526, 408);
+        account.setBounds(( Menu.screenWidth - 509 ) / 2 + 10, Menu.screenHeight / 5 + 10, 524, 400);
         account.setBackground(new Color(55, 55, 55));
         account.setLayout(null);
         account.setVisible(false);
@@ -480,11 +480,11 @@ public class Setting extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(option_settingv1, 280, 200, 200, 40, this);
-        g2d.drawImage(option_settingv2, 280, 250, 200, 40, this);
-        g2d.drawImage(logout_image, 280, 300, 200, 40, this);
-        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(ReadImage.game_options_panel, 500, 174, 540, 420, this);
+        g2d.drawImage(option_settingv1, Menu.screenWidth / 6 + 24, Menu.screenHeight / 4 - 16, 200, 40, this);
+        g2d.drawImage(option_settingv2, Menu.screenWidth / 6 + 24, Menu.screenHeight / 4 - 16 + 50, 200, 40, this);
+        g2d.drawImage(logout_image, Menu.screenWidth / 6 + 24, Menu.screenHeight / 4 - 16 + 100, 200, 40, this);
+        g2d.drawImage(ReadImage.title_bar, ( Menu.screenWidth - 450 ) / 2, 10, 450, 44, this);
+        g2d.drawImage(ReadImage.game_options_panel, ( Menu.screenWidth - 509 ) / 2, Menu.screenHeight / 5, 540, 420, this);
     }
     public ButtonImage getBack_normal_button() {
         return back_normal_button;

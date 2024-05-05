@@ -38,16 +38,16 @@ public class ListPuzzle extends JPanel {
         this.setBackground(new Color(41, 41, 41));
         this.setLayout(null);
         title_bar_label = new JLabel("Puzzles");
-        title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(title_bar_label.getFont().deriveFont(20.0f));
+        title_bar_label.setFont(new Font("",Font.BOLD,20));
+        title_bar_label.setBounds(( Menu.screenWidth - 60 ) / 2, 18, title_bar_label.getPreferredSize().width + 2, title_bar_label.getPreferredSize().height);
         this.add(title_bar_label);
         // ----------------------
         // setting back_normal, home_normal
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
-        back_normal_button.setBounds(465, 10, 44, 44);
-        home_normal_button.setBounds(1000, 10, 44, 44);
+        back_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 - 65, 10, 44, 44);
+        home_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 + 450 + 20, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -64,9 +64,9 @@ public class ListPuzzle extends JPanel {
         this.add(home_normal_button);
         //
         forward_left = new ButtonImage(ReadImage.forward_normal, ReadImage.forward_selected, 32, 32, "");
-        forward_left.setBounds(700, 740, 32, 32);
+        forward_left.setBounds(Menu.screenWidth / 2 - 32 * 2 + 4, Menu.screenHeight - 120, 32, 32);
         forward_right = new ButtonImage(ReadImage.forward_normal_v2, ReadImage.forward_selected_v2, 32, 32, "");
-        forward_right.setBounds(788, 740, 32, 32);
+        forward_right.setBounds(Menu.screenWidth / 2 + 34, Menu.screenHeight - 120, 32, 32);
         forward_left.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -110,7 +110,7 @@ public class ListPuzzle extends JPanel {
         page.setForeground(Color.WHITE);
         page.setFont(new Font("", Font.PLAIN, 20));
         page.setText(_page[index_page]);
-        page.setBounds(746, 740, 60, 30);
+        page.setBounds(Menu.screenWidth / 2 - 12, Menu.screenHeight - 116, 34, 20);
         this.add(page);
         //
         initPage1();
@@ -145,7 +145,7 @@ public class ListPuzzle extends JPanel {
         panel_contains_puzzle_page_1 = new JPanel();
         panel_contains_puzzle_page_1.setBackground(new Color(41, 41, 41));
         panel_contains_puzzle_page_1.setLayout(null);
-        panel_contains_puzzle_page_1.setBounds(260, 100, 1000, 620);
+        panel_contains_puzzle_page_1.setBounds(Menu.screenWidth / 6, Menu.screenHeight / 8 - 8, 1000, 620);
         int X = 10;
         int Y = 10;
         for (int i = 0; i < 5; ++i) {
@@ -168,7 +168,7 @@ public class ListPuzzle extends JPanel {
         panel_contains_puzzle_page_2 = new JPanel();
         panel_contains_puzzle_page_2.setBackground(new Color(41, 41, 41));
         panel_contains_puzzle_page_2.setLayout(null);
-        panel_contains_puzzle_page_2.setBounds(260, 100, 1000, 620);
+        panel_contains_puzzle_page_2.setBounds(Menu.screenWidth / 6, Menu.screenHeight / 8 - 8, 1000, 620);
 
         int X = 10;
         int Y = 10;
@@ -192,7 +192,7 @@ public class ListPuzzle extends JPanel {
         panel_contains_puzzle_page_3 = new JPanel();
         panel_contains_puzzle_page_3.setBackground(new Color(41, 41, 41));
         panel_contains_puzzle_page_3.setLayout(null);
-        panel_contains_puzzle_page_3.setBounds(260, 100, 1000, 620);
+        panel_contains_puzzle_page_3.setBounds(Menu.screenWidth / 6, Menu.screenHeight / 8 - 8, 1000, 620);
         int X = 10;
         int Y = 10;
         for (int i = 0; i < 5; ++i) {
@@ -260,6 +260,6 @@ public class ListPuzzle extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
+        g2d.drawImage(ReadImage.title_bar, ( Menu.screenWidth - 450 ) / 2, 10, 450, 44, this);
     }
 }

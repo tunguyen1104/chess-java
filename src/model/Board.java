@@ -347,15 +347,15 @@ public class Board extends JPanel {
             rowKingCheckMate = 7 - rowKingCheckMate;
         }
         if (rotating) {
-            game.getWhite_name().setBounds(1000, 140, 490, 120);
-            game.getBlack_name().setBounds(1000, 590, 490, 120);
-            game.getTimeLabelWhite().setBounds(1050, 160, 500, 200);
-            game.getTimeLabelBlack().setBounds(1050, 490, 500, 200);
+            game.getWhite_name().setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 58, 490, 120);
+            game.getBlack_name().setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 508, 490, 120);
+            game.getTimeLabelWhite().setBounds(Menu.screenWidth / 6 + 800, Menu.screenHeight / 10 + 80, 500, 200);
+            game.getTimeLabelBlack().setBounds(Menu.screenWidth / 6 + 800, Menu.screenHeight / 10 + 410, 500, 200);
         } else {
-            game.getWhite_name().setBounds(1000, 590, 490, 120);
-            game.getBlack_name().setBounds(1000, 140, 490, 120);
-            game.getTimeLabelWhite().setBounds(1050, 490, 500, 200);
-            game.getTimeLabelBlack().setBounds(1050, 160, 500, 200);
+            game.getWhite_name().setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 508, 490, 120);
+            game.getBlack_name().setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 58, 490, 120);
+            game.getTimeLabelWhite().setBounds(Menu.screenWidth / 6 + 800, Menu.screenHeight / 10 + 410, 500, 200);
+            game.getTimeLabelBlack().setBounds(Menu.screenWidth / 6 + 800, Menu.screenHeight / 10 + 80, 500, 200);
         }
         ReadImage.sound.playMusic(4);
         repaint();

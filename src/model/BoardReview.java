@@ -14,6 +14,7 @@ import javax.swing.*;
 
 import model.pieces.*;
 import controller.ListenerReview;
+import view.Menu;
 import view.Review;
 
 public class BoardReview extends JPanel{
@@ -67,7 +68,6 @@ public class BoardReview extends JPanel{
         for (Piece piece : pieceList) {
             if (piece.name.equals("Pawn")) {
                 Piece pawn = new Pawn(7 - piece.col, 7 - piece.row, piece.isWhite);
-                pawn.isFirstMove = piece.isFirstMove;
                 rotateList.add(pawn);
             } else if (piece.name.equals("King")) {
                 rotateList.add(new King(7 - piece.col, 7 - piece.row, piece.isWhite));
@@ -94,11 +94,11 @@ public class BoardReview extends JPanel{
             row_checkmate = 7 - row_checkmate;
         }
         if(!rotating) {
-            review.getWhite_name().setBounds(1000, 590, 490, 120);
-            review.getBlack_name().setBounds(1000, 140, 490, 120);
+            review.getWhite_name().setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 508, 200, 120);
+            review.getBlack_name().setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 58, 200, 120);
         } else {
-            review.getBlack_name().setBounds(1000, 590, 490, 120);
-            review.getWhite_name().setBounds(1000, 140, 490, 120);
+            review.getBlack_name().setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 508, 200, 120);
+            review.getWhite_name().setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 58, 200, 120);
         }
         review.setBoard_index((rotating) ? ReadImage.board_index_black : null);
         if(request) ReadImage.sound.playMusic(4);

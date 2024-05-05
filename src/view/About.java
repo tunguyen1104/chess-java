@@ -46,14 +46,14 @@ public class About extends JPanel {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(Menu.screenWidth, Menu.screenHeight));
         title_bar_label = new JLabel("About");
-        title_bar_label.setBounds(720, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(new Font("",Font.BOLD,20));
+        title_bar_label.setBounds(( Menu.screenWidth - 60 ) / 2, 18, title_bar_label.getPreferredSize().width, title_bar_label.getPreferredSize().height);
         this.add(title_bar_label);
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
-        back_normal_button.setBounds(465, 10, 44, 44);
-        home_normal_button.setBounds(1000, 10, 44, 44);
+        back_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 - 65, 10, 44, 44);
+        home_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 + 450 + 20, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -80,8 +80,8 @@ public class About extends JPanel {
             e1.printStackTrace();
         }
         about_game.setForeground(Color.WHITE);
-        about_game.setBackground(new Color(55, 55, 55));
-        about_game.setBounds(520, 220, 480, 380);
+        about_game.setBackground(new Color(55,55,55));
+        about_game.setBounds(( Menu.screenWidth - 509 ) / 2 + 14, Menu.screenHeight / 5, 480, 360);
         about_game.setEditable(false);
         this.add(about_game);
     }
@@ -89,7 +89,7 @@ public class About extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(ReadImage.game_options_panel, 500, 180, 509, 420, this);
+        g2d.drawImage(ReadImage.title_bar, ( Menu.screenWidth - 450 ) / 2, 10, 450, 44, this);
+        g2d.drawImage(ReadImage.game_options_panel,( Menu.screenWidth - 509 ) / 2, Menu.screenHeight / 6, 509, 420, this);
     }
 }
