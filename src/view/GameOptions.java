@@ -56,7 +56,7 @@ public class GameOptions extends JPanel {
     };
     DialogPromotion a;
     private ListenerGameOptions input = new ListenerGameOptions(this);
-    public GameOptions(DialogPromotion a) {
+    public GameOptions() {
         try {
             option_box_game = ReadImage.option_box;
             option_box_time = option_box_game;
@@ -66,7 +66,7 @@ public class GameOptions extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.a = a;
+        this.a = new DialogPromotion((JFrame)this.getParent(),"",true);
         initPanel();
     }
     public void handle_forward_left_game() {
@@ -156,7 +156,7 @@ public class GameOptions extends JPanel {
                 break;
         }
         if (option_box_game_label.getText().equals("PvC")) {
-            Menu.panelCardLayout.add(new GamePVC(minute,a), "gamePvC");
+            Menu.panelCardLayout.add(new GamePVC(minute), "gamePvC");
             Menu.cardLayout.show(Menu.panelCardLayout, "gamePvC");
         } else {
             Menu.panelCardLayout.add(new GamePVP(minute), "gamePvP");

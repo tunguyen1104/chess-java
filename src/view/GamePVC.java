@@ -41,18 +41,18 @@ public class GamePVC extends JPanel {
     public TimeLabel timeLabelBlack;
     ButtonImage back_normal_button;
     ButtonImage home_normal_button;
-    public JTextArea textArea;
-    public JScrollPane scrollPaneTextArea;
-    private ViewBoard board;
-    public GamePVC(int minute,DialogPromotion a) {
+   // public JTextArea textArea;
+   // public JScrollPane scrollPaneTextArea;
+    private ViewBoard panel;
+    public GamePVC(int minute) {
         this.setLayout(null);
         board_index = ReadImage.board_index;
         initPanel(minute);
-        DialogPromotion dialog_promo = a;
+        DialogPromotion dialog_promo = new DialogPromotion((JFrame)this.getParent(),"",true);
         Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
-        ViewBoard panel = new ViewBoard();
-        panel.setMy_dialog(dialog_promo);
-        panel.setBounds(280, 100, 8 * 80, 8 * 80);
+        this.panel = new ViewBoard();
+        this.panel.setMy_dialog(dialog_promo);
+        this.panel.setBounds(280, 100, 8 * 80, 8 * 80);
         MoveController m_ctrl=new MoveController(panel,panel.getP(),dialog_promo);
         panel.addMouseListener(m_ctrl);
         panel.addMouseMotionListener(m_ctrl);
@@ -108,7 +108,7 @@ public class GamePVC extends JPanel {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
-        textArea = new JTextArea();
+        /*textArea = new JTextArea();
         textArea.setBackground(new Color(55, 55, 55));
         textArea.setForeground(Color.WHITE);
         textArea.setEditable(false);
@@ -125,7 +125,7 @@ public class GamePVC extends JPanel {
         Border border = BorderFactory.createLineBorder(new Color(55, 55, 55));
         scrollPaneTextArea.setBorder(border);
         scrollPaneTextArea.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
-        this.add(scrollPaneTextArea);
+        this.add(scrollPaneTextArea);*/
         this.add(timeLabelWhite);
         this.add(timeLabelBlack);
         this.add(white_name);

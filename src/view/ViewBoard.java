@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -15,8 +17,12 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.Timer;
+import javax.swing.border.Border;
 
 import model.*;
 import model.pieces.Piece;

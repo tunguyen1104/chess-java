@@ -57,6 +57,7 @@ public class MoveController implements MouseListener,MouseMotionListener {
 				if(this.view.getMy_board().board1[this.P.getFromRow()][this.P.getFromCol()].move(this.view.getMy_board()).contains("*7_ks"))
 				{
 					this.view.make_move_animated("*7_ks");
+					this.view.getStrSaveData().append("0-0____");
 					Thread_MNX move_after_castling =new Thread_MNX(this.view,true);
 					move_after_castling.start();
 				}
@@ -66,6 +67,7 @@ public class MoveController implements MouseListener,MouseMotionListener {
 				if(this.view.getMy_board().board1[this.P.getFromRow()][this.P.getFromCol()].move(this.view.getMy_board()).contains("*7_qs"))
 				{
 					this.view.make_move_animated("*7_qs");
+					this.view.getStrSaveData().append("0-0-0__");
 					Thread_MNX move_after_castling =new Thread_MNX(this.view,true);
 					move_after_castling.start();
 				}
