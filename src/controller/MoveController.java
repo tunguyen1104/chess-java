@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import model.JDBCConnection;
 import model.Thread_MNX;
 import view.DialogPromotion;
 import view.PlayerView;
@@ -56,6 +57,8 @@ public class MoveController implements MouseListener,MouseMotionListener {
 				if(this.view.getMy_board().board1[this.P.getFromRow()][this.P.getFromCol()].move(this.view.getMy_board()).contains("*7_ks"))
 				{
 					this.view.make_move_animated("*7_ks");
+					Thread_MNX move_after_castling =new Thread_MNX(this.view,true);
+					move_after_castling.start();
 				}
 			}
 			if(this.P.getMouseX()/this.view.getSquare_size()==2)
@@ -63,6 +66,8 @@ public class MoveController implements MouseListener,MouseMotionListener {
 				if(this.view.getMy_board().board1[this.P.getFromRow()][this.P.getFromCol()].move(this.view.getMy_board()).contains("*7_qs"))
 				{
 					this.view.make_move_animated("*7_qs");
+					Thread_MNX move_after_castling =new Thread_MNX(this.view,true);
+					move_after_castling.start();
 				}
 			}
 		}
@@ -90,6 +95,26 @@ public class MoveController implements MouseListener,MouseMotionListener {
 		if(this.view.getMy_board().possible_move(true).length()!=this.view.getMy_board().possible_move(true).replaceAll(expected_move, "").length())
 		{
 			this.P.setActiveValid_move(false);
+			this.view.getStrSaveData().append(this.view.convert(expected_move,true));
+			if((char)this.view.convert(expected_move,true).charAt(6)=='#')
+			{
+				for(int i=0;i<this.view.getStrSaveData().length();i+=14)
+				{
+					if(i+14<=this.view.getStrSaveData().length())
+					{
+						this.view.getStrSaveData().insert(i+14, "\n");
+						i++;
+					}
+				}
+				String result=this.view.getMy_board().convertDate()
+						+ "\nPvC\n" +
+		                        "3" +
+		                        "\nCheckMate\n" +
+		                        "White win\n"+
+						this.view.getStrSaveData();
+				JDBCConnection.insertHistory(result);
+				System.out.println(result);
+			}
 			this.view.player_make_move(expected_move);
 			if(this.view.getOp().getOn_openings())
 			{
@@ -98,12 +123,13 @@ public class MoveController implements MouseListener,MouseMotionListener {
 				if(this.view.getOp().getOn_openings())
 				{
 					String AI_openings_move=this.view.getOp().Suggest_move();
+					this.view.getStrSaveData().append(this.view.convert(AI_openings_move,true));
 					this.view.getOp().setMoved(AI_openings_move);
 					this.view.make_move_animated(AI_openings_move);	
 				}
 			}
 			if(this.view.getOp().getOn_openings()==false) {
-				Thread_MNX enemy_move=new Thread_MNX(this.view);
+				Thread_MNX enemy_move=new Thread_MNX(this.view,false);
 				enemy_move.start();
 			}
 		}

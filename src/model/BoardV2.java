@@ -1,5 +1,10 @@
 package model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 import model.pieces.*;
@@ -233,6 +238,29 @@ public class BoardV2 {
 		}
 		return list;
 	}
+	 private String getFileName() {
+	        Date currentTime = new Date();
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(currentTime);
+	        return String.format("%d-%02d-%02d_%02d-%02d-%02d",
+	                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
+	                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+	    }
+	   public String convertDate() {
+	        String outputDate = null;
+	        Date currentTime = new Date();
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(currentTime);
+	        try {
+	            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
+	            SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy", Locale.US);
+	            Date date = inputFormat.parse(getFileName());
+	            outputDate = outputFormat.format(date);
+	        } catch (ParseException e) {
+	            System.out.println("Error convertDate!");
+	        }
+	        return outputDate;
+	    }
 	public void show_console_board()
 	{
 		for(int i=0;i<8;i++)

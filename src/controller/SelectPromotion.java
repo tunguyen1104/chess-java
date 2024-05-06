@@ -55,11 +55,12 @@ public class SelectPromotion implements MouseListener,MouseMotionListener{
 			}
 		}
 		String promotion_move="1"+this.dialog.getFromCol()+this.dialog.getEndCol()+this.dialog.getEnemy_piece()+promotion_piece;
+		this.board.getStrSaveData().append(this.board.convert(promotion_move,false));
 		this.board.getMy_board().make_move(promotion_move);
 		this.board.getP().setActiveValid_move(false);
 		this.board.repaint();
 		this.dialog.dispose();
-		Thread_MNX enemy_move=new Thread_MNX(this.board);
+		Thread_MNX enemy_move=new Thread_MNX(this.board,false);
 		enemy_move.start();
 	}
 

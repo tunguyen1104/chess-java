@@ -8,6 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -31,8 +36,10 @@ public class ViewBoard extends JPanel implements ActionListener  {
 	DialogPromotion my_dialog;
 	Boolean is_check=false;
 	private Openings op;
+	private StringBuilder StrSaveData;
 	ViewBoard()
 	{
+		StrSaveData= new StringBuilder("");
 		this.P=new PlayerView();
 		hsX=1;
 		hsY=1;
@@ -54,8 +61,14 @@ public class ViewBoard extends JPanel implements ActionListener  {
 			throw new RuntimeException(e);
 		}
 		my_board=new BoardV2();
-		my_board.create_game();
-		//my_board.test();
+		//my_board.create_game();
+		my_board.test();
+	}
+	public StringBuilder getStrSaveData() {
+		return StrSaveData;
+	}
+	public void setStrSaveData(StringBuilder strSaveData) {
+		StrSaveData = strSaveData;
 	}
 	public Openings getOp() {
 		return op;
@@ -84,6 +97,91 @@ public class ViewBoard extends JPanel implements ActionListener  {
 	public void setIs_check(Boolean is_check) {
 		this.is_check = is_check;
 	}
+	public boolean checked(String move,boolean isW)
+	{
+		this.getMy_board().make_move(move);
+		if(!this.getMy_board().is_kingsafe(!isW)) 
+		{
+			this.getMy_board().undo_move(move);
+			return false;
+		}
+		else {
+			this.getMy_board().undo_move(move);
+			return true;
+		}
+	}
+	public boolean checked_mate(String move,boolean isW)
+	{
+		this.getMy_board().make_move(move);
+		if(this.getMy_board().possible_move(!isW).length()==0) 
+		{
+			this.getMy_board().undo_move(move);
+			return true;
+		}
+		else {
+			this.getMy_board().undo_move(move);
+			return false;
+		}
+	}
+	public String convert(String imove,boolean isW)
+	{
+		String omove="";
+		if((char)imove.charAt(0)=='*'){
+			if(imove.substring(3).equals("ks"))
+				omove+="0-0____";
+			if(imove.substring(3).equals("qs"))
+				omove+="0-0-0__";
+		}
+		else
+		{
+			if(Character.getNumericValue(imove.charAt(3))<=7&&Character.getNumericValue(imove.charAt(3))!=-1)
+			{
+				omove+=""+imove.charAt(1)+imove.charAt(0)+imove.charAt(3)+imove.charAt(2);
+				if(imove.charAt(4)==' ')
+				{
+					omove+="__";
+				}
+				else omove+=imove.charAt(4)+"_";
+				if(!checked(imove,isW))
+				{
+					if(checked_mate(imove,isW))
+					{
+						omove+="#";
+					}
+					else omove+="+";
+				}
+				else omove+="_";
+			}
+			//612pk
+			else {
+				if(!isW)
+				{
+					omove+=""+imove.charAt(1)+imove.charAt(0)+imove.charAt(2)+(Character.getNumericValue(imove.charAt(0))+1);
+				}
+				else
+					omove+=""+imove.charAt(1)+imove.charAt(0)+imove.charAt(2)+(Character.getNumericValue(imove.charAt(0))-1);
+				if(imove.charAt(3)==' ')
+				{
+					omove+="_";
+				}
+				else omove+=imove.charAt(3);
+				String temp=""+imove.charAt(4);
+				omove+=temp.toUpperCase();
+				if(!checked(imove,isW))
+				{
+					if(checked_mate(imove,isW))
+					{
+						omove+="#";					
+					}
+					else omove+="+";
+				}
+				else omove+="_";
+					
+			}
+		}
+		return omove;
+	}
+
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2D = (Graphics2D) g;
