@@ -110,7 +110,6 @@ public class Review extends JPanel {
         last_normal_button = new ButtonImage(ReadImage.last_normal, ReadImage.last_selected, 40, 40, "");
         last_normal_button.setBounds(x + 120, Menu.screenHeight / 3 + 42, 40, 40);
         this.add(last_normal_button);
-        //
         title_bar_label = new JLabel("Review");
         title_bar_label.setForeground(Color.WHITE);
         title_bar_label.setFont(new Font("",Font.BOLD,20));

@@ -56,7 +56,7 @@ public class BoardReview extends JPanel{
                 if (cnt <= 5) continue;
                 String move2 = line.trim().substring(7);
                 move.add(line.trim().substring(0, 7));
-                if (move2.contains("_")) move.add(move2);
+                if (!move2.equals("")) move.add(move2);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

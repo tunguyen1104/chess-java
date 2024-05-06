@@ -92,7 +92,7 @@ public class PuzzleGame extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        color_to_move.setBounds(12, 50, 240, 50);
+        color_to_move.setBounds(12, 56, 240, 50);
         color_to_move.setForeground(Color.WHITE);
         hint_panel.add(color_to_move);
         this.add(hint_panel);
