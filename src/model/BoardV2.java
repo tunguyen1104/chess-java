@@ -20,7 +20,7 @@ public class BoardV2 {
 	public BoardV2()
 	{
 		board1=new Piece[8][8];
-		depth=4;
+		this.depth=3;
 	}
 	public int getDepth() {
 		return depth;
@@ -753,11 +753,10 @@ public class BoardV2 {
 	{
 		this.setKing(true, 6, 4);
 		this.setKing(false, 2, 6);
-		//a.setQueen(false, 3, 1);
 		this.setQueen(true, 0, 3);
 		this.setKnight(true, 5, 5);
 		this.setKnight(true, 5, 7);
-		//this.setKnight(false, 1, 2);
+		this.setKnight(false, 1, 2);
 		this.setPawn(true, 1, 2);
 		this.setKnight(true, 3,2 );
 		this.setRook(false, 0, 7);
@@ -777,18 +776,15 @@ public class BoardV2 {
 		this.setPawn(true, 1, 0);
 		this.moved_rook_king_b+="040007";
 		this.moved_rook_king_w+="747077";
+		this.setDepth(4);
 	}
 	public static void main(String[] args) {
 		BoardV2 a = new BoardV2();
 		a.test();
-		a.setKing(false, 7, 0);
-		a.setRook(true,7,1);
-		a.board1[7][0]=null;
-		a.board1[7][1]=null;
 		a.show_console_board();
-		System.out.println(a.possible_move(false));
+		a.setDepth(4);
 		long start = System.currentTimeMillis();
-		System.out.println(a.minimax_alpha_beta(4, -1000000, 1000000, false));
+		System.out.println(a.minimax_alpha_beta(a.getDepth(), -1000000, 1000000, false));
 		long end= System.currentTimeMillis();
 		System.out.println("It's took "+(end-start)+" miliseconds");
 	}

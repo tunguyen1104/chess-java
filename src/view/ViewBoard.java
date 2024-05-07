@@ -67,8 +67,8 @@ public class ViewBoard extends JPanel implements ActionListener  {
 			throw new RuntimeException(e);
 		}
 		my_board=new BoardV2();
-		my_board.create_game();
-		//my_board.test();
+		//my_board.create_game();
+		my_board.test();
 	}
 	public StringBuilder getStrSaveData() {
 		return StrSaveData;

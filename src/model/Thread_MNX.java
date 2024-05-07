@@ -36,8 +36,9 @@ public class Thread_MNX extends Thread {
 				e.printStackTrace();
 			}
 		}
-		if(this.s.getCnt_move()<8) this.s.getPanel().getMy_board().setDepth(3);
+		if(this.s.getCnt_move()==8) this.s.getPanel().getMy_board().setDepth(4);
 		if(this.s.getPanel().getMy_board().rating_material(false)<1750) this.s.getPanel().getMy_board().setDepth(5);
+		else this.s.getPanel().getMy_board().setDepth(4);
 		this.ts=this.s.getPanel().getMy_board().minimax_alpha_beta(this.s.getPanel().getMy_board().getDepth(), -1000000, 1000000, false);
 		this.s.getPanel().getStrSaveData().append(this.s.getPanel().convert(ts,false));
 		if((char)this.s.getPanel().convert(ts,false).charAt(6)=='#')
