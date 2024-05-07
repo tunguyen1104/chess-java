@@ -52,7 +52,7 @@ public class GamePVC extends JPanel {
         Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
         this.panel = new ViewBoard();
         this.panel.setMy_dialog(dialog_promo);
-        this.panel.setBounds(280, 100, 8 * 80, 8 * 80);
+        this.panel.setBounds(Menu.screenWidth / 6 + 30, Menu.screenHeight / 10 + 24, 8 * 80, 8 * 80);
         MoveController m_ctrl=new MoveController(panel,panel.getP(),dialog_promo);
         panel.addMouseListener(m_ctrl);
         panel.addMouseMotionListener(m_ctrl);
@@ -67,27 +67,27 @@ public class GamePVC extends JPanel {
     public void initPanel(int minute) {
         this.setBackground(new Color(41, 41, 41));
         this.setPreferredSize(new Dimension(1536, 864));
-        timeLabelWhite = new TimeLabel(minute, 1050, 490);
-        timeLabelBlack = new TimeLabel(minute, 1050, 160);
+        timeLabelWhite = new TimeLabel(minute, Menu.screenWidth / 6 + 800, Menu.screenHeight / 10 + 410);
+        timeLabelBlack = new TimeLabel(minute, Menu.screenWidth / 6 + 800, Menu.screenHeight / 10 + 80);
         // setting name
         black_name = new JLabel("Computer (Black)");
-        black_name.setBounds(1000, 140, 490, 120);
+        black_name.setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 58, 490, 120);
         black_name.setForeground(Color.WHITE);
         black_name.setFont(black_name.getFont().deriveFont(20.0f));
         white_name = new JLabel("Player (White)");
-        white_name.setBounds(1000, 590, 490, 120);
+        white_name.setBounds(Menu.screenWidth / 6 + 750, Menu.screenHeight / 10 + 508, 490, 120);
         white_name.setForeground(Color.WHITE);
         white_name.setFont(white_name.getFont().deriveFont(20.0f));
         // ===========Title Bar============
         title_bar_label = new JLabel("Standard - PvC");
-        title_bar_label.setBounds(700, 0, 400, 60);
         title_bar_label.setForeground(Color.WHITE);
-        title_bar_label.setFont(new Font("",Font.BOLD,18));
+        title_bar_label.setFont(new Font("",Font.BOLD,20));
+        title_bar_label.setBounds(( Menu.screenWidth - 140 ) / 2, 18, title_bar_label.getPreferredSize().width + 4, title_bar_label.getPreferredSize().height);
         // ================================
         back_normal_button = new ButtonImage(ReadImage.back_normal, ReadImage.back_selected, 44, 44, "");
         home_normal_button = new ButtonImage(ReadImage.home_normal, ReadImage.home_selected, 44, 44, "");
-        back_normal_button.setBounds(465, 10, 44, 44);
-        home_normal_button.setBounds(1000, 10, 44, 44);
+        back_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 - 65, 10, 44, 44);
+        home_normal_button.setBounds(( Menu.screenWidth - 450 ) / 2 + 450 + 20, 10, 44, 44);
         back_normal_button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -134,15 +134,8 @@ public class GamePVC extends JPanel {
         this.add(home_normal_button);
         this.add(title_bar_label);
 
-        ButtonImage rotate = new ButtonImage(ReadImage.rotate_normal, ReadImage.rotate_selected, 50, 40, "");
-        rotate.setBounds(1200, 326, 50, 40);
-        rotate.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-
-            }
-        });
+        ButtonImage rotate = new ButtonImage(ReadImage.rotate_normal, ReadImage.rotate_selected, 48, 38, "");
+        rotate.setBounds(Menu.screenWidth / 6 + 950, Menu.screenHeight / 10 + 246, 48, 38);
         this.add(rotate);
     }
 
@@ -150,9 +143,9 @@ public class GamePVC extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
-        g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(ReadImage.game_gui, 250, 80,1014,690, this);
-        g2d.drawImage(board_index, 250, 80,690,690, this);
+        g2d.drawImage(ReadImage.title_bar, ( Menu.screenWidth - 450 ) / 2, 10, 450, 44, this);
+        g2d.drawImage(ReadImage.game_gui, Menu.screenWidth / 6, Menu.screenHeight / 10,1014,690, this);
+        g2d.drawImage(board_index, Menu.screenWidth / 6, Menu.screenHeight / 10,690,690, this);
     }
 
     public Timer timer = new Timer(1000, new ActionListener() {

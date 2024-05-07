@@ -134,9 +134,9 @@ public class ViewBoard extends JPanel implements ActionListener  {
 		String omove="";
 		if((char)imove.charAt(0)=='*'){
 			if(imove.substring(3).equals("ks"))
-				omove+="0-0____";
+				omove+="O-O____";
 			if(imove.substring(3).equals("qs"))
-				omove+="0-0-0__";
+				omove+="O-O-O__";
 		}
 		else
 		{
