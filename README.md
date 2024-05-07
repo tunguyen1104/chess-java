@@ -3,58 +3,85 @@
 Để vận hành được chương trình, điều đầu tiên cần phải có chính việc thiết lập kết nối với cơ sở dữ liệu MySQL. Bài viết này sẽ hướng dẫn bạn cách tải xuống mysql và tạo database đối với windows (còn hệ điều hành macos hay linux thì cũng tương tự):
 1. Truy cập link: [https://www.mysql.com/products/workbench/](https://www.mysql.com/products/workbench/)
 <img src="resources/readme/mysql/1.png" alt="castling" width="500">
+
 2. Nhấp vào tab ```DOWNLOADS```
 <img src="resources/readme/mysql/2.png" alt="castling" width="500">
+
 3. Cuộn xuống và nhấp vào ```MySQL Community (GPL) Downloads```
 <img src="resources/readme/mysql/3.png" alt="castling" width="500">
+
 4. Sau đấy bấm vào ```MySQL installer for Windows```
 <img src="resources/readme/mysql/4.png" alt="castling" width="500">
+
 5. Chọn hệ điều hành và tải xuống tệp có kích thước lớn hơn
 <img src="resources/readme/mysql/5.png" alt="castling" width="500">
+
 6. Sau khi tại xong nhấp đúp chuột vào tập tin cài đặt. Nó sẽ tải lại các thành phần cần thiết và mở cửa sổ như này. Chọn ```Custom``` rồi ```Next```
 <img src="resources/readme/mysql/6.png" alt="castling" width="500">
+
 7. Click vào ```MySQL Server``` và ```MySQL Workbench``` chọn các bản mới nhất rồi nhấn mũi tên sang phải. Sau đấy nhấn ```Next```
 <img src="resources/readme/mysql/7.png" alt="castling" width="500">
+
 8. Nhấp vào ```Execute``` để cài đặt hai thành phần cần thiết. Quá trình này có thể mất một chút thời gian tùy thuộc vào tốc độ internet và cấu hình máy tính của bạn.
 <img src="resources/readme/mysql/8.png" alt="castling" width="500">
+
 9. Sau khi hoàn tất,nhấn ```Next```.
 <img src="resources/readme/mysql/9.png" alt="castling" width="500">
+
 10. Nhấn ```Next```.
 <img src="resources/readme/mysql/10.png" alt="castling" width="500">
+
 11. Nhấn ```Next```.
 <img src="resources/readme/mysql/11.png" alt="castling" width="500">
+
 12. Bây giờ hãy cung cấp cho nó mật khẩu là ```admin``` hãy nhớ nhớ mật khẩu vì bạn sẽ cần nó khi muốn làm việc trong MySQL Workbench, rồi bấm ```Next```.
 <img src="resources/readme/mysql/12.png" alt="castling" width="500">
+
 13. Chúng tôi muốn chạy dịch vụ dưới dạng Tài khoản hệ thống tiêu chuẩn cho hệ điều hành của mình. Do đó, hãy giữ nguyên mọi thứ và nhấn ```Next```.
 <img src="resources/readme/mysql/13.png" alt="castling" width="500">
+
 14. Nhấn ```Next```.
 <img src="resources/readme/mysql/14.png" alt="castling" width="500">
+
 15. Nhấn ```Execute```.
 <img src="resources/readme/mysql/15.png" alt="castling" width="500">
+
 16. Sau đó, khi bạn nhận được hộp kiểm màu xanh lá cây trong tất cả các bước cấu hình, bạn chỉ cần nhấp vào ```Finish```
 <img src="resources/readme/mysql/16.png" alt="castling" width="500">
+
 17. Cấu hình đã được áp dụng thành công, nhấn ```Next```
 <img src="resources/readme/mysql/17.png" alt="castling" width="500">
+
 18. Nhấn ```Finish``` để hoàn tất cài đặt.
 <img src="resources/readme/mysql/18.png" alt="castling" width="500">
+
 19. Bây giờ chúng ta cần cấu hình các biến đường dẫn cho hệ điều hành của mình. Đi tới ổ đĩa mà bạn đã cài đặt hệ điều hành Windows như đường dẫn bên dưới hình ảnh, nhấn vào ```MySQL Server 8.0```
 <img src="resources/readme/mysql/19.png" alt="castling" width="500">
+
 20. Nhấn vào ```bin```
 <img src="resources/readme/mysql/20.png" alt="castling" width="500">
+
 19. Copy path/address.
 <img src="resources/readme/mysql/21.png" alt="castling" width="500">
+
 22. Bây giờ hãy mở ```Edit the system environment variables```
 <img src="resources/readme/mysql/22.png" alt="castling" width="500">
+
 23. Nhấn ```Environment Variables```
 <img src="resources/readme/mysql/23.png" alt="castling" width="500">
+
 24. Click đúp vào ```Path```
 <img src="resources/readme/mysql/24.png" alt="castling" width="500">
+
 25. Bấm ```New``` và dán path/address mà bạn đã sao chép trước đó, rồi nhấn ```OK``` và ```OK``` tiếp.
 <img src="resources/readme/mysql/25.png" alt="castling" width="500">
+
 26. Bây giờ bạn có thể mở MySQL Workbench, bấm vào cái ```Local instance```. Nó sẽ hỏi mật khẩu, nhập mật khẩu là ```admin``` và bấm ```save``` để sau này mở lên không cần quan tâm đến mật khẩu nữa.
 <img src="resources/readme/mysql/26.png" alt="castling" width="500">
+
 27. Sau đấy bạn vào [resources/chess.sql](resources/chess.sql) copy đoạn mã và dán vào file Query, nhấn vào ```Execute```(hình tia sét) và thấy nó load có các tích xanh như hình dưới là bạn đã thành công tạo database.
 <img src="resources/readme/mysql/27.png" alt="castling" width="500">
+
 ### Castling
 Đây là một nước đi quan trọng trong cờ vua, cho phép 2 quân cùng màu có thể tạo thành một nước cờ.
 
