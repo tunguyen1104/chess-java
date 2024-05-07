@@ -20,7 +20,7 @@ public class BoardV2 {
 	public BoardV2()
 	{
 		board1=new Piece[8][8];
-		depth=3;
+		depth=4;
 	}
 	public int getDepth() {
 		return depth;
