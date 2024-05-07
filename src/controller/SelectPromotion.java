@@ -6,16 +6,17 @@ import java.awt.event.MouseMotionListener;
 
 import model.Thread_MNX;
 import view.DialogPromotion;
+import view.GamePVC;
 import view.ViewBoard;
 
 public class SelectPromotion implements MouseListener,MouseMotionListener{
 
 	private DialogPromotion dialog;
-	private ViewBoard board;
-	public SelectPromotion(DialogPromotion d , ViewBoard v)
+	private GamePVC board;
+	public SelectPromotion(DialogPromotion d , GamePVC g)
 	{
 		this.dialog=d;
-		this.board=v;
+		this.board=g;
 	}
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -55,9 +56,13 @@ public class SelectPromotion implements MouseListener,MouseMotionListener{
 			}
 		}
 		String promotion_move="1"+this.dialog.getFromCol()+this.dialog.getEndCol()+this.dialog.getEnemy_piece()+promotion_piece;
-		this.board.getStrSaveData().append(this.board.convert(promotion_move,false));
-		this.board.getMy_board().make_move(promotion_move);
-		this.board.getP().setActiveValid_move(false);
+		this.board.setLabel(1);
+		String rs = this.board.textArea.getText()+String.format("%3s %8s %6s", this.board.getCnt_move()+".",promotion_move,"");
+		this.board.setCnt_move(this.board.getCnt_move()+1);
+		this.board.textArea.setText(rs);
+		this.board.getPanel().getStrSaveData().append(this.board.getPanel().convert(promotion_move,false));
+		this.board.getPanel().getMy_board().make_move(promotion_move);
+		this.board.getPanel().getP().setActiveValid_move(false);
 		this.board.repaint();
 		this.dialog.setVisible(false);
 		Thread_MNX enemy_move=new Thread_MNX(this.board,false);

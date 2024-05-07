@@ -16,9 +16,17 @@ public class BoardV2 {
 	private int soTH=0;
 	private int soTHTT=0;
 	private String moved_rook_king_b="",moved_rook_king_w="";
+	private int depth;
 	public BoardV2()
 	{
 		board1=new Piece[8][8];
+		depth=3;
+	}
+	public int getDepth() {
+		return depth;
+	}
+	public void setDepth(int depth) {
+		this.depth = depth;
 	}
 	public void setKing(boolean iswhite,int r,int c)
 	{
@@ -654,7 +662,7 @@ public class BoardV2 {
 			if(iswhite==false&&value<beta)
 			{
 				beta=value;
-				if(depth==4)
+				if(depth==this.depth)
 				{
 					this.kqua_MNX=list_move.substring(i, i+5);
 				}
@@ -662,7 +670,7 @@ public class BoardV2 {
 			if(iswhite==true&&value>=alpha)
 			{
 				alpha=value;
-				if(depth==4)
+				if(depth==this.depth)
 				{
 					this.kqua_MNX=list_move.substring(i, i+5);
 				}
@@ -675,7 +683,7 @@ public class BoardV2 {
 						return ""+beta;
 			}
 		}
-		if(depth==4)
+		if(depth==this.depth)
 			return this.kqua_MNX;
 		else
 		{

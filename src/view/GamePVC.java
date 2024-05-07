@@ -5,6 +5,7 @@ import controller.SelectPromotion;
 import model.ReadImage;
 import model.Sound;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -40,11 +41,15 @@ public class GamePVC extends JPanel {
     public TimeLabel timeLabelWhite;
     public TimeLabel timeLabelBlack;
     ButtonImage back_normal_button;
-    ButtonImage home_normal_button;
-   // public JTextArea textArea;
-   // public JScrollPane scrollPaneTextArea;
+	ButtonImage home_normal_button;
+    public JTextArea textArea,rating_box;
+    public JScrollPane scrollPaneTextArea;
     private ViewBoard panel;
+    private int cnt_move;
+    private JLabel rating_move;
+    private DialogEndGame EndGameLog;
     public GamePVC(int minute) {
+    	this.cnt_move=1;
         this.setLayout(null);
         board_index = ReadImage.board_index;
         initPanel(minute);
@@ -53,18 +58,22 @@ public class GamePVC extends JPanel {
         this.panel = new ViewBoard();
         this.panel.setMy_dialog(dialog_promo);
         this.panel.setBounds(280, 100, 8 * 80, 8 * 80);
-        MoveController m_ctrl=new MoveController(panel,panel.getP(),dialog_promo);
+        MoveController m_ctrl=new MoveController(panel,panel.getP(),dialog_promo,this);
         panel.addMouseListener(m_ctrl);
         panel.addMouseMotionListener(m_ctrl);
-        SelectPromotion choosing = new SelectPromotion(dialog_promo,panel);
+        SelectPromotion choosing = new SelectPromotion(dialog_promo,this);
         dialog_promo.addMouseListener(choosing);
         dialog_promo.addMouseMotionListener(choosing);
+        this.rating_move=new JLabel("");
+        rating_move.setBackground(new Color(55, 55, 55));
+        rating_move.setOpaque(true);
+        //rating_move.setVisible(false);
+		this.add(rating_move);
         this.add(panel);
         //timeLabelWhite.start();
         //timer.start();
     }
-
-    public void initPanel(int minute) {
+	public void initPanel(int minute) {
         this.setBackground(new Color(41, 41, 41));
         this.setPreferredSize(new Dimension(1536, 864));
         timeLabelWhite = new TimeLabel(minute, 1050, 490);
@@ -108,7 +117,11 @@ public class GamePVC extends JPanel {
                 Menu.cardLayout.show(Menu.panelCardLayout, "menu");
             }
         });
-        /*textArea = new JTextArea();
+        EndGameLog= new DialogEndGame("Black","CheckMate");
+        EndGameLog.setBounds(300,90,640,640);
+        EndGameLog.setVisible(false);
+        this.add(EndGameLog);
+        textArea = new JTextArea();
         textArea.setBackground(new Color(55, 55, 55));
         textArea.setForeground(Color.WHITE);
         textArea.setEditable(false);
@@ -121,15 +134,18 @@ public class GamePVC extends JPanel {
             e.printStackTrace();
         }
         scrollPaneTextArea = new JScrollPane(textArea);
-        scrollPaneTextArea.setBounds(962, 380, 298, 148);
+        scrollPaneTextArea.setBounds(962, 270, 298, 348);
         Border border = BorderFactory.createLineBorder(new Color(55, 55, 55));
         scrollPaneTextArea.setBorder(border);
         scrollPaneTextArea.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
-        this.add(scrollPaneTextArea);*/
-        this.add(timeLabelWhite);
-        this.add(timeLabelBlack);
-        this.add(white_name);
-        this.add(black_name);
+        this.add(scrollPaneTextArea);
+        rating_box = new JTextArea(String.format("%26s", "Rating your last move"));
+        rating_box.setFont(new Font("",Font.BOLD|Font.ITALIC,22));
+        rating_box.setBackground(new Color(55, 55, 55));
+        rating_box.setForeground(Color.WHITE);
+        rating_box.setEditable(false);
+        rating_box.setBounds(962, 99, 298,148);
+        this.add(rating_box);
         this.add(back_normal_button);
         this.add(home_normal_button);
         this.add(title_bar_label);
@@ -143,16 +159,59 @@ public class GamePVC extends JPanel {
 
             }
         });
-        this.add(rotate);
+        //this.add(rotate);
     }
+	public void TurnEndGameLog() {
+		this.EndGameLog.setOpaque(true);
+		this.panel.setOpaque(false);
+		this.EndGameLog.setVisible(true);
+	}
+	public void setLabel(int Case)
+	{
+		switch(Case)
+		{
+			case 1:
+				Icon nice = new ImageIcon(this.getClass().getResource("/gif/nice.gif"));
+				this.rating_move.setIcon(nice);
+		        this.rating_move.setBounds(1010, 140, 186, 80);
+		        break;
+			case 2:
+				Icon nice2 = new ImageIcon(this.getClass().getResource("/gif/rating1.gif"));
+				this.rating_move.setIcon(nice2);
+		        this.rating_move.setBounds(1055, 145, 103, 103);
+		        break;
+			case 3:
+				Icon nice3 = new ImageIcon(this.getClass().getResource("/gif/wow-good.gif"));
+				this.rating_move.setIcon(nice3);
+		        this.rating_move.setBounds(1035, 138, 128, 93);
+		        break;
+			case 4:
+				Icon nice4 = new ImageIcon(this.getClass().getResource("/gif/ratingbad.gif"));
+				this.rating_move.setIcon(nice4);
+		        this.rating_move.setBounds(1048, 145, 116, 100);
+		        break;
+		}
+	}
+	public JLabel getRating_move() {
+		return rating_move;
+	}
+    public ViewBoard getPanel() {
+		return panel;
+	}
+    public void setCnt_move(int cnt_move) {
+		this.cnt_move = cnt_move;
+	}
 
+	public int getCnt_move() {
+		return cnt_move;
+	}
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         g2d.drawImage(ReadImage.title_bar, 530, 10, 450, 44, this);
-        g2d.drawImage(ReadImage.game_gui, 250, 80,1014,690, this);
-        g2d.drawImage(board_index, 250, 80,690,690, this);
+        //g2d.drawImage(ReadImage.game_gui, 250, 80,1014,690, this);
+        //g2d.drawImage(board_index, 250, 80,690,690, this);
     }
 
     public Timer timer = new Timer(1000, new ActionListener() {

@@ -1,15 +1,20 @@
 package model;
 
+import view.DialogEndGame;
+import view.GamePVC;
 import view.ViewBoard;
 
 public class Thread_MNX extends Thread {
-	ViewBoard s;
+	GamePVC s;
 	String ts;
 	boolean wait;
-	public Thread_MNX(ViewBoard j,boolean w)
+	public Thread_MNX(GamePVC j,boolean w)
 	{
 		this.s=j;
 		this.wait=w;
+	}
+	public String getTs() {
+		return ts;
 	}
 	public void run()
 	{
@@ -30,29 +35,33 @@ public class Thread_MNX extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}			
-		this.ts=this.s.getMy_board().minimax_alpha_beta(4, -1000000, 1000000, false);
-		this.s.getStrSaveData().append(this.s.convert(ts,false));
-		if((char)this.s.convert(ts,false).charAt(6)=='#')
+		}
+		if(this.s.getCnt_move()>4) this.s.getPanel().getMy_board().setDepth(4);
+		if(this.s.getPanel().getMy_board().rating_material(false)<1750) this.s.getPanel().getMy_board().setDepth(5);
+		this.ts=this.s.getPanel().getMy_board().minimax_alpha_beta(this.s.getPanel().getMy_board().getDepth(), -1000000, 1000000, false);
+		this.s.getPanel().getStrSaveData().append(this.s.getPanel().convert(ts,false));
+		if((char)this.s.getPanel().convert(ts,false).charAt(6)=='#')
 		{
-			for(int i=0;i<this.s.getStrSaveData().length();i+=14)
+			for(int i=0;i<this.s.getPanel().getStrSaveData().length();i+=14)
 			{
-				if(i+14<=this.s.getStrSaveData().length())
+				if(i+14<=this.s.getPanel().getStrSaveData().length())
 				{
-					this.s.getStrSaveData().insert(i+14, "\n");
+					this.s.getPanel().getStrSaveData().insert(i+14, "\n");
 					i++;
 				}
 			}
-			String result=this.s.getMy_board().convertDate()
+			String result=this.s.getPanel().getMy_board().convertDate()
 					+ "\nPvC\n" +
 	                        "3" +
 	                        "\nCheckMate\n" +
-	                        "White win\n"+
-					this.s.getStrSaveData();
+	                        "Black win\n"+
+					this.s.getPanel().getStrSaveData();
 			JDBCConnection.insertHistory(result);
+			this.s.TurnEndGameLog();
 			System.out.println(result);
 		}
-		this.s.make_move_animated(ts);
+		this.s.textArea.setText(this.s.textArea.getText()+ts+"\n");
+		this.s.getPanel().make_move_animated(ts);
 	}
 }
 
