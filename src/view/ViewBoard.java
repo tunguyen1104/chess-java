@@ -67,8 +67,8 @@ public class ViewBoard extends JPanel implements ActionListener  {
 			throw new RuntimeException(e);
 		}
 		my_board=new BoardV2();
-		//my_board.create_game();
-		my_board.test();
+		my_board.create_game();
+		//my_board.test();
 	}
 	public StringBuilder getStrSaveData() {
 		return StrSaveData;
@@ -134,9 +134,9 @@ public class ViewBoard extends JPanel implements ActionListener  {
 		String omove="";
 		if((char)imove.charAt(0)=='*'){
 			if(imove.substring(3).equals("ks"))
-				omove+="0-0____";
+				omove+="O-O____";
 			if(imove.substring(3).equals("qs"))
-				omove+="0-0-0__";
+				omove+="O-O-O__";
 		}
 		else
 		{
