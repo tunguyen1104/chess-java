@@ -17,19 +17,12 @@ public class ListenerPuzzle extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         if (board.done_failed_puzzle != -1)
             return;
-        if (board.selectedPiece != null) {
-            if (board.color_to_move == board.selectedPiece.isWhite) {
-                board.selectedPiece = null;
-                return;
-            }
-        }
         int col = e.getX() / board.tileSize;
         int row = e.getY() / board.tileSize;
         Piece pieceXY = board.getPiece(col, row);
-        if (pieceXY != null) {
+        if (pieceXY != null && pieceXY.isWhite != board.color_to_move_puzzle) {
             board.selectedPiece = pieceXY;
-            if (board.selectedPiece.isWhite != board.color_to_move)
-                board.paint_in_place(col, row);
+            board.paint_in_place(col, row);
         }
     }
 
@@ -38,14 +31,9 @@ public class ListenerPuzzle extends MouseAdapter {
         if (board.done_failed_puzzle != -1)
             return;
         if (board.selectedPiece != null) {
-            if (board.color_to_move == board.selectedPiece.isWhite) {
-                board.selectedPiece = null;
-                return;
-            } else {
-                board.selectedPiece.xPos = e.getX() - board.tileSize / 2;
-                board.selectedPiece.yPos = e.getY() - board.tileSize / 2;
-                board.repaint();
-            }
+            board.selectedPiece.xPos = e.getX() - board.tileSize / 2;
+            board.selectedPiece.yPos = e.getY() - board.tileSize / 2;
+            board.repaint();
         }
     }
 

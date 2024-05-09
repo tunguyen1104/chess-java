@@ -1,6 +1,6 @@
 package model;
 
-import controller.Listener;
+import controller.ListenerPvP;
 import controller.ListenerPuzzle;
 import model.pieces.*;
 import view.*;
@@ -25,7 +25,7 @@ public class Board extends JPanel {
     private ArrayList<Piece> rotateList = new ArrayList<Piece>();
     public boolean rotating = false;
     public Piece selectedPiece;// quân cờ lúc bạn trỏ vào
-    public Listener input;
+    public ListenerPvP input;
     public ListenerPuzzle inputPuzzle;
     public int enPassantTile = -1;
     public int promotion = -1;
@@ -36,10 +36,10 @@ public class Board extends JPanel {
     private int new_row = -1;
     private int col_in_place = -1;
     private int row_in_place = -1;
-    private int castLing = -1;
+    private int castling = -1;
     private ArrayList<String> dataPuzzle = JDBCConnection.takeDataPuzzle();
     Timer timer;
-    public boolean color_to_move;
+    public boolean color_to_move_puzzle;
     private PuzzleGame puzzleGame;
     public String column = "abcdefgh";
     public String column_rotate = "hgfedcba";
@@ -51,8 +51,6 @@ public class Board extends JPanel {
     private int col_hint = -1;
     private int row_hint = -1;
     private boolean hintBoolean = false;
-    private boolean checkMateWhite = false;
-    private boolean checkMateBlack = false;
     public boolean checkEndGame = false;
     
     private int colKingCheckMate = -1;
@@ -72,7 +70,7 @@ public class Board extends JPanel {
     public Board(GamePVP game) {
         this.game = game;
         ReadImage.sound.playMusic(0);
-        input = new Listener(this, game);
+        input = new ListenerPvP(this, game);
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
@@ -261,17 +259,17 @@ public class Board extends JPanel {
             ReadImage.sound.playMusic(2);
         }
         if (piece.name.equals("King"))
-            pieceList.add(new King(y_new, x_new, color_to_move));
+            pieceList.add(new King(y_new, x_new, color_to_move_puzzle));
         else if (piece.name.equals("Queen"))
-            pieceList.add(new Queen(y_new, x_new, color_to_move));
+            pieceList.add(new Queen(y_new, x_new, color_to_move_puzzle));
         else if (piece.name.equals("Rook"))
-            pieceList.add(new Rook(y_new, x_new, color_to_move));
+            pieceList.add(new Rook(y_new, x_new, color_to_move_puzzle));
         else if (piece.name.equals("Bishop"))
-            pieceList.add(new Bishop( y_new, x_new, color_to_move));
+            pieceList.add(new Bishop( y_new, x_new, color_to_move_puzzle));
         else if (piece.name.equals("Knight"))
-            pieceList.add(new Knight(y_new, x_new, color_to_move));
+            pieceList.add(new Knight(y_new, x_new, color_to_move_puzzle));
         else if (piece.name.equals("Pawn"))
-            pieceList.add(new Pawn(y_new, x_new, color_to_move));
+            pieceList.add(new Pawn(y_new, x_new, color_to_move_puzzle));
         repaint();
     }
 
@@ -361,7 +359,7 @@ public class Board extends JPanel {
         repaint();
     }
     public void makeMove(Move move) {
-        castLing = -1;
+        castling = -1;
         if (move.piece.name.equals("Pawn")) {
             movePawn(move);
         } else {
@@ -387,12 +385,12 @@ public class Board extends JPanel {
         if(Math.abs(move.piece.col - move.getNewCol()) == 2) {
             Piece rook;
             if(move.piece.col < move.getNewCol()) {
-                castLing = 1;
+                castling = 1;
                 rook = getPiece(7, move.piece.row);
                 rook.col = 5;
                 
             } else {
-                castLing = 2;
+                castling = 2;
                 rook = getPiece(0, move.piece.row);
                 rook.col = 3;
             }
@@ -511,10 +509,10 @@ public class Board extends JPanel {
     public String handle_step_review(Move move) {
         //0536qQ_
         String step = "";
-        if(castLing != -1) {
-            if(castLing == 1) {
+        if(castling != -1) {
+            if(castling == 1) {
                 step = "O-O___";
-            } else if(castLing == 2) {
+            } else if(castling == 2) {
                 step = "O-O-O_";
             }
         } else {
@@ -558,10 +556,10 @@ public class Board extends JPanel {
     }
 
     public String step_end(String step, Move move) {
-        if(castLing != -1) {
-            if(castLing == 1) {
+        if(castling != -1) {
+            if(castling == 1) {
                 step = "O-O";
-            } else if(castLing == 2) {
+            } else if(castling == 2) {
                 step = "O-O-O";
             }
             return step;
@@ -635,8 +633,6 @@ public class Board extends JPanel {
         assert king != null;
         boolean check = checkMate(color, king.col, king.row);
         if(check) {
-            if(color) checkMateWhite = true;
-            else checkMateBlack = true;
             colKingCheckMate = king.col;
             rowKingCheckMate = king.row;
             return true;
@@ -754,22 +750,6 @@ public class Board extends JPanel {
                 Piece piece = getPiece(newCol, newRow);
                 if (piece != null && piece.name.equals("Knight") && piece.isWhite != color) {
                     return true;
-                }
-            }
-        }
-        //King
-        for (int col_index = -1; col_index <= 1; col_index++) {
-            for (int row_index = -1; row_index <= 1; row_index++) {
-                if (col_index == 0 && row_index == 0) {
-                    continue;
-                }
-                int newCol = kingCol + col_index;
-                int newRow = kingRow + row_index;
-                if (isValidPosition(newCol, newRow)) {
-                    Piece piece = getPiece(newCol, newRow);
-                    if (piece != null && piece.isWhite != color && piece.name.equals("King")) {
-                        return true;
-                    }
                 }
             }
         }
@@ -973,7 +953,7 @@ public class Board extends JPanel {
             }
             if (row == 7) {
                 ++cnt;
-                color_to_move = (fen.charAt(cnt) == 'b') ? false : true;
+                color_to_move_puzzle = (fen.charAt(cnt) == 'b') ? false : true;
                 while (cnt < fen.length()) {
                     if (fen.charAt(cnt) == ',') {
                         ++cnt;
@@ -1029,25 +1009,5 @@ public class Board extends JPanel {
     }
     public void setHintBoolean(boolean hintBoolean) {
         this.hintBoolean = hintBoolean;
-    }
-    public boolean isCheckMateWhite() {
-        return checkMateWhite;
-    }
-
-    public void setCheckMateWhite(boolean checkMateWhite) {
-        this.checkMateWhite = checkMateWhite;
-    }
-    public boolean isCheckMateBlack() {
-        return checkMateBlack;
-    }
-
-    public void setCheckMateBlack(boolean checkMateBlack) {
-        this.checkMateBlack = checkMateBlack;
-    }
-    public boolean isCheckEndGame() {
-        return checkEndGame;
-    }
-    public void setCheckEndGame(boolean checkEndGame) {
-        this.checkEndGame = checkEndGame;
     }
 }

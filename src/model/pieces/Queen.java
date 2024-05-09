@@ -20,7 +20,7 @@ public class Queen extends Piece {
         return ((Math.abs(this.col - col) == Math.abs(this.row - row)) || (this.col == col || this.row == row)) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
     @Override
-    public boolean moveCollidesWithPiece(Board board, int col,int row) {
+    public boolean moveCollidesWithPiece(Board board, int col, int row) {
         if(this.col == col || this.row == row) {
             //up
             if(this.row > row) {

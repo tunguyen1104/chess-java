@@ -9,7 +9,7 @@ import model.ReadImage;
 import model.pieces.Piece;
 import view.GamePVP;
 
-public class Listener extends MouseAdapter {
+public class ListenerPvP extends MouseAdapter {
     private GamePVP game;
     private Board board;
     private StringBuilder pgn = new StringBuilder();
@@ -18,7 +18,7 @@ public class Listener extends MouseAdapter {
     private boolean checkPromotion = true;
     private boolean checkMateEndGame = false;
     private int count_step = 1;
-    public Listener(Board board, GamePVP game) {
+    public ListenerPvP(Board board, GamePVP game) {
         this.board = board;
         this.game = game;
     }
@@ -26,34 +26,22 @@ public class Listener extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         if (board.checkEndGame)
             return;
-        if (board.selectedPiece != null) {
-            if (isTurn != board.selectedPiece.isWhite) {
-                board.selectedPiece = null;
-                return;
-            }
-        }
         int col = e.getX() / board.tileSize;
         int row = e.getY() / board.tileSize;
         Piece pieceXY = board.getPiece(col, row);
-        if (pieceXY != null) {
+        if (pieceXY != null && pieceXY.isWhite == isTurn) {
             board.selectedPiece = pieceXY;
-            if (board.selectedPiece.isWhite == isTurn)
-                board.paint_in_place(col, row);
+            board.paint_in_place(col, row);
         }
     }
-
     @Override
     public void mouseDragged(MouseEvent e) {
         if (board.checkEndGame)
             return;
         if (board.selectedPiece != null) {
-            if (isTurn != board.selectedPiece.isWhite) {
-                board.selectedPiece = null;
-            } else {
-                board.selectedPiece.xPos = e.getX() - board.tileSize / 2;
-                board.selectedPiece.yPos = e.getY() - board.tileSize / 2;
-                board.repaint();
-            }
+            board.selectedPiece.xPos = e.getX() - board.tileSize / 2;
+            board.selectedPiece.yPos = e.getY() - board.tileSize / 2;
+            board.repaint();
         }
     }
     @Override
@@ -103,7 +91,7 @@ public class Listener extends MouseAdapter {
                 String text = board.convertDate() +
                         "\nPvP\n" +
                         game.minute +
-                        "CheckMate\n" +
+                        "\nCheckMate\n" +
                         "Black win\n";
                 board.saveFile(new String(text + pgn));
                 ReadImage.sound.playMusic(1);

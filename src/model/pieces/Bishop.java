@@ -21,7 +21,7 @@ public class Bishop extends Piece {
         return Math.abs(this.col - col) == Math.abs(this.row - row) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
     @Override
-    public boolean moveCollidesWithPiece(Board board, int col,int row) {
+    public boolean moveCollidesWithPiece(Board board, int col, int row) {
         //up left
         if(this.col > col && this.row > row) {
             for(int i = 1;i < Math.abs(this.col - col); ++i) {

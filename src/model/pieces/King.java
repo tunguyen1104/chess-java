@@ -21,7 +21,7 @@ public class King extends Piece {
     public boolean check_the_valid_moves_of_the_chess_pieces(Board board, int col, int row) {
         return ( Math.abs((col - this.col) * (row - this.row)) == 1 || Math.abs(col - this.col) + Math.abs(row - this.row) == 1 || can_castling(board, col,row) ) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
-    private boolean can_castling(Board board, int col,int row) {
+    private boolean can_castling(Board board, int col, int row) {
         if(row == this.row) {
             if(col == 6) {
                 Piece rook = board.getPiece(7, row);

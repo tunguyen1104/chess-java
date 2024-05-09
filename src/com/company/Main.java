@@ -12,13 +12,7 @@ public class Main {
         } catch (UnsupportedLookAndFeelException e) {
             throw new RuntimeException(e);
         }
-        boolean ok = false;
-        try {
-            ok = JDBCConnection.checkCurrentUser();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        if (ok) {
+        if (JDBCConnection.checkCurrentUser()) {
             new Menu();
         } else
             new Login();

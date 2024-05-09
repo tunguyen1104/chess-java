@@ -59,6 +59,7 @@ public class Thread_MNX extends Thread {
 					this.s.getPanel().getStrSaveData();
 			JDBCConnection.insertHistory(result);
 			this.s.TurnEndGameLog();
+			ReadImage.sound.playMusic(1);
 			System.out.println(result);
 		}
 		this.s.textArea.setText(this.s.textArea.getText()+ts+"\n");

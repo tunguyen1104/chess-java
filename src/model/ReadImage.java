@@ -54,7 +54,7 @@ public class ReadImage {
     public static Image game_options_panel;
     public static Image panel_500_320;
     public static Sound sound;
-    private ArrayList<String> data = new ArrayList<>();
+    private ArrayList<String> data;
     public ReadImage() {
         data = JDBCConnection.takeDataSetting();
         try {

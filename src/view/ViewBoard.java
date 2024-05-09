@@ -67,8 +67,8 @@ public class ViewBoard extends JPanel implements ActionListener  {
 			throw new RuntimeException(e);
 		}
 		my_board=new BoardV2();
-		//my_board.create_game();
-		my_board.test();
+		my_board.create_game();
+		//my_board.test();
 	}
 	public StringBuilder getStrSaveData() {
 		return StrSaveData;
@@ -321,6 +321,7 @@ public class ViewBoard extends JPanel implements ActionListener  {
 			repaint();
 		}
 		else {
+			ReadImage.sound.playMusic(2);
 			this.AI_turn=false;
 			this.my_board.board1[(eY-qdY*hsY)/square_size][(eX-qdX*hsX)/square_size]=temp_piece;
 			this.my_board.make_move(enemy_move);

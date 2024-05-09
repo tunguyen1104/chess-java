@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import model.ReadImage;
 import model.Thread_MNX;
 import view.DialogPromotion;
 import view.GamePVC;
@@ -61,6 +62,7 @@ public class SelectPromotion implements MouseListener,MouseMotionListener{
 		this.board.setCnt_move(this.board.getCnt_move()+1);
 		this.board.textArea.setText(rs);
 		this.board.getPanel().getStrSaveData().append(this.board.getPanel().convert(promotion_move,false));
+		ReadImage.sound.playMusic(1);
 		this.board.getPanel().getMy_board().make_move(promotion_move);
 		this.board.getPanel().getP().setActiveValid_move(false);
 		this.board.repaint();

@@ -82,7 +82,7 @@ public class PuzzleGame extends JPanel {
         hint.setBounds(60, 140, 152, 50);
         hint_panel.add(hint);
         color_to_move = new JLabel();
-        String key = board.color_to_move ? "Black to Move" : "White to Move";
+        String key = board.color_to_move_puzzle ? "Black to Move" : "White to Move";
         color_to_move.setText(key);
         try {
             color_to_move.setFont(Font.createFont(Font.TRUETYPE_FONT,

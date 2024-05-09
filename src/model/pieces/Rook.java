@@ -20,7 +20,7 @@ public class Rook extends Piece {
         return (this.col == col || this.row == row) && (col < 8 && col >= 0 && row < 8 && row >= 0);
     }
     @Override
-    public boolean moveCollidesWithPiece(Board board, int col,int row){
+    public boolean moveCollidesWithPiece(Board board, int col, int row){
         //up
         if(this.row > row) {
             for(int r = this.row - 1;r > row; --r){
