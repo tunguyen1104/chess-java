@@ -1,6 +1,6 @@
 # Chess Java
 ### Download Mysql
-Để vận hành được chương trình, điều đầu tiên cần phải có chính việc thiết lập kết nối với cơ sở dữ liệu MySQL. Bài viết này sẽ hướng dẫn bạn cách tải xuống mysql và tạo database đối với windows (còn hệ điều hành macos hay linux thì cũng tương tự):
+Để vận hành được chương trình, điều đầu tiên cần phải có chính việc thiết lập kết nối với cơ sở dữ liệu MySQL. Dưới đây tôi sẽ hướng dẫn bạn cách tải xuống mysql và tạo database đối với windows (còn hệ điều hành macos hay linux thì cũng tương tự):
 1. Truy cập link: [https://www.mysql.com/products/workbench/](https://www.mysql.com/products/workbench/)
 <img src="resources/readme/mysql/1.png" alt="castling" width="500">
 
@@ -16,7 +16,7 @@
 5. Chọn hệ điều hành và tải xuống tệp có kích thước lớn hơn
 <img src="resources/readme/mysql/5.png" alt="castling" width="500">
 
-6. Sau khi tại xong nhấp đúp chuột vào tập tin cài đặt. Nó sẽ tải lại các thành phần cần thiết và mở cửa sổ như này. Chọn ```Custom``` rồi ```Next```
+6. Sau khi tải xong nhấp đúp chuột vào tập tin cài đặt. Nó sẽ tải lại các thành phần cần thiết và mở cửa sổ như này. Chọn ```Custom``` rồi ```Next```
 <img src="resources/readme/mysql/6.png" alt="castling" width="500">
 
 7. Click vào ```MySQL Server``` và ```MySQL Workbench``` chọn các bản mới nhất rồi nhấn mũi tên sang phải. Sau đấy nhấn ```Next```
@@ -79,10 +79,10 @@
 26. Bây giờ bạn có thể mở MySQL Workbench, bấm vào cái ```Local instance```. Nó sẽ hỏi mật khẩu, nhập mật khẩu là ```admin``` và bấm ```save``` để sau này mở lên không cần quan tâm đến mật khẩu nữa.
 <img src="resources/readme/mysql/26.png" alt="castling" width="500">
 
-27. Sau đấy bạn vào [resources/chess.sql](resources/chess.sql) copy đoạn mã và dán vào file Query, nhấn vào ```Execute```(hình tia sét) và thấy nó load có các tích xanh như hình dưới là bạn đã thành công tạo database.
+27. Sau đấy bạn vào [resources/chess.sql](resources/chess.sql) copy đoạn mã và dán vào file Query, nhấn ```Execute```(hình tia sét) và thấy nó load có các tích xanh như hình dưới là bạn đã thành công tạo database.
 <img src="resources/readme/mysql/27.png" alt="castling" width="500">
 
-28. Sắp xong rồi, giờ hãy kéo thanh cuộn lên và bấm vào nút ```Releases``` để tải xuống phiên bản mới nhất của game.
+28. Sắp xong rồi, giờ hãy bấm vào nút ```Releases``` để tải xuống phiên bản mới nhất của game.
 <img src="resources/readme/mysql/28.png" alt="castling" width="500">
 
 29. Sau khi tải xuống tệp ChessGame_v1.0.zip, bạn cần giải nén tệp này để tiếp tục.
