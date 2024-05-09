@@ -17,10 +17,15 @@ public class BoardV2 {
 	private int soTHTT=0;
 	private String moved_rook_king_b="",moved_rook_king_w="";
 	private int depth;
+	private int range_each_depth;
 	public BoardV2()
 	{
 		board1=new Piece[8][8];
 		this.depth=3;
+		this.range_each_depth=40;
+	}
+	public void setRange_each_depth(int range_each_depth) {
+		this.range_each_depth = range_each_depth;
 	}
 	public int getDepth() {
 		return depth;
@@ -653,7 +658,7 @@ public class BoardV2 {
 				return ""+this.rating(iswhite, depth,list_move.length())*hs; 
 		}
 		list_move=this.sort_list_move(list_move, iswhite);
-		for(int i=0;i<Math.min(50,list_move.length());i+=5)
+		for(int i=0;i<Math.min(this.range_each_depth,list_move.length());i+=5)
 		{
 			this.make_move(list_move.substring(i, i+5));
 			String child_node = this.minimax_alpha_beta(depth-1,alpha,beta,!iswhite);
@@ -695,19 +700,9 @@ public class BoardV2 {
 	}
 	public void test1()
 	{
-		while(true)
-		{
-			this.show_console_board();
-			Scanner ts = new Scanner(System.in);
-			String nuocdi="";
-			System.out.println("Nhập nước đi của bạn : ");
-			nuocdi=ts.nextLine();
-			this.make_move(nuocdi);
-			long st_time=System.currentTimeMillis();
-			this.make_move(this.minimax_alpha_beta(4, -1000000, 1000000, false));
-			long end_time=System.currentTimeMillis();
-			System.out.println("It's took "+ (end_time-st_time)+" miliseconds");
-		}
+		this.moved_rook_king_b+="040007";
+		this.moved_rook_king_w+="747077";
+		this.setDepth(4);
 	}
 	public void test3()
 	{
