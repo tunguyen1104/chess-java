@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import model.JDBCConnection;
+import model.ReadImage;
 import model.Thread_MNX;
 import view.DialogPromotion;
 import view.GamePVC;
@@ -103,6 +104,7 @@ public class MoveController implements MouseListener,MouseMotionListener {
 		if(this.view.getMy_board().possible_move(true).length()!=this.view.getMy_board().possible_move(true).replaceAll(expected_move, "").length())
 		{
 			this.P.setActiveValid_move(false);
+			ReadImage.sound.playMusic(2);
 			this.view.getStrSaveData().append(this.view.convert(expected_move,true));
 			if((char)this.view.convert(expected_move,true).charAt(6)=='#')
 			{
@@ -133,7 +135,6 @@ public class MoveController implements MouseListener,MouseMotionListener {
 			else if(rankOfmove<40) this.G.setLabel(3);
 			else this.G.setLabel(4);
 			this.view.player_make_move(expected_move);
-			System.out.println(this.G.getPanel().getMy_board().getDepth());
 			if(this.view.getOp().getOn_openings())
 			{
 				this.view.getOp().setMoved(expected_move);

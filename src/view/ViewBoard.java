@@ -321,6 +321,7 @@ public class ViewBoard extends JPanel implements ActionListener  {
 			repaint();
 		}
 		else {
+			ReadImage.sound.playMusic(2);
 			this.AI_turn=false;
 			this.my_board.board1[(eY-qdY*hsY)/square_size][(eX-qdX*hsX)/square_size]=temp_piece;
 			this.my_board.make_move(enemy_move);
