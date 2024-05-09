@@ -82,6 +82,15 @@
 27. Sau đấy bạn vào [resources/chess.sql](resources/chess.sql) copy đoạn mã và dán vào file Query, nhấn vào ```Execute```(hình tia sét) và thấy nó load có các tích xanh như hình dưới là bạn đã thành công tạo database.
 <img src="resources/readme/mysql/27.png" alt="castling" width="500">
 
+28. Sắp xong rồi, giờ hãy kéo thanh cuộn lên và bấm vào nút ```Releases``` để tải xuống phiên bản mới nhất của game.
+<img src="resources/readme/mysql/28.png" alt="castling" width="500">
+
+29. Sau khi tải xuống tệp ChessGame_v1.0.zip, bạn cần giải nén tệp này để tiếp tục.
+<img src="resources/readme/mysql/29.png" alt="castling" width="500">
+
+30. Khởi chạy file jar ngay để bắt đầu chơi.
+<img src="resources/readme/mysql/30.png" alt="castling" width="500">
+
 ### Castling
 Đây là một nước đi quan trọng trong cờ vua, cho phép 2 quân cùng màu có thể tạo thành một nước cờ.
 
