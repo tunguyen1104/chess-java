@@ -95,6 +95,11 @@ public class GamePVC extends JPanel {
         rating_box.setForeground(Color.WHITE);
         rating_box.setEditable(false);
         rating_box.setBounds(962, 99, 298,148);
+        JLabel decor_ratingbox = new JLabel();
+        Icon bongo_cat = new ImageIcon("resources/gif/bongo.gif");
+        decor_ratingbox.setIcon(bongo_cat);
+        decor_ratingbox.setBounds(1218, 84,45, 28);
+		this.add(decor_ratingbox);
         this.add(rating_box);
         this.add(back_normal_button);
         this.add(home_normal_button);

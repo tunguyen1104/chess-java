@@ -22,6 +22,9 @@ public class Openings {
 		this.moved_list=new LinkedList();
 		on_openings=true;
 	}
+	public void setOn_openings(Boolean on_openings) {
+		this.on_openings = on_openings;
+	}
 	public Boolean getOn_openings() {
 		return on_openings;
 	}

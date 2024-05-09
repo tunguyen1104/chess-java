@@ -563,8 +563,8 @@ public class BoardV2 {
 				}
 				}
 		}
-		if(counting_bishop>=2) kqua+=300*counting_bishop;
-		if(counting_bishop==1) kqua+=250;
+		if(counting_bishop>=2) kqua+=325*counting_bishop;
+		if(counting_bishop==1) kqua+=275;
 		return kqua;
 	}
 	public int rating_moveablitly(int list_length,boolean iswhite,int depth)
@@ -572,7 +572,7 @@ public class BoardV2 {
 		int kqua=0;
 		kqua+=list_length;// +5 point/1 valid move
 		if(list_length==0) {
-			if(!this.is_kingsafe(!iswhite)==true) kqua-=200000*depth;//checkmate
+			if(!this.is_kingsafe(iswhite)) kqua-=200000*depth;//checkmate
 			else kqua-=150000*depth;//stalemate
 		}
 		return kqua;

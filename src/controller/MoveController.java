@@ -99,6 +99,7 @@ public class MoveController implements MouseListener,MouseMotionListener {
 		String expected_move=""+this.P.getFromRow()+this.P.getFromCol()+(this.P.getMouseY()/this.view.getSquare_size())+(this.P.getMouseX()/this.view.getSquare_size())+enemy_piece_id;
 		if(this.view.getMy_board().possible_move(true).length()!=this.view.getMy_board().possible_move(true).replaceAll(expected_move, "").length())
 		{
+			System.out.println(this.view.getMy_board().getDepth());
 			this.P.setActiveValid_move(false);
 			ReadImage.sound.playMusic(2);
 			this.view.getStrSaveData().append(this.view.convert(expected_move,true));

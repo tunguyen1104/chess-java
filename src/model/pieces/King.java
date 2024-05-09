@@ -214,13 +214,13 @@ public class King extends Piece {
             int point_castling=0;
             if(this.isWhite==true)
             {
-                if(this.row==7&&this.col==2&&b.board1[7][3]!=null&&b.board1[7][3].getId()=="r") point_castling=700;
+                if(this.row==7&&this.col==2&&b.board1[7][3]!=null&&b.board1[7][3].getId()=="r") point_castling=100;
                 if(this.row==7&&this.col==6&&b.board1[7][5]!=null&&b.board1[7][5].getId()=="r") point_castling=100;
                 return this.Positional_board_mid[this.row][this.col]+point_castling;
             }
             else
             {
-                if(this.row==0&&this.col==2&&b.board1[0][3]!=null&&b.board1[0][3].getId()=="r") point_castling=700;
+                if(this.row==0&&this.col==2&&b.board1[0][3]!=null&&b.board1[0][3].getId()=="r") point_castling=100;
                 if(this.row==0&&this.col==6&&b.board1[0][5]!=null&&b.board1[0][5].getId()=="r") point_castling=100;
                 return this.Positional_board_mid[7-this.row][7-this.col]+point_castling;
             }
