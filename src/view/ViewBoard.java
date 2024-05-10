@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
+import controller.check_in;
 import model.*;
 import model.pieces.Piece;
 
@@ -66,9 +67,11 @@ public class ViewBoard extends JPanel implements ActionListener  {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		check_in ckin= new check_in(this.P);
+		this.addMouseListener(ckin);
 		my_board=new BoardV2();
 		my_board.create_game();
-		//my_board.test();
+		//my_board.test1();
 	}
 	public StringBuilder getStrSaveData() {
 		return StrSaveData;

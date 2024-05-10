@@ -700,6 +700,29 @@ public class BoardV2 {
 	}
 	public void test1()
 	{
+		this.setQueen(true, 0, 0);
+		this.setRook(false, 0, 7);
+		this.setPawn(false, 1, 0);
+		this.setPawn(false, 1, 1);
+		this.setPawn(false, 1, 3);
+		this.setPawn(false, 1, 6);
+		this.setPawn(false, 1, 7);
+		this.setPawn(false, 2, 5);
+		this.setPawn(false, 3, 4);
+		this.setQueen(false, 1, 3);
+		this.setKing(false, 1, 5);
+		this.setKnight(false, 4, 3);
+		this.setPawn(true, 5, 0);
+		this.setPawn(true, 5, 3);
+		this.setPawn(true, 6, 0);
+		this.setPawn(true, 6, 2);
+		this.setPawn(true, 6, 6);
+		this.setPawn(true, 6, 7);
+		this.setRook(true, 6, 1);
+		this.setRook(true, 7, 5);
+		this.setBishop(true, 7, 2);
+		this.setBishop(false, 5, 7);
+		this.setKing(true, 7, 6);
 		this.moved_rook_king_b+="040007";
 		this.moved_rook_king_w+="747077";
 		this.setDepth(4);

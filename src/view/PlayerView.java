@@ -4,6 +4,7 @@ public class PlayerView {
 	private int mouseX,mouseY,dragX,dragY,fromCol,fromRow;
 	private boolean isDrag,activeValid_move;
 	private boolean who_turn;
+	private boolean check_in;
 	public PlayerView()
 	{
 		this.who_turn=true;
@@ -15,6 +16,12 @@ public class PlayerView {
 		this.mouseY=-1;
 		this.dragX=-1;
 		this.dragY=-1;
+	}	
+	public boolean isCheck_in() {
+		return check_in;
+	}
+	public void setCheck_in(boolean check_in) {
+		this.check_in = check_in;
 	}
 	public boolean isWho_turn() {
 		return who_turn;
