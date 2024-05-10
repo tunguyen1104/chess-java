@@ -27,14 +27,6 @@ public class ListenerGameOptions extends MouseAdapter implements ActionListener 
             gameOptions.handle_forward_left_time();
         } else if(e.getSource().equals(gameOptions.getForward_right_time())) {
             gameOptions.handle_forward_right_time();
-        }else if(e.getSource().equals(gameOptions.getForward_left_side())) {
-            gameOptions.handle_forward_left_side();
-        } else if(e.getSource().equals(gameOptions.getForward_right_side())) {
-            gameOptions.handle_forward_right_side();
-        }else if(e.getSource().equals(gameOptions.getForward_left_lever())) {
-            gameOptions.handle_forward_left_lever();
-        } else if(e.getSource().equals(gameOptions.getForward_right_lever())) {
-            gameOptions.handle_forward_right_lever();
         }
     }
 
